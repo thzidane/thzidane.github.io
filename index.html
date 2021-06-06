@@ -166,15 +166,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Chapter-1-Network-layers-Stack"><a href="#Chapter-1-Network-layers-Stack" class="headerlink" title="Chapter 1 Network layers Stack"></a>Chapter 1 <em><strong>Network layers Stack</strong></em></h1><h2 id="5层因特网协议栈"><a href="#5层因特网协议栈" class="headerlink" title="5层因特网协议栈"></a><code>5层因特网协议栈</code></h2><pre><code>- Application: HTTP, SMTP, FTP and DNS
-- Transport: TCP and UDP
-- Network or Internet: IP
-- Data Link: Ethernet, Wi-Fi
-- Physical: Bit
-</code></pre>
+        <h2 id="Chapter-1-Network-layers-Stack"><a href="#Chapter-1-Network-layers-Stack" class="headerlink" title="Chapter 1 Network layers Stack"></a>Chapter 1 <em><strong>Network layers Stack</strong></em></h2><h3 id="5层因特网协议栈"><a href="#5层因特网协议栈" class="headerlink" title="5层因特网协议栈"></a><code>5层因特网协议栈</code></h3><ul>
+<li>Application: HTTP, SMTP, FTP and DNS</li>
+<li>Transport: TCP and UDP</li>
+<li>Network or Internet: IP</li>
+<li>Data Link: Ethernet, Wi-Fi</li>
+<li>Physical: Bit</li>
+</ul>
 <hr>
-<h1 id="Chapter-2-Application-layer"><a href="#Chapter-2-Application-layer" class="headerlink" title="Chapter 2 Application layer"></a>Chapter 2 <em><strong>Application layer</strong></em></h1><h2 id="Summary-of-application-layer"><a href="#Summary-of-application-layer" class="headerlink" title="Summary of application layer"></a><code>Summary of application layer</code></h2><ul>
-<li><h3 id="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"><a href="#应用程序（计算机进程）和socket（应用程序和网络之间的API）会话" class="headerlink" title="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"></a>应用程序（计算机进程）和socket（应用程序和网络之间的API）会话</h3><ul>
+<h2 id="Chapter-2-Application-layer"><a href="#Chapter-2-Application-layer" class="headerlink" title="Chapter 2 Application layer"></a>Chapter 2 <em><strong>Application layer</strong></em></h2><h3 id="Summary-of-application-layer"><a href="#Summary-of-application-layer" class="headerlink" title="Summary of application layer"></a><code>Summary of application layer</code></h3><h4 id="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"><a href="#应用程序（计算机进程）和socket（应用程序和网络之间的API）会话" class="headerlink" title="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"></a>应用程序（计算机进程）和socket（应用程序和网络之间的API）会话</h4><ol>
 <li>选择运输协议<ul>
 <li>分类标准：<ol>
 <li>可靠数据传输</li>
@@ -195,29 +195,27 @@
 </li>
 <li>TCP/IP network provides 2 transport prototype:<ol>
 <li>TCP: Reliable data transfer<ul>
-<li>SSL(Secure Sockes Layer) is the improvment of TCP and it provides data encryption and decryption while sending message e2e </li>
+<li>SSL(Secure Sockes Layer) is the improvment of TCP and it provides data encryption and decryption while sending message e2e</li>
 <li>Without SSL send message: Sender program -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver program</li>
 <li>With SSL send message: Sender program -&gt; Sender SSL socket API -&gt; Sender SSL encrypt message -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver socket API -&gt; Receiver SSL decrypt message -&gt;Receiver program</li>
 </ul>
 </li>
 <li>UDP: Unreliable data transfer<ul>
 <li>No connection handshake as TCP</li>
-<li>No gurantee of data arrival and arrival sequence               </li>
+<li>No gurantee of data arrival and arrival sequence</li>
 </ul>
 </li>
 </ol>
 </li>
 </ul>
 </li>
-<li>也许能设定几个运输层参数 （如最大缓存和最大报文长度）</li>
-</ul>
-</li>
-<li><h3 id="进程寻址"><a href="#进程寻址" class="headerlink" title="进程寻址"></a>进程寻址</h3><ol>
+<li>设定几个运输层参数（如最大缓存和最大报文长度）</li>
+</ol>
+<h4 id="进程寻址"><a href="#进程寻址" class="headerlink" title="进程寻址"></a>进程寻址</h4><ol>
 <li>IP address (主机地址)</li>
-<li>Port number （主机上的指定接收进程的标识符）   </li>
+<li>Port number（主机上的指定接收进程的标识符)</li>
 </ol>
-</li>
-<li><h3 id="Popular-application-and-its-prototypes"><a href="#Popular-application-and-its-prototypes" class="headerlink" title="Popular application and its prototypes"></a>Popular application and its prototypes</h3><table>
+<h4 id="Popular-application-and-its-prototypes"><a href="#Popular-application-and-its-prototypes" class="headerlink" title="Popular application and its prototypes"></a>Popular application and its prototypes</h4><table>
 <thead>
 <tr>
 <th>Application</th>
@@ -256,16 +254,50 @@
 <td>UDP</td>
 </tr>
 </tbody></table>
-</li>
-<li><h3 id="Application-layer-protocol"><a href="#Application-layer-protocol" class="headerlink" title="Application-layer protocol"></a>Application-layer protocol</h3><ol>
+<h4 id="Application-layer-protocol"><a href="#Application-layer-protocol" class="headerlink" title="Application-layer protocol"></a>Application-layer protocol</h4><ol>
 <li>Message type: Request and response message</li>
 <li>Message grammar</li>
 <li>Message different parts definition and meaning</li>
 <li>When and how client and server send and recive message and response</li>
 </ol>
+<hr>
+<h3 id="Web-and-Http"><a href="#Web-and-Http" class="headerlink" title="Web and Http"></a><code>Web and Http</code></h3><h4 id="HTTP-HyperText-Transfer-Protocol"><a href="#HTTP-HyperText-Transfer-Protocol" class="headerlink" title="HTTP (HyperText Transfer Protocol)"></a>HTTP (HyperText Transfer Protocol)</h4><ol>
+<li>Concepts:<ul>
+<li>HTTP Client(like web browser) send HTTP request and receives HTTP response from HTTP server(like apache web server)</li>
+<li>HTTP is stateless protocol</li>
+</ul>
+</li>
+<li>3 Hanshakes between client and server based on HTTP and TCP protocol:<ul>
+<li>1st handshake: client sends small TCP message for connection request to server</li>
+<li>2nd handshake: server sends small response TCP message to accept connection</li>
+<li>3rd handshake: client accept connection and sent HTTP request message</li>
+<li>Rough Timecost: 2 Round-Trip Time(RTT) + Real content(like html file) transfer<ul>
+<li>1 RTT for first and second handshakes (Client wants to talk to server and server reponse YES to client round trip)</li>
+<li>1 RTT for third handshake (Client sends request message and receives response message from server)</li>
+</ul>
 </li>
 </ul>
-<h2 id="Web-and-Http"><a href="#Web-and-Http" class="headerlink" title="Web and Http"></a><code>Web and Http</code></h2><hr>
+</li>
+<li>non-peristent connection vs persistent connection:<ul>
+<li>Reduce RTT for first and second handshakes to build connection for every new request</li>
+<li>Persistent connection is HTTP 1.1 and 2 default</li>
+</ul>
+</li>
+<li><em><strong>HTTP message format</strong></em><ul>
+<li>HTTP <em>Request</em> message format:<ol>
+<li>Request line:<ul>
+<li>HTTP verbs: GET, POST, HEAD, PUT and DELETE</li>
+<li>URL</li>
+<li>HTTP version</li>
+</ul>
+</li>
+<li>Header line(lines after first one):</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
 
       
 
