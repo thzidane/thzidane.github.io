@@ -8,16 +8,16 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>Learning networt from top to down | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Chapter 15层因特网协议栈 Application: HTTP, SMTP, FTP and DNS Transport: TCP and UDP Network or Internet: IP Data Link: Ethernet, Wi-Fi Physical: Bit   Chapter 2第一层应用层 应用程序（计算机进程）和socket（应用程序和网络之间的API）会话 选择运">
+  <meta name="description" content="Chapter 1 Network layers Stack5层因特网协议栈- Application: HTTP, SMTP, FTP and DNS - Transport: TCP and UDP - Network or Internet: IP - Data Link: Ethernet, Wi-Fi - Physical: Bit   Chapter 2 Application lay">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Learning networt from top to down">
 <meta property="og:url" content="http://example.com/2021/05/31/Learning-networt-from-top-to-down/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Chapter 15层因特网协议栈 Application: HTTP, SMTP, FTP and DNS Transport: TCP and UDP Network or Internet: IP Data Link: Ethernet, Wi-Fi Physical: Bit   Chapter 2第一层应用层 应用程序（计算机进程）和socket（应用程序和网络之间的API）会话 选择运">
+<meta property="og:description" content="Chapter 1 Network layers Stack5层因特网协议栈- Application: HTTP, SMTP, FTP and DNS - Transport: TCP and UDP - Network or Internet: IP - Data Link: Ethernet, Wi-Fi - Physical: Bit   Chapter 2 Application lay">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-31T23:10:32.000Z">
-<meta property="article:modified_time" content="2021-06-05T04:01:44.267Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:modified_time" content="2021-06-05T19:04:38.440Z">
+<meta property="article:author" content="Hao Tang">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -47,7 +47,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="" class="js-avatar">
+			<img src="img/cookie.jpg" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/"></a></h1>
@@ -58,8 +58,6 @@
 			<ul>
 			
 				<li><a href="/">主页</a></li>
-	        
-				<li><a href="/tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -105,15 +103,13 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="" class="js-avatar">
+				<img src="img/cookie.jpg" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author"></h1>
 			</hgroup>
 			
 			
-			
-				
 			
 				
 			
@@ -137,9 +133,7 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
-		        
-					<li style="width: 50%"><a href="/tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
+					<li style="width: 100%"><a href="/">主页</a></li>
 		        
 				</ul>
 			</nav>
@@ -174,27 +168,106 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Chapter-1"><a href="#Chapter-1" class="headerlink" title="Chapter 1"></a>Chapter 1</h1><h2 id="5层因特网协议栈"><a href="#5层因特网协议栈" class="headerlink" title="5层因特网协议栈"></a>5层因特网协议栈</h2><ul>
-<li>Application: HTTP, SMTP, FTP and DNS</li>
-<li>Transport: TCP and UDP</li>
-<li>Network or Internet: IP</li>
-<li>Data Link: Ethernet, Wi-Fi</li>
-<li>Physical: Bit</li>
-</ul>
+        <h1 id="Chapter-1-Network-layers-Stack"><a href="#Chapter-1-Network-layers-Stack" class="headerlink" title="Chapter 1 Network layers Stack"></a>Chapter 1 <em><strong>Network layers Stack</strong></em></h1><h2 id="5层因特网协议栈"><a href="#5层因特网协议栈" class="headerlink" title="5层因特网协议栈"></a><code>5层因特网协议栈</code></h2><pre><code>- Application: HTTP, SMTP, FTP and DNS
+- Transport: TCP and UDP
+- Network or Internet: IP
+- Data Link: Ethernet, Wi-Fi
+- Physical: Bit
+</code></pre>
 <hr>
-<h1 id="Chapter-2"><a href="#Chapter-2" class="headerlink" title="Chapter 2"></a>Chapter 2</h1><h2 id="第一层应用层"><a href="#第一层应用层" class="headerlink" title="第一层应用层"></a>第一层应用层</h2><ul>
-<li>应用程序（计算机进程）和socket（应用程序和网络之间的API）会话<ol>
-<li>选择运输协议</li>
+<h1 id="Chapter-2-Application-layer"><a href="#Chapter-2-Application-layer" class="headerlink" title="Chapter 2 Application layer"></a>Chapter 2 <em><strong>Application layer</strong></em></h1><h2 id="Summary-of-application-layer"><a href="#Summary-of-application-layer" class="headerlink" title="Summary of application layer"></a><code>Summary of application layer</code></h2><ul>
+<li><h3 id="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"><a href="#应用程序（计算机进程）和socket（应用程序和网络之间的API）会话" class="headerlink" title="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"></a>应用程序（计算机进程）和socket（应用程序和网络之间的API）会话</h3><ol>
+<li>选择运输协议<ul>
+<li>分类标准：<ol>
+<li>可靠数据传输</li>
+<li>吞吐量<ul>
+<li>带宽敏感应用：对吞吐量具有特定的要求</li>
+<li>弹性应用：实时利用当时可用的带宽（如电子邮件、文件传输以及Web应用）</li>
+</ul>
+</li>
+<li>定时<ul>
+<li>低时延vs高时延</li>
+</ul>
+</li>
+<li>安全性<ul>
+<li>加密、数据完整性和端点鉴别</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>TCP/IP network provides 2 transport prototype:<ol>
+<li>TCP: Reliable data transfer<ul>
+<li>SSL(Secure Sockes Layer) is the improvment of TCP and it provides data encryption and decryption while sending message e2e </li>
+<li>Without SSL send message: Sender program -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver program</li>
+<li>With SSL send message: Sender program -&gt; Sender SSL socket API -&gt; Sender SSL encrypt message -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver socket API -&gt; Receiver SSL decrypt message -&gt;Receiver program</li>
+</ul>
+</li>
+<li>UDP: Unreliable data transfer<ul>
+<li>No connection handshake as TCP</li>
+<li>No gurantee of data arrival and arrival sequence               </li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
 <li>也许能设定几个运输层参数 （如最大缓存和最大报文长度）</li>
 </ol>
 </li>
-<li>进程寻址<ol>
+<li><h3 id="进程寻址"><a href="#进程寻址" class="headerlink" title="进程寻址"></a>进程寻址</h3><ol>
 <li>IP address (主机地址)</li>
 <li>Port number （主机上的指定接收进程的标识符）   </li>
 </ol>
 </li>
+<li><h3 id="Popular-application-and-its-prototypes"><a href="#Popular-application-and-its-prototypes" class="headerlink" title="Popular application and its prototypes"></a>Popular application and its prototypes</h3><table>
+<thead>
+<tr>
+<th>Application</th>
+<th>Application Prototype</th>
+<th>Transport Prototype</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Email</td>
+<td>SMTP</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>Remote Open end access</td>
+<td>Telnet</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>Web</td>
+<td>HTTP</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>File transfer</td>
+<td>FTP</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>Steam media like youtube</td>
+<td>HTTP</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>Internet phone call</td>
+<td>SIP,RTP or special like skype</td>
+<td>UDP</td>
+</tr>
+</tbody></table>
+</li>
+<li><h3 id="Application-layer-protocol"><a href="#Application-layer-protocol" class="headerlink" title="Application-layer protocol"></a>Application-layer protocol</h3><ol>
+<li>Message type: Request and response message</li>
+<li>Message grammar</li>
+<li>Message different parts definition and meaning</li>
+<li>When and how client and server send and recive message and response</li>
+</ol>
+</li>
 </ul>
-<hr>
+<h2 id="Web-and-Http"><a href="#Web-and-Http" class="headerlink" title="Web and Http"></a><code>Web and Http</code></h2><hr>
 
       
 
@@ -333,7 +406,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 John Doe
+    		&copy; 2021 Hao Tang
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -464,27 +537,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
         <ul class="search-ul">
           
             <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
+              <a href="https://thzidane.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>Link 1</a>
             </li>
           
             <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接3</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接5</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接6</a>
+              <a href="https://thzidane.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
             </li>
           
         </ul>
@@ -495,7 +552,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">Thanks for visiting!!!&lt;br&gt;&lt;br&gt;Hao Tang&lt;br&gt;Microsoft Software Engineer</div>
   	  	
     	</section>
     
