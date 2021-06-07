@@ -75,7 +75,7 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+					<a class="github" target="_blank" href="https://thzidane.github.io/" title="github"><i class="icon-github"></i></a>
 		        
 					<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
 		        
@@ -114,7 +114,7 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+						<a class="github" target="_blank" href="https://thzidane.github.io/" title="github"><i class="icon-github"></i></a>
 			        
 						<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
 			        
@@ -166,55 +166,36 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Chapter-1-Network-layers-Stack"><a href="#Chapter-1-Network-layers-Stack" class="headerlink" title="Chapter 1 Network layers Stack"></a>Chapter 1 <em><strong>Network layers Stack</strong></em></h2><h3 id="5层因特网协议栈"><a href="#5层因特网协议栈" class="headerlink" title="5层因特网协议栈"></a><code>5层因特网协议栈</code></h3><ul>
-<li>Application: HTTP, SMTP, FTP and DNS</li>
-<li>Transport: TCP and UDP</li>
-<li>Network or Internet: IP</li>
-<li>Data Link: Ethernet, Wi-Fi</li>
-<li>Physical: Bit</li>
-</ul>
+        <h2 id="Chapter-1-Network-layers-Stack"><a href="#Chapter-1-Network-layers-Stack" class="headerlink" title="Chapter 1 Network layers Stack"></a>Chapter 1 <em><strong>Network layers Stack</strong></em></h2><h3 id="5层因特网协议栈"><a href="#5层因特网协议栈" class="headerlink" title="5层因特网协议栈"></a><code>5层因特网协议栈</code></h3><pre><code>- Application: HTTP, SMTP, FTP and DNS
+- Transport: TCP and UDP
+- Network or Internet: IP
+- Data Link: Ethernet, Wi-Fi
+- Physical: Bit
+</code></pre>
 <hr>
-<h2 id="Chapter-2-Application-layer"><a href="#Chapter-2-Application-layer" class="headerlink" title="Chapter 2 Application layer"></a>Chapter 2 <em><strong>Application layer</strong></em></h2><h3 id="Summary-of-application-layer"><a href="#Summary-of-application-layer" class="headerlink" title="Summary of application layer"></a><code>Summary of application layer</code></h3><h4 id="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"><a href="#应用程序（计算机进程）和socket（应用程序和网络之间的API）会话" class="headerlink" title="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"></a>应用程序（计算机进程）和socket（应用程序和网络之间的API）会话</h4><ol>
-<li>选择运输协议<ul>
-<li>分类标准：<ol>
-<li>可靠数据传输</li>
-<li>吞吐量<ul>
-<li>带宽敏感应用：对吞吐量具有特定的要求</li>
-<li>弹性应用：实时利用当时可用的带宽（如电子邮件、文件传输以及Web应用）</li>
-</ul>
-</li>
-<li>定时<ul>
-<li>低时延vs高时延</li>
-</ul>
-</li>
-<li>安全性<ul>
-<li>加密、数据完整性和端点鉴别</li>
-</ul>
-</li>
-</ol>
-</li>
-<li>TCP/IP network provides 2 transport prototype:<ol>
-<li>TCP: Reliable data transfer<ul>
-<li>SSL(Secure Sockes Layer) is the improvment of TCP and it provides data encryption and decryption while sending message e2e</li>
-<li>Without SSL send message: Sender program -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver program</li>
-<li>With SSL send message: Sender program -&gt; Sender SSL socket API -&gt; Sender SSL encrypt message -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver socket API -&gt; Receiver SSL decrypt message -&gt;Receiver program</li>
-</ul>
-</li>
-<li>UDP: Unreliable data transfer<ul>
-<li>No connection handshake as TCP</li>
-<li>No gurantee of data arrival and arrival sequence</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-<li>设定几个运输层参数（如最大缓存和最大报文长度）</li>
-</ol>
-<h4 id="进程寻址"><a href="#进程寻址" class="headerlink" title="进程寻址"></a>进程寻址</h4><ol>
-<li>IP address (主机地址)</li>
-<li>Port number（主机上的指定接收进程的标识符)</li>
-</ol>
+<h2 id="Chapter-2-Application-layer"><a href="#Chapter-2-Application-layer" class="headerlink" title="Chapter 2 Application layer"></a>Chapter 2 <em><strong>Application layer</strong></em></h2><h3 id="Summary-of-application-layer"><a href="#Summary-of-application-layer" class="headerlink" title="Summary of application layer"></a><code>Summary of application layer</code></h3><h4 id="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"><a href="#应用程序（计算机进程）和socket（应用程序和网络之间的API）会话" class="headerlink" title="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"></a>应用程序（计算机进程）和socket（应用程序和网络之间的API）会话</h4><pre><code>- 选择运输协议
+    1. 分类标准：
+        - 可靠数据传输
+        - 吞吐量
+            - 带宽敏感应用：对吞吐量具有特定的要求
+            - 弹性应用：实时利用当时可用的带宽（如电子邮件、文件传输以及Web应用）
+        - 定时
+            - 低时延vs高时延
+        - 安全性
+            - 加密、数据完整性和端点鉴别
+    2. TCP/IP network provides 2 transport prototype:
+        1. TCP: Reliable data transfer
+            - SSL(Secure Sockes Layer) is the improvment of TCP and it provides data encryption and decryption while sending message e2e
+            - Without SSL send message: Sender program -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver program
+            - With SSL send message: Sender program -&gt; Sender SSL socket API -&gt; Sender SSL encrypt message -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver socket API -&gt; Receiver SSL decrypt message -&gt;Receiver program
+        2. UDP: Unreliable data transfer
+            - No connection handshake as TCP
+            - No gurantee of data arrival and arrival sequence
+- 设定几个运输层参数（如最大缓存和最大报文长度）
+</code></pre>
+<h4 id="进程寻址"><a href="#进程寻址" class="headerlink" title="进程寻址"></a>进程寻址</h4><pre><code>1. IP address (主机地址)
+2. Port number（主机上的指定接收进程的标识符)
+</code></pre>
 <h4 id="Popular-application-and-its-prototypes"><a href="#Popular-application-and-its-prototypes" class="headerlink" title="Popular application and its prototypes"></a>Popular application and its prototypes</h4><table>
 <thead>
 <tr>
@@ -254,49 +235,146 @@
 <td>UDP</td>
 </tr>
 </tbody></table>
-<h4 id="Application-layer-protocol"><a href="#Application-layer-protocol" class="headerlink" title="Application-layer protocol"></a>Application-layer protocol</h4><ol>
-<li>Message type: Request and response message</li>
-<li>Message grammar</li>
-<li>Message different parts definition and meaning</li>
-<li>When and how client and server send and recive message and response</li>
-</ol>
+<h4 id="Application-layer-protocol"><a href="#Application-layer-protocol" class="headerlink" title="Application-layer protocol"></a>Application-layer protocol</h4><pre><code>1. Message type: Request and response message
+2. Message grammar
+3. Message different parts definition and meaning
+4. When and how client and server send and recive message and response
+</code></pre>
 <hr>
-<h3 id="Web-and-Http"><a href="#Web-and-Http" class="headerlink" title="Web and Http"></a><code>Web and Http</code></h3><h4 id="HTTP-HyperText-Transfer-Protocol"><a href="#HTTP-HyperText-Transfer-Protocol" class="headerlink" title="HTTP (HyperText Transfer Protocol)"></a>HTTP (HyperText Transfer Protocol)</h4><ol>
-<li>Concepts:<ul>
-<li>HTTP Client(like web browser) send HTTP request and receives HTTP response from HTTP server(like apache web server)</li>
-<li>HTTP is stateless protocol</li>
-</ul>
-</li>
-<li>3 Hanshakes between client and server based on HTTP and TCP protocol:<ul>
-<li>1st handshake: client sends small TCP message for connection request to server</li>
-<li>2nd handshake: server sends small response TCP message to accept connection</li>
-<li>3rd handshake: client accept connection and sent HTTP request message</li>
-<li>Rough Timecost: 2 Round-Trip Time(RTT) + Real content(like html file) transfer<ul>
-<li>1 RTT for first and second handshakes (Client wants to talk to server and server reponse YES to client round trip)</li>
-<li>1 RTT for third handshake (Client sends request message and receives response message from server)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>non-peristent connection vs persistent connection:<ul>
-<li>Reduce RTT for first and second handshakes to build connection for every new request</li>
-<li>Persistent connection is HTTP 1.1 and 2 default</li>
-</ul>
-</li>
-<li><em><strong>HTTP message format</strong></em><ul>
-<li>HTTP <em>Request</em> message format:<ol>
-<li>Request line:<ul>
-<li>HTTP verbs: GET, POST, HEAD, PUT and DELETE</li>
-<li>URL</li>
-<li>HTTP version</li>
-</ul>
-</li>
-<li>Header line(lines after first one):</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
+<h3 id="Web-and-Http"><a href="#Web-and-Http" class="headerlink" title="Web and Http"></a><code>Web and Http</code></h3><h4 id="HTTP-HyperText-Transfer-Protocol"><a href="#HTTP-HyperText-Transfer-Protocol" class="headerlink" title="HTTP (HyperText Transfer Protocol)"></a>HTTP (HyperText Transfer Protocol)</h4><pre><code>- Concepts
+    1. HTTP Client(like web browser) send HTTP request and receives HTTP response from HTTP server(like apache web server)
+    2. HTTP is stateless protocol
+- Three Hanshakes between client and server based on HTTP and TCP protocol
+    1. First handshake: client sends small TCP message for connection request to server
+    2. Second handshake: server sends small response TCP message to accept connection
+    3. Third handshake: client accept connection and sent HTTP request message
+    4. *SUMMARY* Rough Timecost: Two Round-Trip Time(RTT) + Real content(like html file) transfer
+        - One RTT for first and second handshakes (Client wants to talk to server and server reponse YES to client round trip)
+        - One RTT for third handshake (Client sends request message and receives response message from server)
+- non-peristent connection vs persistent connection:
+    1. Reduce RTT for first and second handshakes to build connection for every new request
+    2. Persistent connection is HTTP 1\.1 and 2 default
+</code></pre>
+<h4 id="HTTP-message-format"><a href="#HTTP-message-format" class="headerlink" title="HTTP message format"></a><em><strong>HTTP message format</strong></em></h4><pre><code>- HTTP message
+    1. HTTP *Request* message format:
+        - Request line:
+            1. HTTP verbs: GET, POST, *HEAD* (Similar as GET but only used for test trace without real HTTP response message from server), *PUT* (Upload file to specific path on server) and DELETE
+            2. URL
+            3. HTTP version
+        - Header line (lines after first one):
+            1. Host: www.abc.com (web proxy cache)
+            2. Connection: close (Non-persistent connection and close the connection after current talk)
+            3. User-agent: Mozilar (firefox browser)
+            4. Accept-language: fr (Frensh as language if not exists in server use default language)
+        - Entity body (POST reuqest will have submit form info)
+    2. HTTP *Response* message format:
+        - status line:
+            1. HTTP version
+            2. status code
+            3. status message
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Status CODE</th>
+<th>Status MESSAGE</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>200</td>
+<td>OK</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>301</td>
+<td>Moved Permanently</td>
+<td>New URL can be found Header line location</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Bad Request</td>
+<td>Request not accepted by server</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found</td>
+<td>Document cannot be found on server</td>
+</tr>
+<tr>
+<td>505</td>
+<td>Http version not supported</td>
+<td>server not support current request HTTP version</td>
+</tr>
+</tbody></table>
+<pre><code>        - Header line:
+            1. Connection: close =&gt; (Non-persistent connection and tell client will close the connection after current talk)
+            2. Date: Tue, 18 Aug 2015 blah blah =&gt; (Server found object and insert it into repsonse message datetime)
+            3. Server: Apache/2.2.3 (Centos) =&gt; (like user agent in request message)
+            4. Last modified: DATE_TIME =&gt; (Important for cache to know last content modified in server which may need refresh cache)
+            5. Content-Length: int number
+            6. Content-Type: HTML
+        - Entity body
+    3. Request and Response message can have a lot of different Header line and based on requirement and real use case.
+</code></pre>
+<h4 id="Web-cache"><a href="#Web-cache" class="headerlink" title="Web cache"></a>Web cache</h4><pre><code>- Cookie
+    1. Request and response message will have cookie header line =&gt; cookie: COOKIE_ID
+    2. Browser will save &quot;SITE_URL: ID&quot; into cookie for future same site load
+    3. Server will also save user: COOKIE_ID pair into database
+- Web proxy server
+    1. A proxy server will answer local network requests(like school). If not hit cache, send request to real original server
+    2. Keep last-modified date on proxy server and will check if cache has been out-of date
+        - Add &quot;If-modified-since: LAST_MODIFIED_DATE&quot; as Header line in request message
+        - If Server responds &quot;HTTP/1.1 304 Not Moified&quot; in response Header line, entity body will be empty. Use cached object.
+</code></pre>
+<hr>
+<h3 id="Email-and-SMTP"><a href="#Email-and-SMTP" class="headerlink" title="Email and SMTP"></a><code>Email and SMTP</code></h3><h4 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h4><pre><code>- 3 parts:
+    1. User agent
+    2. Mail server
+    3. SMTP (Simple Mail Transfer Protocol)
+
+- Email send and receive process:
+    1. Sender writes message and receiver email address using *User Agent* program
+    2. Sender *User Agent* sends message to its *Mail Server* and message will be saved into message queue
+    3. Sender *Mail Server* finds this message and will try to create a TCP connection to receiver *Mail Server*
+    4. After initial handshakes between sender *Mail Server* and receiver *Mail Server*, message will be sent to receiver&#39;s *Mail Server*
+    5. Receiver *Mail Server* will save this message to receiver&#39;s *Inbox*
+    6. Receiver can use its username and password to access its *Inbox* and saw the message from sender
+</code></pre>
+<h4 id="SMTP"><a href="#SMTP" class="headerlink" title="SMTP"></a>SMTP</h4><pre><code>- Have to translate 0 and 1 media stream data into ASCII for sending email message because SMTP is an old protocol and there are not many image and video when email was firstly created.
+
+- Handshake Commands sent from user agent(Client) to server(S):
+    1. HELO (Short for Hello)
+    2. MAIL FROM
+    3. RCPT TO
+    4. DATA (Message Body)
+    5. QUIT
+
+- SMTP vs HTTP:
+    1. Push Protocol vs Pull Protocol
+        - SMTP talk is initialized by sender (send email to server)
+        - HTTP talk is initialized by receiver (Get document from server)
+    2. SMTP required 7 bit ASCII and need translate everything into ASCII if they are not originally like image. It is ***NOT*** requirement for HTTP
+    3. SMTP put all objects into one response message vs HTTP put every object into its own response message
+
+- SMTP message format:
+    * Header lines
+        1. From: SENDER_EMAIL_ADDRESS
+        2. To: RECEIVER_EMAIL_ADDRESS
+        3. Subject: EMAIL_SUBJECT
+        4. other optional Header lines
+    * New line 
+    * Message body data (ASCII)                       
+
+- Reason why we need 2 mail servers between sender and client user agent
+    1. First mail server (Sender) is existing for keeping retry in case receiver server is not on
+    2. Second mail server (Receiver) is existing because we need one server always on to receive new emails
+
+- 3 popular mail access protocols (SMTP is only used for push message and we need pull protocol for client to get emails)
+    1. POP3 (Post Office Protocol-Version 3)
+    2. Internet Mail Access Protocol
+    3. HTTP         
+</code></pre>
 <hr>
 
       
@@ -421,7 +499,8 @@
           </div>
         </div>
       </div>
-      <footer id="footer">
+      <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
