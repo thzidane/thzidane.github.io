@@ -16,7 +16,7 @@
 <meta property="og:description" content="Chapter 1 Network layers Stack5层因特网协议栈- Application: HTTP, SMTP, FTP and DNS - Transport: TCP and UDP - Network or Internet: IP - Data Link: Ethernet, Wi-Fi - Physical: Bit   Chapter 2 Application lay">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-31T23:10:32.000Z">
-<meta property="article:modified_time" content="2021-06-07T04:57:10.276Z">
+<meta property="article:modified_time" content="2021-06-08T04:21:01.342Z">
 <meta property="article:author" content="Hao Tang">
 <meta name="twitter:card" content="summary">
   
@@ -373,9 +373,21 @@
     2. Second mail server (Receiver) is existing because we need one server always on to receive new emails
 
 - 3 popular mail access protocols (SMTP is only used for push message and we need pull protocol for client to get emails)
-    1. POP3 (Post Office Protocol-Version 3)
-    2. Internet Mail Access Protocol
-    3. HTTP         
+    * POP3 (Post Office Protocol-Version 3)
+        1. Authoriztion: use username and password to setup connection to mail server
+        2. Event process: Get response messages from mail server and also mark emails messages that need to be deleted 
+            - Delete message from server after download =&gt; User cannot access message from other device anymore. Only in first download device locally 
+            - Keep message after download
+        3. Refresh
+    * Internet Mail Access Protocol
+        - Add remote server folders and search functions (POP3 NOT)
+        - Return part of the email message (like subject)
+    * HTTP   
+        - Sender use HTTP to send message to mail server
+        - Receiver received HTTP response messsage from mail server      
+</code></pre>
+<h3 id="DNS-Domain-Name-System"><a href="#DNS-Domain-Name-System" class="headerlink" title="DNS (Domain Name System)"></a><code>DNS (Domain Name System)</code></h3><h4 id="DNS-Includes"><a href="#DNS-Includes" class="headerlink" title="DNS Includes"></a>DNS Includes</h4><pre><code>- Layered DNS server
+- Distributed database application protocol for hostname searching 
 </code></pre>
 <hr>
 

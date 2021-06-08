@@ -371,9 +371,21 @@
     2. Second mail server (Receiver) is existing because we need one server always on to receive new emails
 
 - 3 popular mail access protocols (SMTP is only used for push message and we need pull protocol for client to get emails)
-    1. POP3 (Post Office Protocol-Version 3)
-    2. Internet Mail Access Protocol
-    3. HTTP         
+    * POP3 (Post Office Protocol-Version 3)
+        1. Authoriztion: use username and password to setup connection to mail server
+        2. Event process: Get response messages from mail server and also mark emails messages that need to be deleted 
+            - Delete message from server after download =&gt; User cannot access message from other device anymore. Only in first download device locally 
+            - Keep message after download
+        3. Refresh
+    * Internet Mail Access Protocol
+        - Add remote server folders and search functions (POP3 NOT)
+        - Return part of the email message (like subject)
+    * HTTP   
+        - Sender use HTTP to send message to mail server
+        - Receiver received HTTP response messsage from mail server      
+</code></pre>
+<h3 id="DNS-Domain-Name-System"><a href="#DNS-Domain-Name-System" class="headerlink" title="DNS (Domain Name System)"></a><code>DNS (Domain Name System)</code></h3><h4 id="DNS-Includes"><a href="#DNS-Includes" class="headerlink" title="DNS Includes"></a>DNS Includes</h4><pre><code>- Layered DNS server
+- Distributed database application protocol for hostname searching 
 </code></pre>
 <hr>
 
