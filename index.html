@@ -384,8 +384,29 @@
         - Sender use HTTP to send message to mail server
         - Receiver received HTTP response messsage from mail server      
 </code></pre>
-<h3 id="DNS-Domain-Name-System"><a href="#DNS-Domain-Name-System" class="headerlink" title="DNS (Domain Name System)"></a><code>DNS (Domain Name System)</code></h3><h4 id="DNS-Includes"><a href="#DNS-Includes" class="headerlink" title="DNS Includes"></a>DNS Includes</h4><pre><code>- Layered DNS server
+<h3 id="DNS-Domain-Name-System"><a href="#DNS-Domain-Name-System" class="headerlink" title="DNS (Domain Name System)"></a><code>DNS (Domain Name System)</code></h3><h4 id="DNS-Summary"><a href="#DNS-Summary" class="headerlink" title="DNS Summary"></a>DNS Summary</h4><pre><code>- Layered DNS server
 - Distributed database application protocol for hostname searching 
+- Also Application layer protocol:
+    1. End to end communication in client - server mode
+    2. Use transport layer to send message between DNS client and DNS server
+- Example of how DNS has been used in browser:
+    1. DNS application client is running on the same machine
+    2. User enter &quot;www.someschool.edu&quot; in browser and browser will call DNS client application
+    3. DNS client will send request to DNS server for the host name passed in
+    4. DNS client will receive a response message including the IP address DNS server found by host name
+    5. Browser will talk to the server using TCP connection by IP address and port like 123.0.123.3:80            
+- Other features DNS provided:
+    1. Host aliasing
+    2. Mail server aliasing
+        * Mail server aliasing can be same as host like yahoo.com is domain also the mail 
+    3. Load balancing:
+        * DNS server will has a list of IP addresses for one single domain host name. When request comes in, it can do round-robin in the list of IP or even more complicated load distribution logic.            
+- DNS is Distributed Database
+    1. Root DNS Server
+    2. TLD (Top-Level Domain) DNS Server
+        * top level domain like com, org, net, edu and gov
+        * region domain like fr, uk, ca and jp
+    3. Authoritive DNS server like big company and schools will maintain
 </code></pre>
 <hr>
 
