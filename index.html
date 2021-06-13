@@ -153,7 +153,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/31/Learning-networt-from-top-to-down/">Learning networt from top to down</a>
+      <a class="article-title" href="/2021/05/31/Learning-networt-from-top-to-down/">Learning network from top to down</a>
     </h1>
   
 
@@ -407,7 +407,79 @@
         * top level domain like com, org, net, edu and gov
         * region domain like fr, uk, ca and jp
     3. Authoritive DNS server like big company and schools will maintain
+- Recursive query vs Iterative query
+    1. Recusive query is sent by myself
+    2. Iterative query is sent on behalf original request sender
+    3. In real world: First request is always recursive and following requests are iterative. 
+- DNS cache:
+    1. For every request, every DNS server in the path of IP DNS query will keep the record for TTL (Normally 2 days) 
+- DNS Resource Record and message:
+    1. (Name, Value, Type, TTL)
+    2. Type=A: (relay1.bar.foo.com, 145.96.03.126, A)
+    3. Type=NS: (foo.com, dns.foo.com, NS)
+    4. Type=CNAME: (foo.com, relay1.bar.foo.com, CNAME)        
+    5. Type=MX: (foo.com, mail.bar.foo.com, MX)
+        * MX makes company web server and mail server having same alternate host name (foo.com)
+        * For getting mail server formal host name, client neeeds send request for MX record
+        * For getting other server formal host name, client needs send request for CNAME record
+    6. For server having an NS record but not the authoritive DNS server withIP , there will always be a Type A record for dns NS record              
+- DNS request and response message
+    1. Header: 12 byte
+    2. Question:
+        * Host name
+        * Type like A or MX
+    3. Answer:
+        * It may contain several Resource Records like multiple IP address for same host name     
+    4. Authoritive 
+    5. Additional info: like for MX request, it will have a Type A RR for formal hostname IP address  
 </code></pre>
+<h3 id="P2P-Document-transfer"><a href="#P2P-Document-transfer" class="headerlink" title="P2P Document transfer"></a><code>P2P Document transfer</code></h3><h4 id="BitTorrent"><a href="#BitTorrent" class="headerlink" title="BitTorrent"></a>BitTorrent</h4><pre><code>- Every one in the BitTorrent can be uploader and downloader
+    1. Reduce the single server uploading time and duplicate work. Every one in the network having file can send its document to someone who needed it
+- Process:
+    1. When you join the torrent, you will register in tracker and periodly report active. You will also get a list of users (50) in the torrent.
+    2. When you need a chunk(256KB), you will receive it from another user in the torrent. If it is a rare one, it will be prioritize the chunn in the list of needed chunks. This is for balance to have fewer rare chunk in the torrent
+</code></pre>
+<h3 id="Video-streaming-and-CDN"><a href="#Video-streaming-and-CDN" class="headerlink" title="Video streaming and CDN"></a><code>Video streaming and CDN</code></h3><h4 id="HTTP-and-DASH-for-video-stream"><a href="#HTTP-and-DASH-for-video-stream" class="headerlink" title="HTTP and DASH for video stream"></a>HTTP and DASH for video stream</h4><pre><code>- DASH (Dynamic Adaptive Streaming over HTTP)
+    1. User cache all video files chunk in Bit. If user has better network, it can download higher quality video file with more stream bits.
+    2. The quality can also change based on how many files cached on client user side and internet speed change =&gt; Dynamic and Adaptive
+    3. HTTP server has a manifest file which will include all info about different quality and bit rates vs its specified URL
+</code></pre>
+<h4 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h4><pre><code>- 2 straties: 深入和邀请做客
+    1. 深入 Build more clusters into ISP (Internet service provider) =&gt; High maintenance cost
+    2. 邀请做客 Only build cluster in IXP (Internet exchange pointer) =&gt; low cost but user may suffer high delay
+- CDN operations and request process:
+    1. When user enter http://video.blah.com/6Y7B23V in browser, it will send a DNS request for video.blah.com
+    2. blah.com authoritive DNS server will not send an IP address directly after found &quot;video&quot; in the domain name. It will send its CDN provider domain name like a1105.KingCND.com
+    3. User LDNS will send second DNS request for the CND provider domain name return in previous step. It will receive a CDN endpointer IP address
+    4. User can generate TCP connection with CDN endpointer and get video
+- CDN cluster selection strategy: pick cluster after received request from user
+    1. Geographically closest: it may not be the closest one because network path or network bandwidth
+    2. Real-time measurement: based on current network bandwidth. This needs period ping message for every cluster LDNS to test. The bad side is that some cluster may not respond to HeartBeat test.        
+</code></pre>
+<h4 id="UDP-client-and-server-in-python"><a href="#UDP-client-and-server-in-python" class="headerlink" title="UDP client and server in python"></a>UDP client and server in python</h4><ul>
+<li>UDPClient.py</li>
+</ul>
+<blockquote>
+<p>from socket import *<br>serverName = ‘hostname’<br>serverPort = 12000<br>clientSocket = socket(AF_INET, SOCK_DGRAM)<br>message = raw_input(‘Input lowercase sentence:’)<br>clientSocket.send(message.encode(), (serverName, serverPort))<br>modifiedMessage, serverAddress = clientSocket.recvfrom(2048)<br>print(modifiedMessage.decode())<br>clientSocket.close()</p>
+</blockquote>
+<ul>
+<li>UDPServer.py</li>
+</ul>
+<blockquote>
+<p>from socket import *<br>serverPort = 12000<br>serverSocket = socket(AF_INET, SOCK_DGRAM)<br>serverSocket.bind(‘’, serverPort)<br>while True:<br>&nbsp;message, clientAddress = serverSocket.recvfrom(2048)<br>&nbsp;modifiedMessage = message.decode().upper()<br>&nbsp;serverSocket.send(modifiedMessage.encode(), clientAddress)</p>
+</blockquote>
+<ul>
+<li>TCPClient.py</li>
+</ul>
+<blockquote>
+<p>from socket import *<br>serverName = ‘servername’<br>serverPort = 12000<br>clientSocket = socket(AF_INET, SOCK_STREAM)<br>clientSocket.connect((serverName, serverPort))<br>message = raw_input(‘Input lowercase sentence:’)<br>clientSocket.send(message.encode())<br>modifiedMessage = clientSocket.recvfrom(2048)<br>print(“From server: “, modifiedMessage.decode())<br>clientSocket.close()</p>
+</blockquote>
+<ul>
+<li>TCPServer.py</li>
+</ul>
+<blockquote>
+<p>from socket import *<br>serverPort = 12000<br>serverSocket = socket(AF_INET, SOCK_STREAM)<br>serverSocket.bind(‘’, serverPort)<br>serverSocket.listen(1)<br>print(“The server is ready to receive”)<br>while True:<br>&nbsp;connectionSocket, addr = serverSocket.accept()<br>&nbsp;message = connectionSocket.recvfrom(2048).decode()<br>&nbsp;modifiedMessage = message.upper()<br>&nbsp;connectionSocket.send(modifiedMessage.encode())<br>&nbsp;connectionSocket.close()</p>
+</blockquote>
 <hr>
 
       
