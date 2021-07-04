@@ -16,7 +16,7 @@
 <meta property="og:description" content="Chapter 1 Network layers Stack5层因特网协议栈- Application: HTTP, SMTP, FTP and DNS - Transport: TCP and UDP - Network or Internet: IP - Data Link: Ethernet, Wi-Fi - Physical: Bit   Chapter 2 Application lay">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-31T23:10:32.000Z">
-<meta property="article:modified_time" content="2021-06-13T01:12:53.767Z">
+<meta property="article:modified_time" content="2021-07-04T18:35:40.193Z">
 <meta property="article:author" content="Hao Tang">
 <meta name="twitter:card" content="summary">
   
@@ -482,7 +482,181 @@
 <blockquote>
 <p>from socket import *<br>serverPort = 12000<br>serverSocket = socket(AF_INET, SOCK_STREAM)<br>serverSocket.bind(‘’, serverPort)<br>serverSocket.listen(1)<br>print(“The server is ready to receive”)<br>while True:<br>&nbsp;connectionSocket, addr = serverSocket.accept()<br>&nbsp;message = connectionSocket.recvfrom(2048).decode()<br>&nbsp;modifiedMessage = message.upper()<br>&nbsp;connectionSocket.send(modifiedMessage.encode())<br>&nbsp;connectionSocket.close()</p>
 </blockquote>
+<h2 id="Chapter-3-Transport-layer"><a href="#Chapter-3-Transport-layer" class="headerlink" title="Chapter 3 Transport layer"></a>Chapter 3 <em><strong>Transport layer</strong></em></h2><h3 id="Summary-of-transport-layer"><a href="#Summary-of-transport-layer" class="headerlink" title="Summary of transport layer"></a><code>Summary of transport layer</code></h3><h4 id="Transport-vs-Network"><a href="#Transport-vs-Network" class="headerlink" title="Transport vs Network"></a>Transport vs Network</h4><pre><code>- Use mail and post service as similar example
+    1. Message from application = Content on one page
+    2. Process = every sibling
+    3. Host = family
+    4. Transport protocol = Ann and Bill (Represent of family for picking  up mails and put them into post mailbox)
+    5. Network protocol = post service
+- IP: unreliable service and best-effor delivery service for segment and message delivery between 2 hosts
+    1. Not guarentee message will be delivered
+    2. Not guarentee messages will be delivered in same sequence as sent
+    3. Not guarentee message delivered have all correct data as sent
+- UDP is also unreliable. Service provided:
+    1. transport-layer multiplexing on sender sideand demultiplexing on receiver side
+    2. Error detection and correction but no gurantee on data integrity and sequence like IP
+- TCP provides extra service than UDP:
+    1. Reliable data transfer
+    2. Congestion control
+</code></pre>
+<h4 id="Multiplexing-and-Demultiplexing"><a href="#Multiplexing-and-Demultiplexing" class="headerlink" title="Multiplexing and Demultiplexing"></a>Multiplexing and Demultiplexing</h4><pre><code>- NO connection Multiplexing (UDP):
+    1. Sender will include origin (sender) port number and destination (receiver) port number into its sent message. 
+    2. Receiver will use the destination port number to find which socket to pass message and use IP address and origin port number to send response. 
+- Connection Multiplexing (TCP):
+    1. (Origin IP, Origin port number, Dest IP, Dest port number) will be the key to distinguish socket on receiver side. If requests have same identifier with these 4 values, they can use same socket. Otherwise create a new one for latter request
+    2. There is a specific port for accepting connection request. After accepting the connection request, server will build a new connection socket with a new port, origin IP address and port number for following message transport.
+</code></pre>
+<h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a><code>UDP</code></h3><h4 id="Summary-and-characteristics"><a href="#Summary-and-characteristics" class="headerlink" title="Summary and characteristics"></a>Summary and characteristics</h4><pre><code>- UDP is simple and only added the necessary function Multiplexing over IP (network protocol)
+- UDP vs TCP:
+    1. Application has more control on when to send data and what data it will be like
+        * TCP has conjection control and need resend message to make sure message arrival on dest
+    2. No need for connection before sending message
+        * TCP needs 3 handshakes for connection before building channel for sending message
+    3. UDP message will not include status info
+        * TCP needs include flags or more info like sequence number in message
+    4. Shorter header than TCP
+- UDP can be used in application that has no requirement on sending accurate data and data integrity. Application can suffer data loss. 
+- UDP Message:
+    1. HEADER:
+        * source port number | destination port number
+        * length of Header and message | check sum
+    2. Application data (message)               
+- Check sum:
+    1. (Bit sum) source port number + dest port number + lenght + check sum 
+    2. Reverse 1 and 0
+    3. (Expected check sum result is 16 bits of 1)If any bit is not zero, it means it has some error =&gt; Discard data
+</code></pre>
 <hr>
+<h4 id="GBN-回退N步-and-SR-选择重传"><a href="#GBN-回退N步-and-SR-选择重传" class="headerlink" title="GBN (回退N步) and SR (选择重传)"></a>GBN (回退N步) and SR (选择重传)</h4><pre><code>- Sender steps
+
+    1. Receive data from upper level:
+        - Add header and send package IF package sequence number is within window
+        - IF package sequence number has been out of range of current window, save the package from upper layer into queue for cache
+    2. Timer and overtime
+        - For SR, every package needs its own timer to calculate if it has been overtime and needs resend package since no response has been received in time
+    3. Received ACK message from receiver
+        - ACK send_base sequence nbr package: increase send_base to minimum number that has not been marked as RECEIVED. Move the window in sequence and send all packages that have not been sent
+        - ACK NOT send_base sequence nbr package: mark it as RECEIVED if it is within window
+
+- Receiver steps
+
+    1. Package sequence nbr in [rev_base, rev_base + window.length - 1] (current minimum + window): 
+        - nbr is rev_base: send all cached packages and this one to upper listener. 
+        - nbr is NOT rev_base: cache the package and waiting for rev_base one and send to listener later
+    2. Package sequence nbr in [rev_base - window.length, rev_base - 1] (current minimum - window):
+        - Already received package and send ACK to no matter sender already marked it as RECEIVED or not
+    3. Discard package in all other cases
+
+- Sender and Receiver
+
+    - Sender and Receiver may always see different window
+    - SECOND point in RECEIVER steps is import because if sender keeps losing ACK signal from receiver. The sliding window may never slide.
+    - window length &lt;= sequence number total count / 2 =&gt; Otherwise receiver may not be able to tell if new package coming in is resending old one or a totally new one(they may share same sequence number)
+</code></pre>
+<hr>
+<h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a><code>TCP</code></h3><h4 id="TCP-Connection"><a href="#TCP-Connection" class="headerlink" title="TCP Connection"></a>TCP Connection</h4><pre><code>a. Components for TCP connection:
+    - Sender Process (client): buffer for sending messages, send_base variable, and socket
+    - Receiver Process (server): buffer for receiving messages, receive_base variable, and socket
+b. *** 3-way handshakes ***
+    1. client send (***1st***) TCP segment message to require connection
+    2. server will respond with a special TCP segment message (***2nd***) to accept connection
+    3. After connection built, client can keep sending messages (***3rd***) through the TCP channel. Only 3rd message will contain real application data.
+c. TCP segment (32 bits):
+    1. 16 bits of source port number and 16 bits of dest port number
+    2. sequence number for a segment
+        - Actual start bit count number of real message data flow
+    3. ACK number
+        - received sequence number + 1 (next expected received bit sequence number)
+    4. 4 bits header length field, unused space, 6 bit flag field and receive window field 
+        - flag field includes ACK bit for confirmation of received one segment 
+</code></pre>
+<hr>
+<h3 id="TCP-reliable-data-transportation-implementation"><a href="#TCP-reliable-data-transportation-implementation" class="headerlink" title="TCP reliable data transportation implementation"></a><code>TCP reliable data transportation implementation</code></h3><h4 id="Simplified-TCP-sender-logic"><a href="#Simplified-TCP-sender-logic" class="headerlink" title="Simplified TCP sender logic"></a>Simplified TCP sender logic</h4><pre><code>NextSeqNum = InitialSeqNumber
+SendBase=InitialSeqNumber
+
+while (true) &#123;
+    switch (case):
+        CASE received signal from upper program to send data:
+            if (timer not started) &#123;
+                start timer 
+            &#125;
+            send message to IP
+            NextSeqNum += length(data)
+            break;
+
+        CASE timer expired and no ACK received:
+            resend the minimum sequence number of segment data
+            restart timer
+            break;
+
+        CASE received ACK nad ACK y (y is next expected sent data sequence nbr):
+            if (y &gt; SendBase) &#123;
+                SendBase = y
+                if (there is any segment not received ACK) &#123;
+                    start timer
+                &#125;
+            &#125;
+            else &#123; /*Duplicate ACK for received data which means following data between y and sendbase has lost */
+                y&#39;s duplicate ACK += 1
+                if (y == 3) &#123;
+                    /* fast retransmit */
+                    resend segment with sequence nbr y
+                &#125;
+            &#125;
+            break;
+&#125;
+</code></pre>
+<h4 id="Other-points-on-how-to-make-reliable-data-transmission-with-TCP"><a href="#Other-points-on-how-to-make-reliable-data-transmission-with-TCP" class="headerlink" title="Other points on how to make reliable data transmission with TCP"></a>Other points on how to make reliable data transmission with TCP</h4><pre><code>a. sender code above
+b. Double TimeoutInterval when losing package ACK and timer timeout:
+    - This will resolve the problem when network stuck but still try to resent same data and make network worse
+c. fast retransmit when there are duplicate ACK
+d. flow-control service
+    - Sender send data speed should match with receiver receive speed
+    - receive window: rwnd = RvcBuffer - [LastByteRecvd - LastByterRead]
+    - Trick: if receiver&#39;s buffer is full, it will let sender know &quot;rwnd = 0&quot;. Sender will not stop sending data. Instead it will send a one-byte segment to keep pinging sender until sender as receiver buffer is cleaned up. It will resume sending segments. Otherwise receiver will never know when sender buffer will be cleaned up.
+</code></pre>
+<h4 id="Start-TCP-3-way-handshake-and-segments"><a href="#Start-TCP-3-way-handshake-and-segments" class="headerlink" title="Start TCP 3-way handshake and segments"></a>Start TCP 3-way handshake and segments</h4><pre><code>1. Client send TCP SYN connection segment
+    - SYN=1, seq=client_isn
+2. Server send TCP SYNACK connection segment
+    - SYN=1, seq=server_isn, ack=client_isn+1
+    - Server allocates buffer and other variables
+2. Client send TCP SYNACK connection segment
+    - SYN=0, seq=client_isn+1, ack=server_isn+1    
+    - Client allocates buffer and other variables            
+</code></pre>
+<h4 id="Stop-TCP-connection"><a href="#Stop-TCP-connection" class="headerlink" title="Stop TCP connection"></a>Stop TCP connection</h4><pre><code>1. Client sends FIN segment (FIN_BIT=1)
+    - client closes connection on its side
+2. Server sends ACK for client FIN
+3. Server send its own FIN segment (FIN_BIT=1)
+    - server closes connection on its side
+4. Client sends ACK for server FIN
+    - Wait for 30s or some customized time period
+</code></pre>
+<h4 id="Congestion-control"><a href="#Congestion-control" class="headerlink" title="Congestion control"></a>Congestion control</h4><pre><code>- Signals and meaning:
+    1. Package lost means congestion: 3 duplicate ACK or timeout once
+    2. ACK means can increase send speed
+- Congestion control Algorithms:
+    1. slow-start:
+        - start with one single minimum length message and test if receive ACK. If ACK received each time, double the sending message count.
+        - Once one package is marked as lost (3 duplicate ACK or timeout): go back to one single message set cwnd / 2 as threshold. Should not increase speed over the threshold
+    2. Once message count reached to threshold again. Increase one for each ACK and update threshold to cwnd / 2 once receiver another 3 duplicate ACK.
+</code></pre>
+<hr>
+<h3 id="Network-layer"><a href="#Network-layer" class="headerlink" title="Network layer"></a><code>Network layer</code></h3><h4 id="Data-plane-转发"><a href="#Data-plane-转发" class="headerlink" title="Data plane (转发)"></a>Data plane (转发)</h4><pre><code>- Router internal routing from one input port to another output port
+- Finished in hardware layer because of ns speed requirement
+- Longest prefix matching rule: IP address match more than one prefix in IP routing table
+- Include 3 parts:
+    1. Input port
+    2. Exchange structure: search routing table and send package to output port 
+    3. Output port
+- Input port and output port queue management:
+    1. FIFO
+    2. Priority Queue: FIFO within same priority
+    3. round robin queuing discipline (most popular in current routers): Rount robin predefined queues. 
+</code></pre>
+<h4 id="Control-Plane（路由选择）"><a href="#Control-Plane（路由选择）" class="headerlink" title="Control Plane（路由选择）"></a>Control Plane（路由选择）</h4><pre><code>- Global routing from one address to another address outside of router    
+- Finished in software layer
+</code></pre>
 
       
 
