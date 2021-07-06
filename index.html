@@ -651,9 +651,36 @@ d. flow-control service
     1. FIFO
     2. Priority Queue: FIFO within same priority
     3. round robin queuing discipline (most popular in current routers): Rount robin predefined queues. 
+- DHCP (Dynamic Host Configuration)
+    1. DHCP discover message (dest =&gt; 255.255.255.255; source: 0.0.0.0)
+    2. DHCP offer message (Recommended IP for client)
+    3. DHCP request message (Client pick one and send it back to server)
+    4. DHCP ACK message
+- NAT (Network Address Translation)
+    1. NAT router has an internal NAT tranlation table with records of randomly generated port number and machine port number match. 
+    2. All messages sent out from router will use the randomly generated port number.
+    3. NAT router will use translation table to translate port number and route message to internal machine.
+- General data plane
+    1. A general data translation table for match(link, IP, TCP) and action (transfer, discard, rewrite bits of message)    
 </code></pre>
 <h4 id="Control-Plane（路由选择）"><a href="#Control-Plane（路由选择）" class="headerlink" title="Control Plane（路由选择）"></a>Control Plane（路由选择）</h4><pre><code>- Global routing from one address to another address outside of router    
-- Finished in software layer
+- Finished in software layer 
+    1. Software-Defined Networking (SDN)
+- Every router control(distributed control) vs central control
+- Routing algorithm:
+    1. Centralized routing algorithm vs distributed routing algorithm
+        - Centralized needs all Link State in the whole network
+            1. Dijkstra: traverse all nodes and in every round, find the node with minimum D[i] (D is array of distance between start node and current node) NOT visited
+        - Distributed doesn&#39;t need all info from the whole network. Every router has its own cost estimate, and use recursion to calculate.
+            1. DV (Distance Vector): Update own routing table everytime any neighbor node send updates (Any change in distance vertor)
+    2. Static vs Dymaic routing algorithm
+    3. Load-sensitive vs load-incensitive routing algorithm
+- OSPF in intra-AS (Autonomous System)
+    1. intra-autonomous system routing protocol
+    2. Dijkstra in local AS like every ISP itself
+- BGP (Border Gateway Protocol 边际网关协议) 
+    1. inter-autonomous system routing protocol
+    2. Most important protocol (same as IP) to linking thousands of different ISP
 </code></pre>
 
       
