@@ -684,6 +684,17 @@ d. flow-control service
     - BGP has 2 responsibilites
         1. Publish BGP route info to other AS router
         2. Find best route
+    - AS External BGP (eBGP) vs AS Internal BGP (iBGP)
+    - route includes BGP attribute and prefix
+        1. IP of NEXT-HOP (Start router IP address)
+        2. Next path
+            - AS2 AS3
+        3. Prefix                
+        4. &quot;IP: AS2 AS3; x&quot; 
+    - BGP Route pick algorithm:
+        1. Local preference which may be learned by another router within same AS
+        2. Shortest AS-PATH not router
+        3. Hot potato routing: fewest router need pass to next AS
 </code></pre>
 
       

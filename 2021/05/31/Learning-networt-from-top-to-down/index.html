@@ -16,7 +16,7 @@
 <meta property="og:description" content="Chapter 1 Network layers Stack5层因特网协议栈- Application: HTTP, SMTP, FTP and DNS - Transport: TCP and UDP - Network or Internet: IP - Data Link: Ethernet, Wi-Fi - Physical: Bit   Chapter 2 Application lay">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-31T23:10:32.000Z">
-<meta property="article:modified_time" content="2021-07-07T04:03:27.093Z">
+<meta property="article:modified_time" content="2021-07-09T16:19:39.269Z">
 <meta property="article:author" content="Hao Tang">
 <meta name="twitter:card" content="summary">
   
@@ -686,6 +686,17 @@ d. flow-control service
     - BGP has 2 responsibilites
         1. Publish BGP route info to other AS router
         2. Find best route
+    - AS External BGP (eBGP) vs AS Internal BGP (iBGP)
+    - route includes BGP attribute and prefix
+        1. IP of NEXT-HOP (Start router IP address)
+        2. Next path
+            - AS2 AS3
+        3. Prefix                
+        4. &quot;IP: AS2 AS3; x&quot; 
+    - BGP Route pick algorithm:
+        1. Local preference which may be learned by another router within same AS
+        2. Shortest AS-PATH not router
+        3. Hot potato routing: fewest router need pass to next AS
 </code></pre>
 
       
