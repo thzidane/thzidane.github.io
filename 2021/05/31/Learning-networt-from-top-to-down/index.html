@@ -16,7 +16,7 @@
 <meta property="og:description" content="Chapter 1 Network layers Stack5层因特网协议栈- Application: HTTP, SMTP, FTP and DNS - Transport: TCP and UDP - Network or Internet: IP - Data Link: Ethernet, Wi-Fi - Physical: Bit   Chapter 2 Application lay">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-31T23:10:32.000Z">
-<meta property="article:modified_time" content="2021-07-09T16:19:39.269Z">
+<meta property="article:modified_time" content="2021-07-11T01:03:45.038Z">
 <meta property="article:author" content="Hao Tang">
 <meta name="twitter:card" content="summary">
   
@@ -683,9 +683,6 @@ d. flow-control service
 - BGP (Border Gateway Protocol 边际网关协议) 
     - inter-autonomous system routing protocol
     - Most important protocol (same as IP) to linking thousands of different ISP
-    - BGP has 2 responsibilites
-        1. Publish BGP route info to other AS router
-        2. Find best route
     - AS External BGP (eBGP) vs AS Internal BGP (iBGP)
     - route includes BGP attribute and prefix
         1. IP of NEXT-HOP (Start router IP address)
@@ -696,7 +693,58 @@ d. flow-control service
     - BGP Route pick algorithm:
         1. Local preference which may be learned by another router within same AS
         2. Shortest AS-PATH not router
-        3. Hot potato routing: fewest router need pass to next AS
+        3. Hot potato routing: fewest router need pass to next AS  
+- How to register a new DNS domain:
+    1. Get IP address range (/24) from ISP (Your Internet service provider)
+    2. Buy a domain and bind your DNS server IP address
+    3. ISP will use BGP broadcast IP address
+</code></pre>
+<h4 id="SDN"><a href="#SDN" class="headerlink" title="SDN"></a>SDN</h4><pre><code>- 4 features:
+    1. Transfer based on flow:
+        - Compared with router based on IP address, SDN can transfer package based on 11 different header bits in package header
+    2. Split data plane and control plane
+        - Data plane: switch
+        - Control plane: server and its running software used for determining and managing flow chart in switch 
+    3. Network control feature is outside of switch 
+    4. Programmable network functions in software level            
+- Functions:
+    1. Communication between SDN controller and swiches controlled by controller
+    2. Network state management including state updates and recalculate after new state update
+    3. REST API for higher level network application like route picker         
+</code></pre>
+<h4 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h4><pre><code>- Used for communication between PC and router
+- Typically used for error detection
+</code></pre>
+<h4 id="Network-management-and-SNMP-Simple-Network-Management-Protocol"><a href="#Network-management-and-SNMP-Simple-Network-Management-Protocol" class="headerlink" title="Network management and SNMP (Simple Network Management Protocol)"></a>Network management and SNMP (Simple Network Management Protocol)</h4><pre><code>- Key parts:
+    1. Managing server
+    2. Managed device
+    3. MIB (Management Information base)
+        - Counter like couter of bad IP data
+        - Managed device will update MIB
+    4. Network management agent:
+        - Communication between Managing server and MIB
+    5. Netwrok management protocol:
+        - It will not manage devices but it is the protocol for network adminitrator to manage the system
+        - SNMP            
+</code></pre>
+<h3 id="Link-layer"><a href="#Link-layer" class="headerlink" title="Link layer"></a><code>Link layer</code></h3><h4 id="Link-layer-summary"><a href="#Link-layer-summary" class="headerlink" title="Link layer summary"></a>Link layer summary</h4><pre><code>- Link layer provided services:
+    1. framing
+        - wrap network layer data and include link layer header
+    2. MAC (Medium Access Control)
+        - MAC protocol is useful when there are multiple nodes listening on same link
+    3. Reliable data transmission
+    4. Error detection and correction
+- Link layer is mostly living in Network Adapter or called Network Interface Card (NIC 网卡)
+    - Nowadays, network interface card has been included in main board 
+</code></pre>
+<h4 id="Error-detection-and-correction"><a href="#Error-detection-and-correction" class="headerlink" title="Error detection and correction"></a>Error detection and correction</h4><pre><code>1. 奇偶校验
+2. checksum
+3. CRC (Cyclic Redundancy Check) most used
+    - Also called polynominal code
+    - D * 2^r XOR R = nG
+    - D: data bits
+    - R: CRC bits R = D * 2^r % G
+    - G: Internation standards known number
 </code></pre>
 
       
