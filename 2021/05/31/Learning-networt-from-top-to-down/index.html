@@ -16,7 +16,7 @@
 <meta property="og:description" content="Chapter 1 Network layers Stack5层因特网协议栈- Application: HTTP, SMTP, FTP and DNS - Transport: TCP and UDP - Network or Internet: IP - Data Link: Ethernet, Wi-Fi - Physical: Bit   Chapter 2 Application lay">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-31T23:10:32.000Z">
-<meta property="article:modified_time" content="2021-07-11T01:03:45.038Z">
+<meta property="article:modified_time" content="2021-07-13T04:51:31.630Z">
 <meta property="article:author" content="Hao Tang">
 <meta name="twitter:card" content="summary">
   
@@ -745,6 +745,83 @@ d. flow-control service
     - D: data bits
     - R: CRC bits R = D * 2^r % G
     - G: Internation standards known number
+</code></pre>
+<h4 id="Multiple-access-link-and-protocol"><a href="#Multiple-access-link-and-protocol" class="headerlink" title="Multiple access link and protocol"></a>Multiple access link and protocol</h4><pre><code>1. point to point link
+2. broadcast link
+    - 3 types of protocols:
+        1. Channel partitioning protocol
+            - TDM: TimeFrame / N nodes
+            - FDM: R bps / N nodes
+            - CDMA (Code Division Multiple Access): Every node use its own special way to Code message and receiver knows how to revert it back 
+        2. Random access protocol
+            1. ALOHA
+                - Don&#39;t do carrier senseing collision detection
+                - When collision happened, always retransmit at possibility p and (1 - p) wait for another time slot
+            2. CSMA(Carrier Sense Multiple Access) and CSMA / CD (Collection Detection)
+                - Carrier sensing: before transmission, it will listen on broadcast channel. It will wait until channel becomes quiet and send its own message
+                - Collection Detection: while sending message, if node heard another node sending message signal. It will give up immediately and wait for a random time slot before resend message
+                - Binary exponential backoff: the random time slot will be picked up randomly from &#123;0, 1, 2, ...., 2^n - 1&#125;. The more times collision happened, the above combination will be larger.
+        3. taking-turns protocol
+            1. Polling protocol: main node asking every node and behave like administrator
+            2. token-passing protocol: nodes passing token
+3. LAN (Local Area Network)
+    - MAC addresss
+        - MAC Address will never change
+        - IP Address is like mailing address. It will change while you are moving
+        - Broadcast MAC address: FF-FF-FF-FF-FF-FF
+        - Only PC or router have MAC address. Not switch
+    - ARP (Address Resolution Protocol)
+        - IP and MAC relation
+        - Local network: search ARP table on its own machine and find MAC address and put it in link data
+        - Outside network: need find first router address in ARP table
+    - Ethernet frame
+        1. Data
+        2. Target MAC address
+            - Adapter only accept message with its MAC address or broadcast address
+        3. Source MAC address
+        4. Type
+            - Translate message for upper level protocol (like IP in network layer)
+        5. CRC
+        6. Preamble
+            - First 7 bytes are 10101010 used by receiver adapter to calculate link layer transmission speed
+            - Last byte is 10101011 and last 2 bits are 11 to inform real data coming in     
+    - Switch (More popular for LAN because of having better performance than broadcast)
+        - Transparent to server or router. Server is not asking switch for address
+        - How switch works:
+            1. Filtering
+                - Switch tale: MAC Address, Port, saved time 
+            2. forwarding
+                - No record for MAC Address in switch table =&gt; broadcast to all ports excluding incoming port
+                - Has record for MAC address
+                    1. record port == incoming port =&gt; discard message (It has been broadcast before. Duplicate)
+                    2. record port != incoming port =&gt; save message to record port sending message queue
+        - Self-learning:
+            1. Empty at first
+            2. Every message received, one record with MAC Address, Port and time will be saved in swtich table
+            3. After some aging time, old records will be deleted automatically. Removed PC records will be retired in this way.
+        - Compared to router:
+            - Switch: 
+                1. Plug and play device
+                2. Used for fewer PC like hundreds machines LAN
+            - Router:
+                1. Route optimization
+                2. Better protection and data seperation to reduce broadcast
+                3. Used for larger network
+        - VLAN 
+            - Use software to create groups of ports
+</code></pre>
+<h4 id="Example-of-making-web-request-process"><a href="#Example-of-making-web-request-process" class="headerlink" title="Example of making web request process"></a>Example of making web request process</h4><pre><code>1. Preparing DHCP, UDP, IP and Ethernet
+    - IN SHORT: send DHCP UDP message to get IP address from router DHCP ACK 
+    - DHCP request to get an IP address from router connected to ISP provider
+    - IP datagram including the DHCP request will be wrapped into an ethernet frame with broadcast MAC also with its own MAC address
+    - Router received the message and decrypt it into UDP segment and it will allocate one IP for the request user. Create an UDP segment(DHCP ACK) and compose it into an IP datagram and ethernet frame back to request user with MAC address.
+    - Switch is self-learning and has saved the user MAC and port relationship. It will send the frame back to user
+2. Preparing DNS and ARP
+    - User PC already knows the its LAN router IP address and its ISP DNS server IP address. It needs get IP address from ISP DNS server by url. It does not know its LAN router MAC address
+    - It will send a broadcast ARP message to its LAN router and gets response from there. In previous DHCP message, it does not include router MAC address.  
+3. Routing to DNS Server and Get IP address from url
+4. TCP and HTTP
+    - 3 handshakes for TCP connection
 </code></pre>
 
       
