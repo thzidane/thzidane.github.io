@@ -146,6 +146,197 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Microservice-Pattern" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/07/17/Microservice-Pattern/">Learning Microservice Pattern</a>
+    </h1>
+  
+
+        
+        <a href="/2021/07/17/Microservice-Pattern/" class="archive-article-date">
+  	<time datetime="2021-07-18T04:22:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Chapter-1-Microservice-summary"><a href="#Chapter-1-Microservice-summary" class="headerlink" title="Chapter 1 Microservice summary"></a>Chapter 1 <em><strong>Microservice summary</strong></em></h2><h3 id="What-is-microservice-and-its-good-and-bad"><a href="#What-is-microservice-and-its-good-and-bad" class="headerlink" title="What is microservice and its good and bad"></a><code>What is microservice and its good and bad</code></h3><pre><code>- What is microservice
+    1. Communictation between services:
+        - Use light protocol like REST or gRPC
+    2. Data managment:
+        - Microservice always has its own data model and database
+- Good:
+    1. Big and complex system can be continous development
+    2. Microservice is small and easy for maintainence
+    3. Individual deployment
+    4. Individual development
+    5. Easy to do new experiment and test new technology
+    6. Better error tolerance
+- Bad:
+    1. How to devide and define microservice is challenging
+    2. Distributed system is complex
+        - Talk between different services
+        - Query with different services
+        - IDE
+        - Maintenance
+    3. Multiple teams management
+    4. Decide when to start using microservice
+</code></pre>
+<hr>
+<h2 id="Chapter-2-Service-Decompose-Strategy"><a href="#Chapter-2-Service-Decompose-Strategy" class="headerlink" title="Chapter 2 Service Decompose Strategy"></a>Chapter 2 <em><strong>Service Decompose Strategy</strong></em></h2><h3 id="Software-Architecture"><a href="#Software-Architecture" class="headerlink" title="Software Architecture"></a>Software Architecture</h3><pre><code>- Features:
+    1. Software Elements
+    2. Relationship
+- 4 + 1 view model
+    1. Logic 
+        - Class and type
+        - Inheritance, class relation and dependency
+    2. Implementation or Development
+        - Module(JAR) and assembly(WAR)
+        - Module and module relationship and modules and assembly relationship
+    3. Process:
+        - Process
+        - Talk between different processes
+    4. Physical:
+        - VM or Physical machine
+        - Network
+- Architecture is import for non-functional requirements
+    - like Reliability and Scalability
+- Software Architecture pattern:
+    - Logic:
+        1. Layers
+            - API
+            - Logic
+            - Database
+        2. 六边形
+            - Business logic is center and all adapters depend on business logic
+            - Ins and outs port and adapters
+                1. Ins 
+                    - port: service API for outside world calling
+                    - Adapter: Processing outside world request (like Spring MVC controller and message broker proxy)
+                2. Outs 
+                    - port: database API
+                    - adapter: process request from business logic (like DAO)
+    - Implementation
+        1. Monolithic
+            - Single WAR
+        2. Microservice
+            - Multiple WAR
+            - What is service:
+                - One single software component and can be individually deployed
+                - Basic definition:
+                    1. Has API
+                    2. Individual deployment
+            - Loose coupling:
+                - Use API to encapsulate the implementation details
+                - Benefits:
+                    1. No access to service database from outside world
+                    2. Isolation easy for development and testing
+                - Bad:
+                    - Data integrity
+                    - Query across different services is hard
+            - Shared Library vs Microservice:
+                - Shared Library should be used for component very unlikely to change
+                - Microsersive is opposite and should be used for easy to change service
+</code></pre>
+<h3 id="Service-decomposition"><a href="#Service-decomposition" class="headerlink" title="Service decomposition"></a>Service decomposition</h3><pre><code>- Microservice decompose steps
+    1. Translate user case to system operation
+        - Create data model for different subdomain (from User story nounce)
+        - System operation definition and correlate operations with data model subdomains (from User story verbs)
+            - Command and query
+            - Operation definition:
+                1. Operation (param1, param2)
+                2. Return value
+                3. pre-requisite
+                4. post-requisite
+    2. Decompose Service
+        1. By business capability
+            - Top level capability and sub level capability
+            - Top level capability is always a service and sometimes sub level can also be a service. It depends
+            - Good: capability is not always changing and services structure is stable
+            - But services by capability may still need change in the future like too many talks between 2 services and they should become one single service 
+        2. By subdomain
+            - Need analyzing the business and its organizational structure
+        3. principles:
+            - SRP: single responsibility principle
+                - One service should only have one single responsibility and only one reason to change it not influenced by others
+                - Good for reliability
+            - CCP: common closure principle
+                - One closure should contain types which are coupled and have to be changed in sequence
+                - Good for maintenance
+    3. Service API definition
+        - Service category:
+            - Internal service call only
+            - Both internal and outer client service call 
+- Microservice design obstacles:
+    1. Network delay
+        - Solution: Request in batch or have to combine 2 servcies
+    2. Service synchronous communication
+        - Problem: REST may reduce the reliability. One service down may cause the whole service not working
+    3. Data integrity across service
+        - SAGA can achieve eventual consistency but still ACID cannot be achieved like old 2-phase commit
+    4. Remove GOD class
+        - DDD: domain driven and decompose large object into different domain
+</code></pre>
+<hr>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tags</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/07/17/Microservice-Pattern/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Learning-networt-from-top-to-down" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -725,7 +916,8 @@ d. flow-control service
         - It will not manage devices but it is the protocol for network adminitrator to manage the system
         - SNMP            
 </code></pre>
-<h3 id="Link-layer"><a href="#Link-layer" class="headerlink" title="Link layer"></a><code>Link layer</code></h3><h4 id="Link-layer-summary"><a href="#Link-layer-summary" class="headerlink" title="Link layer summary"></a>Link layer summary</h4><pre><code>- Link layer provided services:
+<hr>
+<h2 id="Link-layer"><a href="#Link-layer" class="headerlink" title="Link layer"></a><code>Link layer</code></h2><h3 id="Link-layer-summary"><a href="#Link-layer-summary" class="headerlink" title="Link layer summary"></a>Link layer summary</h3><pre><code>- Link layer provided services:
     1. framing
         - wrap network layer data and include link layer header
     2. MAC (Medium Access Control)
@@ -735,7 +927,7 @@ d. flow-control service
 - Link layer is mostly living in Network Adapter or called Network Interface Card (NIC 网卡)
     - Nowadays, network interface card has been included in main board 
 </code></pre>
-<h4 id="Error-detection-and-correction"><a href="#Error-detection-and-correction" class="headerlink" title="Error detection and correction"></a>Error detection and correction</h4><pre><code>1. 奇偶校验
+<h3 id="Error-detection-and-correction"><a href="#Error-detection-and-correction" class="headerlink" title="Error detection and correction"></a>Error detection and correction</h3><pre><code>1. 奇偶校验
 2. checksum
 3. CRC (Cyclic Redundancy Check) most used
     - Also called polynominal code
@@ -744,7 +936,7 @@ d. flow-control service
     - R: CRC bits R = D * 2^r % G
     - G: Internation standards known number
 </code></pre>
-<h4 id="Multiple-access-link-and-protocol"><a href="#Multiple-access-link-and-protocol" class="headerlink" title="Multiple access link and protocol"></a>Multiple access link and protocol</h4><pre><code>1. point to point link
+<h3 id="Multiple-access-link-and-protocol"><a href="#Multiple-access-link-and-protocol" class="headerlink" title="Multiple access link and protocol"></a>Multiple access link and protocol</h3><pre><code>1. point to point link
 2. broadcast link
     - 3 types of protocols:
         1. Channel partitioning protocol
@@ -808,7 +1000,7 @@ d. flow-control service
         - VLAN 
             - Use software to create groups of ports
 </code></pre>
-<h4 id="Example-of-making-web-request-process"><a href="#Example-of-making-web-request-process" class="headerlink" title="Example of making web request process"></a>Example of making web request process</h4><pre><code>1. Preparing DHCP, UDP, IP and Ethernet
+<h3 id="Example-of-making-web-request-process"><a href="#Example-of-making-web-request-process" class="headerlink" title="Example of making web request process"></a>Example of making web request process</h3><pre><code>1. Preparing DHCP, UDP, IP and Ethernet
     - IN SHORT: send DHCP UDP message to get IP address from router DHCP ACK 
     - DHCP request to get an IP address from router connected to ISP provider
     - IP datagram including the DHCP request will be wrapped into an ethernet frame with broadcast MAC also with its own MAC address
@@ -821,7 +1013,8 @@ d. flow-control service
 4. TCP and HTTP
     - 3 handshakes for TCP connection
 </code></pre>
-<h3 id="Security"><a href="#Security" class="headerlink" title="Security"></a><code>Security</code></h3><h4 id="Security-Summary"><a href="#Security-Summary" class="headerlink" title="Security Summary"></a>Security Summary</h4><pre><code>- Scure communication features:
+<hr>
+<h2 id="Security"><a href="#Security" class="headerlink" title="Security"></a><code>Security</code></h2><h3 id="Security-Summary"><a href="#Security-Summary" class="headerlink" title="Security Summary"></a>Security Summary</h3><pre><code>- Scure communication features:
     1. Confidentiality
         - PlainText =&gt; CipherText with Encryption Algorithm
         - 2 key systems:
@@ -851,7 +1044,7 @@ d. flow-control service
             4. Server can verify the response from client by decrypting the response message with nounce it sent before
     4. Operational security
 </code></pre>
-<h4 id="Network-Security-Examples"><a href="#Network-Security-Examples" class="headerlink" title="Network Security Examples"></a>Network Security Examples</h4><pre><code>1. Email
+<h3 id="Network-Security-Examples"><a href="#Network-Security-Examples" class="headerlink" title="Network Security Examples"></a>Network Security Examples</h3><pre><code>1. Email
     - Confidentiality
         1. Generate random symmetric key
         2. use the symmetric key to encrypt message
@@ -878,6 +1071,7 @@ d. flow-control service
         - Data
         - MAC (Data and MAC will be encrypted)
 </code></pre>
+<hr>
 
       
 
@@ -1087,6 +1281,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">tags</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>

@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Learning network from top to down | Hexo</title>
+  <title>Learning Microservice Pattern | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Chapter 1 Network layers Stack5层因特网协议栈- Application: HTTP, SMTP, FTP and DNS - Transport: TCP and UDP - Network or Internet: IP - Data Link: Ethernet, Wi-Fi - Physical: Bit   Chapter 2 Application lay">
+  <meta name="description" content="Chapter 1 Microservice summaryWhat is microservice and its good and bad- What is microservice     1. Communictation between services:         - Use light protocol like REST or gRPC     2. Data managme">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Learning network from top to down">
-<meta property="og:url" content="http://example.com/2021/05/31/Learning-networt-from-top-to-down/index.html">
+<meta property="og:title" content="Learning Microservice Pattern">
+<meta property="og:url" content="http://example.com/2021/07/17/Microservice-Pattern/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Chapter 1 Network layers Stack5层因特网协议栈- Application: HTTP, SMTP, FTP and DNS - Transport: TCP and UDP - Network or Internet: IP - Data Link: Ethernet, Wi-Fi - Physical: Bit   Chapter 2 Application lay">
+<meta property="og:description" content="Chapter 1 Microservice summaryWhat is microservice and its good and bad- What is microservice     1. Communictation between services:         - Use light protocol like REST or gRPC     2. Data managme">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-05-31T23:10:32.000Z">
-<meta property="article:modified_time" content="2021-07-18T16:26:23.943Z">
+<meta property="article:published_time" content="2021-07-18T04:22:34.000Z">
+<meta property="article:modified_time" content="2021-07-21T04:34:04.496Z">
 <meta property="article:author" content="Hao Tang">
+<meta property="article:tag" content="tags">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -148,739 +149,142 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Learning-networt-from-top-to-down" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Microservice-Pattern" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Learning network from top to down
+      Learning Microservice Pattern
     </h1>
   
 
         
-        <a href="/2021/05/31/Learning-networt-from-top-to-down/" class="archive-article-date">
-  	<time datetime="2021-05-31T23:10:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-31</time>
+        <a href="/2021/07/17/Microservice-Pattern/" class="archive-article-date">
+  	<time datetime="2021-07-18T04:22:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-17</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Chapter-1-Network-layers-Stack"><a href="#Chapter-1-Network-layers-Stack" class="headerlink" title="Chapter 1 Network layers Stack"></a>Chapter 1 <em><strong>Network layers Stack</strong></em></h2><h3 id="5层因特网协议栈"><a href="#5层因特网协议栈" class="headerlink" title="5层因特网协议栈"></a><code>5层因特网协议栈</code></h3><pre><code>- Application: HTTP, SMTP, FTP and DNS
-- Transport: TCP and UDP
-- Network or Internet: IP
-- Data Link: Ethernet, Wi-Fi
-- Physical: Bit
+        <h2 id="Chapter-1-Microservice-summary"><a href="#Chapter-1-Microservice-summary" class="headerlink" title="Chapter 1 Microservice summary"></a>Chapter 1 <em><strong>Microservice summary</strong></em></h2><h3 id="What-is-microservice-and-its-good-and-bad"><a href="#What-is-microservice-and-its-good-and-bad" class="headerlink" title="What is microservice and its good and bad"></a><code>What is microservice and its good and bad</code></h3><pre><code>- What is microservice
+    1. Communictation between services:
+        - Use light protocol like REST or gRPC
+    2. Data managment:
+        - Microservice always has its own data model and database
+- Good:
+    1. Big and complex system can be continous development
+    2. Microservice is small and easy for maintainence
+    3. Individual deployment
+    4. Individual development
+    5. Easy to do new experiment and test new technology
+    6. Better error tolerance
+- Bad:
+    1. How to devide and define microservice is challenging
+    2. Distributed system is complex
+        - Talk between different services
+        - Query with different services
+        - IDE
+        - Maintenance
+    3. Multiple teams management
+    4. Decide when to start using microservice
 </code></pre>
 <hr>
-<h2 id="Chapter-2-Application-layer"><a href="#Chapter-2-Application-layer" class="headerlink" title="Chapter 2 Application layer"></a>Chapter 2 <em><strong>Application layer</strong></em></h2><h3 id="Summary-of-application-layer"><a href="#Summary-of-application-layer" class="headerlink" title="Summary of application layer"></a><code>Summary of application layer</code></h3><h4 id="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"><a href="#应用程序（计算机进程）和socket（应用程序和网络之间的API）会话" class="headerlink" title="应用程序（计算机进程）和socket（应用程序和网络之间的API）会话"></a>应用程序（计算机进程）和socket（应用程序和网络之间的API）会话</h4><pre><code>- 选择运输协议
-    1. 分类标准：
-        - 可靠数据传输
-        - 吞吐量
-            - 带宽敏感应用：对吞吐量具有特定的要求
-            - 弹性应用：实时利用当时可用的带宽（如电子邮件、文件传输以及Web应用）
-        - 定时
-            - 低时延vs高时延
-        - 安全性
-            - 加密、数据完整性和端点鉴别
-    2. TCP/IP network provides 2 transport prototype:
-        1. TCP: Reliable data transfer
-            - SSL(Secure Sockes Layer) is the improvment of TCP and it provides data encryption and decryption while sending message e2e
-            - Without SSL send message: Sender program -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver program
-            - With SSL send message: Sender program -&gt; Sender SSL socket API -&gt; Sender SSL encrypt message -&gt; Sender TCP socket -&gt; Receiver TCP socket -&gt; Receiver socket API -&gt; Receiver SSL decrypt message -&gt;Receiver program
-        2. UDP: Unreliable data transfer
-            - No connection handshake as TCP
-            - No gurantee of data arrival and arrival sequence
-- 设定几个运输层参数（如最大缓存和最大报文长度）
+<h2 id="Chapter-2-Service-Decompose-Strategy"><a href="#Chapter-2-Service-Decompose-Strategy" class="headerlink" title="Chapter 2 Service Decompose Strategy"></a>Chapter 2 <em><strong>Service Decompose Strategy</strong></em></h2><h3 id="Software-Architecture"><a href="#Software-Architecture" class="headerlink" title="Software Architecture"></a>Software Architecture</h3><pre><code>- Features:
+    1. Software Elements
+    2. Relationship
+- 4 + 1 view model
+    1. Logic 
+        - Class and type
+        - Inheritance, class relation and dependency
+    2. Implementation or Development
+        - Module(JAR) and assembly(WAR)
+        - Module and module relationship and modules and assembly relationship
+    3. Process:
+        - Process
+        - Talk between different processes
+    4. Physical:
+        - VM or Physical machine
+        - Network
+- Architecture is import for non-functional requirements
+    - like Reliability and Scalability
+- Software Architecture pattern:
+    - Logic:
+        1. Layers
+            - API
+            - Logic
+            - Database
+        2. 六边形
+            - Business logic is center and all adapters depend on business logic
+            - Ins and outs port and adapters
+                1. Ins 
+                    - port: service API for outside world calling
+                    - Adapter: Processing outside world request (like Spring MVC controller and message broker proxy)
+                2. Outs 
+                    - port: database API
+                    - adapter: process request from business logic (like DAO)
+    - Implementation
+        1. Monolithic
+            - Single WAR
+        2. Microservice
+            - Multiple WAR
+            - What is service:
+                - One single software component and can be individually deployed
+                - Basic definition:
+                    1. Has API
+                    2. Individual deployment
+            - Loose coupling:
+                - Use API to encapsulate the implementation details
+                - Benefits:
+                    1. No access to service database from outside world
+                    2. Isolation easy for development and testing
+                - Bad:
+                    - Data integrity
+                    - Query across different services is hard
+            - Shared Library vs Microservice:
+                - Shared Library should be used for component very unlikely to change
+                - Microsersive is opposite and should be used for easy to change service
 </code></pre>
-<h4 id="进程寻址"><a href="#进程寻址" class="headerlink" title="进程寻址"></a>进程寻址</h4><pre><code>1. IP address (主机地址)
-2. Port number（主机上的指定接收进程的标识符)
-</code></pre>
-<h4 id="Popular-application-and-its-prototypes"><a href="#Popular-application-and-its-prototypes" class="headerlink" title="Popular application and its prototypes"></a>Popular application and its prototypes</h4><table>
-<thead>
-<tr>
-<th>Application</th>
-<th>Application Prototype</th>
-<th>Transport Prototype</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Email</td>
-<td>SMTP</td>
-<td>TCP</td>
-</tr>
-<tr>
-<td>Remote Open end access</td>
-<td>Telnet</td>
-<td>TCP</td>
-</tr>
-<tr>
-<td>Web</td>
-<td>HTTP</td>
-<td>TCP</td>
-</tr>
-<tr>
-<td>File transfer</td>
-<td>FTP</td>
-<td>TCP</td>
-</tr>
-<tr>
-<td>Steam media like youtube</td>
-<td>HTTP</td>
-<td>TCP</td>
-</tr>
-<tr>
-<td>Internet phone call</td>
-<td>SIP,RTP or special like skype</td>
-<td>UDP</td>
-</tr>
-</tbody></table>
-<h4 id="Application-layer-protocol"><a href="#Application-layer-protocol" class="headerlink" title="Application-layer protocol"></a>Application-layer protocol</h4><pre><code>1. Message type: Request and response message
-2. Message grammar
-3. Message different parts definition and meaning
-4. When and how client and server send and recive message and response
-</code></pre>
-<hr>
-<h3 id="Web-and-Http"><a href="#Web-and-Http" class="headerlink" title="Web and Http"></a><code>Web and Http</code></h3><h4 id="HTTP-HyperText-Transfer-Protocol"><a href="#HTTP-HyperText-Transfer-Protocol" class="headerlink" title="HTTP (HyperText Transfer Protocol)"></a>HTTP (HyperText Transfer Protocol)</h4><pre><code>- Concepts
-    1. HTTP Client(like web browser) send HTTP request and receives HTTP response from HTTP server(like apache web server)
-    2. HTTP is stateless protocol
-- Three Hanshakes between client and server based on HTTP and TCP protocol
-    1. First handshake: client sends small TCP message for connection request to server
-    2. Second handshake: server sends small response TCP message to accept connection
-    3. Third handshake: client accept connection and sent HTTP request message
-    4. *SUMMARY* Rough Timecost: Two Round-Trip Time(RTT) + Real content(like html file) transfer
-        - One RTT for first and second handshakes (Client wants to talk to server and server reponse YES to client round trip)
-        - One RTT for third handshake (Client sends request message and receives response message from server)
-- non-peristent connection vs persistent connection:
-    1. Reduce RTT for first and second handshakes to build connection for every new request
-    2. Persistent connection is HTTP 1\.1 and 2 default
-</code></pre>
-<h4 id="HTTP-message-format"><a href="#HTTP-message-format" class="headerlink" title="HTTP message format"></a><em><strong>HTTP message format</strong></em></h4><pre><code>- HTTP message
-    1. HTTP *Request* message format:
-        - Request line:
-            1. HTTP verbs: GET, POST, *HEAD* (Similar as GET but only used for test trace without real HTTP response message from server), *PUT* (Upload file to specific path on server) and DELETE
-            2. URL
-            3. HTTP version
-        - Header line (lines after first one):
-            1. Host: www.abc.com (web proxy cache)
-            2. Connection: close (Non-persistent connection and close the connection after current talk)
-            3. User-agent: Mozilar (firefox browser)
-            4. Accept-language: fr (Frensh as language if not exists in server use default language)
-        - Entity body (POST reuqest will have submit form info)
-    2. HTTP *Response* message format:
-        - status line:
-            1. HTTP version
-            2. status code
-            3. status message
-</code></pre>
-<table>
-<thead>
-<tr>
-<th>Status CODE</th>
-<th>Status MESSAGE</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>200</td>
-<td>OK</td>
-<td>Success</td>
-</tr>
-<tr>
-<td>301</td>
-<td>Moved Permanently</td>
-<td>New URL can be found Header line location</td>
-</tr>
-<tr>
-<td>400</td>
-<td>Bad Request</td>
-<td>Request not accepted by server</td>
-</tr>
-<tr>
-<td>404</td>
-<td>Not Found</td>
-<td>Document cannot be found on server</td>
-</tr>
-<tr>
-<td>505</td>
-<td>Http version not supported</td>
-<td>server not support current request HTTP version</td>
-</tr>
-</tbody></table>
-<pre><code>        - Header line:
-            1. Connection: close =&gt; (Non-persistent connection and tell client will close the connection after current talk)
-            2. Date: Tue, 18 Aug 2015 blah blah =&gt; (Server found object and insert it into repsonse message datetime)
-            3. Server: Apache/2.2.3 (Centos) =&gt; (like user agent in request message)
-            4. Last modified: DATE_TIME =&gt; (Important for cache to know last content modified in server which may need refresh cache)
-            5. Content-Length: int number
-            6. Content-Type: HTML
-        - Entity body
-    3. Request and Response message can have a lot of different Header line and based on requirement and real use case.
-</code></pre>
-<h4 id="Web-cache"><a href="#Web-cache" class="headerlink" title="Web cache"></a>Web cache</h4><pre><code>- Cookie
-    1. Request and response message will have cookie header line =&gt; cookie: COOKIE_ID
-    2. Browser will save &quot;SITE_URL: ID&quot; into cookie for future same site load
-    3. Server will also save user: COOKIE_ID pair into database
-- Web proxy server
-    1. A proxy server will answer local network requests(like school). If not hit cache, send request to real original server
-    2. Keep last-modified date on proxy server and will check if cache has been out-of date
-        - Add &quot;If-modified-since: LAST_MODIFIED_DATE&quot; as Header line in request message
-        - If Server responds &quot;HTTP/1.1 304 Not Moified&quot; in response Header line, entity body will be empty. Use cached object.
-</code></pre>
-<hr>
-<h3 id="Email-and-SMTP"><a href="#Email-and-SMTP" class="headerlink" title="Email and SMTP"></a><code>Email and SMTP</code></h3><h4 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h4><pre><code>- 3 parts:
-    1. User agent
-    2. Mail server
-    3. SMTP (Simple Mail Transfer Protocol)
-
-- Email send and receive process:
-    1. Sender writes message and receiver email address using *User Agent* program
-    2. Sender *User Agent* sends message to its *Mail Server* and message will be saved into message queue
-    3. Sender *Mail Server* finds this message and will try to create a TCP connection to receiver *Mail Server*
-    4. After initial handshakes between sender *Mail Server* and receiver *Mail Server*, message will be sent to receiver&#39;s *Mail Server*
-    5. Receiver *Mail Server* will save this message to receiver&#39;s *Inbox*
-    6. Receiver can use its username and password to access its *Inbox* and saw the message from sender
-</code></pre>
-<h4 id="SMTP"><a href="#SMTP" class="headerlink" title="SMTP"></a>SMTP</h4><pre><code>- Have to translate 0 and 1 media stream data into ASCII for sending email message because SMTP is an old protocol and there are not many image and video when email was firstly created.
-
-- Handshake Commands sent from user agent(Client) to server(S):
-    1. HELO (Short for Hello)
-    2. MAIL FROM
-    3. RCPT TO
-    4. DATA (Message Body)
-    5. QUIT
-
-- SMTP vs HTTP:
-    1. Push Protocol vs Pull Protocol
-        - SMTP talk is initialized by sender (send email to server)
-        - HTTP talk is initialized by receiver (Get document from server)
-    2. SMTP required 7 bit ASCII and need translate everything into ASCII if they are not originally like image. It is ***NOT*** requirement for HTTP
-    3. SMTP put all objects into one response message vs HTTP put every object into its own response message
-
-- SMTP message format:
-    * Header lines
-        1. From: SENDER_EMAIL_ADDRESS
-        2. To: RECEIVER_EMAIL_ADDRESS
-        3. Subject: EMAIL_SUBJECT
-        4. other optional Header lines
-    * New line 
-    * Message body data (ASCII)                       
-
-- Reason why we need 2 mail servers between sender and client user agent
-    1. First mail server (Sender) is existing for keeping retry in case receiver server is not on
-    2. Second mail server (Receiver) is existing because we need one server always on to receive new emails
-
-- 3 popular mail access protocols (SMTP is only used for push message and we need pull protocol for client to get emails)
-    * POP3 (Post Office Protocol-Version 3)
-        1. Authoriztion: use username and password to setup connection to mail server
-        2. Event process: Get response messages from mail server and also mark emails messages that need to be deleted 
-            - Delete message from server after download =&gt; User cannot access message from other device anymore. Only in first download device locally 
-            - Keep message after download
-        3. Refresh
-    * Internet Mail Access Protocol
-        - Add remote server folders and search functions (POP3 NOT)
-        - Return part of the email message (like subject)
-    * HTTP   
-        - Sender use HTTP to send message to mail server
-        - Receiver received HTTP response messsage from mail server      
-</code></pre>
-<h3 id="DNS-Domain-Name-System"><a href="#DNS-Domain-Name-System" class="headerlink" title="DNS (Domain Name System)"></a><code>DNS (Domain Name System)</code></h3><h4 id="DNS-Summary"><a href="#DNS-Summary" class="headerlink" title="DNS Summary"></a>DNS Summary</h4><pre><code>- Layered DNS server
-- Distributed database application protocol for hostname searching 
-- Also Application layer protocol:
-    1. End to end communication in client - server mode
-    2. Use transport layer to send message between DNS client and DNS server
-- Example of how DNS has been used in browser:
-    1. DNS application client is running on the same machine
-    2. User enter &quot;www.someschool.edu&quot; in browser and browser will call DNS client application
-    3. DNS client will send request to DNS server for the host name passed in
-    4. DNS client will receive a response message including the IP address DNS server found by host name
-    5. Browser will talk to the server using TCP connection by IP address and port like 123.0.123.3:80            
-- Other features DNS provided:
-    1. Host aliasing
-    2. Mail server aliasing
-        * Mail server aliasing can be same as host like yahoo.com is domain also the mail 
-    3. Load balancing:
-        * DNS server will has a list of IP addresses for one single domain host name. When request comes in, it can do round-robin in the list of IP or even more complicated load distribution logic.            
-- DNS is Distributed Database
-    1. Root DNS Server
-    2. TLD (Top-Level Domain) DNS Server
-        * top level domain like com, org, net, edu and gov
-        * region domain like fr, uk, ca and jp
-    3. Authoritive DNS server like big company and schools will maintain
-- Recursive query vs Iterative query
-    1. Recusive query is sent by myself
-    2. Iterative query is sent on behalf original request sender
-    3. In real world: First request is always recursive and following requests are iterative. 
-- DNS cache:
-    1. For every request, every DNS server in the path of IP DNS query will keep the record for TTL (Normally 2 days) 
-- DNS Resource Record and message:
-    1. (Name, Value, Type, TTL)
-    2. Type=A: (relay1.bar.foo.com, 145.96.03.126, A)
-    3. Type=NS: (foo.com, dns.foo.com, NS)
-    4. Type=CNAME: (foo.com, relay1.bar.foo.com, CNAME)        
-    5. Type=MX: (foo.com, mail.bar.foo.com, MX)
-        * MX makes company web server and mail server having same alternate host name (foo.com)
-        * For getting mail server formal host name, client neeeds send request for MX record
-        * For getting other server formal host name, client needs send request for CNAME record
-    6. For server having an NS record but not the authoritive DNS server withIP , there will always be a Type A record for dns NS record              
-- DNS request and response message
-    1. Header: 12 byte
-    2. Question:
-        * Host name
-        * Type like A or MX
-    3. Answer:
-        * It may contain several Resource Records like multiple IP address for same host name     
-    4. Authoritive 
-    5. Additional info: like for MX request, it will have a Type A RR for formal hostname IP address  
-</code></pre>
-<h3 id="P2P-Document-transfer"><a href="#P2P-Document-transfer" class="headerlink" title="P2P Document transfer"></a><code>P2P Document transfer</code></h3><h4 id="BitTorrent"><a href="#BitTorrent" class="headerlink" title="BitTorrent"></a>BitTorrent</h4><pre><code>- Every one in the BitTorrent can be uploader and downloader
-    1. Reduce the single server uploading time and duplicate work. Every one in the network having file can send its document to someone who needed it
-- Process:
-    1. When you join the torrent, you will register in tracker and periodly report active. You will also get a list of users (50) in the torrent.
-    2. When you need a chunk(256KB), you will receive it from another user in the torrent. If it is a rare one, it will be prioritize the chunn in the list of needed chunks. This is for balance to have fewer rare chunk in the torrent
-</code></pre>
-<h3 id="Video-streaming-and-CDN"><a href="#Video-streaming-and-CDN" class="headerlink" title="Video streaming and CDN"></a><code>Video streaming and CDN</code></h3><h4 id="HTTP-and-DASH-for-video-stream"><a href="#HTTP-and-DASH-for-video-stream" class="headerlink" title="HTTP and DASH for video stream"></a>HTTP and DASH for video stream</h4><pre><code>- DASH (Dynamic Adaptive Streaming over HTTP)
-    1. User cache all video files chunk in Bit. If user has better network, it can download higher quality video file with more stream bits.
-    2. The quality can also change based on how many files cached on client user side and internet speed change =&gt; Dynamic and Adaptive
-    3. HTTP server has a manifest file which will include all info about different quality and bit rates vs its specified URL
-</code></pre>
-<h4 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h4><pre><code>- 2 straties: 深入和邀请做客
-    1. 深入 Build more clusters into ISP (Internet service provider) =&gt; High maintenance cost
-    2. 邀请做客 Only build cluster in IXP (Internet exchange pointer) =&gt; low cost but user may suffer high delay
-- CDN operations and request process:
-    1. When user enter http://video.blah.com/6Y7B23V in browser, it will send a DNS request for video.blah.com
-    2. blah.com authoritive DNS server will not send an IP address directly after found &quot;video&quot; in the domain name. It will send its CDN provider domain name like a1105.KingCND.com
-    3. User LDNS will send second DNS request for the CND provider domain name return in previous step. It will receive a CDN endpointer IP address
-    4. User can generate TCP connection with CDN endpointer and get video
-- CDN cluster selection strategy: pick cluster after received request from user
-    1. Geographically closest: it may not be the closest one because network path or network bandwidth
-    2. Real-time measurement: based on current network bandwidth. This needs period ping message for every cluster LDNS to test. The bad side is that some cluster may not respond to HeartBeat test.        
-</code></pre>
-<h4 id="UDP-client-and-server-in-python"><a href="#UDP-client-and-server-in-python" class="headerlink" title="UDP client and server in python"></a>UDP client and server in python</h4><ul>
-<li>UDPClient.py</li>
-</ul>
-<blockquote>
-<p>from socket import *<br>serverName = ‘hostname’<br>serverPort = 12000<br>clientSocket = socket(AF_INET, SOCK_DGRAM)<br>message = raw_input(‘Input lowercase sentence:’)<br>clientSocket.send(message.encode(), (serverName, serverPort))<br>modifiedMessage, serverAddress = clientSocket.recvfrom(2048)<br>print(modifiedMessage.decode())<br>clientSocket.close()</p>
-</blockquote>
-<ul>
-<li>UDPServer.py</li>
-</ul>
-<blockquote>
-<p>from socket import *<br>serverPort = 12000<br>serverSocket = socket(AF_INET, SOCK_DGRAM)<br>serverSocket.bind(‘’, serverPort)<br>while True:<br>&nbsp;message, clientAddress = serverSocket.recvfrom(2048)<br>&nbsp;modifiedMessage = message.decode().upper()<br>&nbsp;serverSocket.send(modifiedMessage.encode(), clientAddress)</p>
-</blockquote>
-<ul>
-<li>TCPClient.py</li>
-</ul>
-<blockquote>
-<p>from socket import *<br>serverName = ‘servername’<br>serverPort = 12000<br>clientSocket = socket(AF_INET, SOCK_STREAM)<br>clientSocket.connect((serverName, serverPort))<br>message = raw_input(‘Input lowercase sentence:’)<br>clientSocket.send(message.encode())<br>modifiedMessage = clientSocket.recvfrom(2048)<br>print(“From server: “, modifiedMessage.decode())<br>clientSocket.close()</p>
-</blockquote>
-<ul>
-<li>TCPServer.py</li>
-</ul>
-<blockquote>
-<p>from socket import *<br>serverPort = 12000<br>serverSocket = socket(AF_INET, SOCK_STREAM)<br>serverSocket.bind(‘’, serverPort)<br>serverSocket.listen(1)<br>print(“The server is ready to receive”)<br>while True:<br>&nbsp;connectionSocket, addr = serverSocket.accept()<br>&nbsp;message = connectionSocket.recvfrom(2048).decode()<br>&nbsp;modifiedMessage = message.upper()<br>&nbsp;connectionSocket.send(modifiedMessage.encode())<br>&nbsp;connectionSocket.close()</p>
-</blockquote>
-<h2 id="Chapter-3-Transport-layer"><a href="#Chapter-3-Transport-layer" class="headerlink" title="Chapter 3 Transport layer"></a>Chapter 3 <em><strong>Transport layer</strong></em></h2><h3 id="Summary-of-transport-layer"><a href="#Summary-of-transport-layer" class="headerlink" title="Summary of transport layer"></a><code>Summary of transport layer</code></h3><h4 id="Transport-vs-Network"><a href="#Transport-vs-Network" class="headerlink" title="Transport vs Network"></a>Transport vs Network</h4><pre><code>- Use mail and post service as similar example
-    1. Message from application = Content on one page
-    2. Process = every sibling
-    3. Host = family
-    4. Transport protocol = Ann and Bill (Represent of family for picking  up mails and put them into post mailbox)
-    5. Network protocol = post service
-- IP: unreliable service and best-effor delivery service for segment and message delivery between 2 hosts
-    1. Not guarentee message will be delivered
-    2. Not guarentee messages will be delivered in same sequence as sent
-    3. Not guarentee message delivered have all correct data as sent
-- UDP is also unreliable. Service provided:
-    1. transport-layer multiplexing on sender sideand demultiplexing on receiver side
-    2. Error detection and correction but no gurantee on data integrity and sequence like IP
-- TCP provides extra service than UDP:
-    1. Reliable data transfer
-    2. Congestion control
-</code></pre>
-<h4 id="Multiplexing-and-Demultiplexing"><a href="#Multiplexing-and-Demultiplexing" class="headerlink" title="Multiplexing and Demultiplexing"></a>Multiplexing and Demultiplexing</h4><pre><code>- NO connection Multiplexing (UDP):
-    1. Sender will include origin (sender) port number and destination (receiver) port number into its sent message. 
-    2. Receiver will use the destination port number to find which socket to pass message and use IP address and origin port number to send response. 
-- Connection Multiplexing (TCP):
-    1. (Origin IP, Origin port number, Dest IP, Dest port number) will be the key to distinguish socket on receiver side. If requests have same identifier with these 4 values, they can use same socket. Otherwise create a new one for latter request
-    2. There is a specific port for accepting connection request. After accepting the connection request, server will build a new connection socket with a new port, origin IP address and port number for following message transport.
-</code></pre>
-<h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a><code>UDP</code></h3><h4 id="Summary-and-characteristics"><a href="#Summary-and-characteristics" class="headerlink" title="Summary and characteristics"></a>Summary and characteristics</h4><pre><code>- UDP is simple and only added the necessary function Multiplexing over IP (network protocol)
-- UDP vs TCP:
-    1. Application has more control on when to send data and what data it will be like
-        * TCP has conjection control and need resend message to make sure message arrival on dest
-    2. No need for connection before sending message
-        * TCP needs 3 handshakes for connection before building channel for sending message
-    3. UDP message will not include status info
-        * TCP needs include flags or more info like sequence number in message
-    4. Shorter header than TCP
-- UDP can be used in application that has no requirement on sending accurate data and data integrity. Application can suffer data loss. 
-- UDP Message:
-    1. HEADER:
-        * source port number | destination port number
-        * length of Header and message | check sum
-    2. Application data (message)               
-- Check sum:
-    1. (Bit sum) source port number + dest port number + lenght + check sum 
-    2. Reverse 1 and 0
-    3. (Expected check sum result is 16 bits of 1)If any bit is not zero, it means it has some error =&gt; Discard data
-</code></pre>
-<hr>
-<h4 id="GBN-回退N步-and-SR-选择重传"><a href="#GBN-回退N步-and-SR-选择重传" class="headerlink" title="GBN (回退N步) and SR (选择重传)"></a>GBN (回退N步) and SR (选择重传)</h4><pre><code>- Sender steps
-
-    1. Receive data from upper level:
-        - Add header and send package IF package sequence number is within window
-        - IF package sequence number has been out of range of current window, save the package from upper layer into queue for cache
-    2. Timer and overtime
-        - For SR, every package needs its own timer to calculate if it has been overtime and needs resend package since no response has been received in time
-    3. Received ACK message from receiver
-        - ACK send_base sequence nbr package: increase send_base to minimum number that has not been marked as RECEIVED. Move the window in sequence and send all packages that have not been sent
-        - ACK NOT send_base sequence nbr package: mark it as RECEIVED if it is within window
-
-- Receiver steps
-
-    1. Package sequence nbr in [rev_base, rev_base + window.length - 1] (current minimum + window): 
-        - nbr is rev_base: send all cached packages and this one to upper listener. 
-        - nbr is NOT rev_base: cache the package and waiting for rev_base one and send to listener later
-    2. Package sequence nbr in [rev_base - window.length, rev_base - 1] (current minimum - window):
-        - Already received package and send ACK to no matter sender already marked it as RECEIVED or not
-    3. Discard package in all other cases
-
-- Sender and Receiver
-
-    - Sender and Receiver may always see different window
-    - SECOND point in RECEIVER steps is import because if sender keeps losing ACK signal from receiver. The sliding window may never slide.
-    - window length &lt;= sequence number total count / 2 =&gt; Otherwise receiver may not be able to tell if new package coming in is resending old one or a totally new one(they may share same sequence number)
-</code></pre>
-<hr>
-<h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a><code>TCP</code></h3><h4 id="TCP-Connection"><a href="#TCP-Connection" class="headerlink" title="TCP Connection"></a>TCP Connection</h4><pre><code>a. Components for TCP connection:
-    - Sender Process (client): buffer for sending messages, send_base variable, and socket
-    - Receiver Process (server): buffer for receiving messages, receive_base variable, and socket
-b. *** 3-way handshakes ***
-    1. client send (***1st***) TCP segment message to require connection
-    2. server will respond with a special TCP segment message (***2nd***) to accept connection
-    3. After connection built, client can keep sending messages (***3rd***) through the TCP channel. Only 3rd message will contain real application data.
-c. TCP segment (32 bits):
-    1. 16 bits of source port number and 16 bits of dest port number
-    2. sequence number for a segment
-        - Actual start bit count number of real message data flow
-    3. ACK number
-        - received sequence number + 1 (next expected received bit sequence number)
-    4. 4 bits header length field, unused space, 6 bit flag field and receive window field 
-        - flag field includes ACK bit for confirmation of received one segment 
-</code></pre>
-<hr>
-<h3 id="TCP-reliable-data-transportation-implementation"><a href="#TCP-reliable-data-transportation-implementation" class="headerlink" title="TCP reliable data transportation implementation"></a><code>TCP reliable data transportation implementation</code></h3><h4 id="Simplified-TCP-sender-logic"><a href="#Simplified-TCP-sender-logic" class="headerlink" title="Simplified TCP sender logic"></a>Simplified TCP sender logic</h4><pre><code>NextSeqNum = InitialSeqNumber
-SendBase=InitialSeqNumber
-
-while (true) &#123;
-    switch (case):
-        CASE received signal from upper program to send data:
-            if (timer not started) &#123;
-                start timer 
-            &#125;
-            send message to IP
-            NextSeqNum += length(data)
-            break;
-
-        CASE timer expired and no ACK received:
-            resend the minimum sequence number of segment data
-            restart timer
-            break;
-
-        CASE received ACK nad ACK y (y is next expected sent data sequence nbr):
-            if (y &gt; SendBase) &#123;
-                SendBase = y
-                if (there is any segment not received ACK) &#123;
-                    start timer
-                &#125;
-            &#125;
-            else &#123; /*Duplicate ACK for received data which means following data between y and sendbase has lost */
-                y&#39;s duplicate ACK += 1
-                if (y == 3) &#123;
-                    /* fast retransmit */
-                    resend segment with sequence nbr y
-                &#125;
-            &#125;
-            break;
-&#125;
-</code></pre>
-<h4 id="Other-points-on-how-to-make-reliable-data-transmission-with-TCP"><a href="#Other-points-on-how-to-make-reliable-data-transmission-with-TCP" class="headerlink" title="Other points on how to make reliable data transmission with TCP"></a>Other points on how to make reliable data transmission with TCP</h4><pre><code>a. sender code above
-b. Double TimeoutInterval when losing package ACK and timer timeout:
-    - This will resolve the problem when network stuck but still try to resent same data and make network worse
-c. fast retransmit when there are duplicate ACK
-d. flow-control service
-    - Sender send data speed should match with receiver receive speed
-    - receive window: rwnd = RvcBuffer - [LastByteRecvd - LastByterRead]
-    - Trick: if receiver&#39;s buffer is full, it will let sender know &quot;rwnd = 0&quot;. Sender will not stop sending data. Instead it will send a one-byte segment to keep pinging sender until sender as receiver buffer is cleaned up. It will resume sending segments. Otherwise receiver will never know when sender buffer will be cleaned up.
-</code></pre>
-<h4 id="Start-TCP-3-way-handshake-and-segments"><a href="#Start-TCP-3-way-handshake-and-segments" class="headerlink" title="Start TCP 3-way handshake and segments"></a>Start TCP 3-way handshake and segments</h4><pre><code>1. Client send TCP SYN connection segment
-    - SYN=1, seq=client_isn
-2. Server send TCP SYNACK connection segment
-    - SYN=1, seq=server_isn, ack=client_isn+1
-    - Server allocates buffer and other variables
-2. Client send TCP SYNACK connection segment
-    - SYN=0, seq=client_isn+1, ack=server_isn+1    
-    - Client allocates buffer and other variables            
-</code></pre>
-<h4 id="Stop-TCP-connection"><a href="#Stop-TCP-connection" class="headerlink" title="Stop TCP connection"></a>Stop TCP connection</h4><pre><code>1. Client sends FIN segment (FIN_BIT=1)
-    - client closes connection on its side
-2. Server sends ACK for client FIN
-3. Server send its own FIN segment (FIN_BIT=1)
-    - server closes connection on its side
-4. Client sends ACK for server FIN
-    - Wait for 30s or some customized time period
-</code></pre>
-<h4 id="Congestion-control"><a href="#Congestion-control" class="headerlink" title="Congestion control"></a>Congestion control</h4><pre><code>- Signals and meaning:
-    1. Package lost means congestion: 3 duplicate ACK or timeout once
-    2. ACK means can increase send speed
-- Congestion control Algorithms:
-    1. slow-start:
-        - start with one single minimum length message and test if receive ACK. If ACK received each time, double the sending message count.
-        - Once one package is marked as lost (3 duplicate ACK or timeout): go back to one single message set cwnd / 2 as threshold. Should not increase speed over the threshold
-    2. Once message count reached to threshold again. Increase one for each ACK and update threshold to cwnd / 2 once receiver another 3 duplicate ACK.
-</code></pre>
-<hr>
-<h3 id="Network-layer"><a href="#Network-layer" class="headerlink" title="Network layer"></a><code>Network layer</code></h3><h4 id="Data-plane-转发"><a href="#Data-plane-转发" class="headerlink" title="Data plane (转发)"></a>Data plane (转发)</h4><pre><code>- Router internal routing from one input port to another output port
-- Finished in hardware layer because of ns speed requirement
-- Longest prefix matching rule: IP address match more than one prefix in IP routing table
-- Include 3 parts:
-    1. Input port
-    2. Exchange structure: search routing table and send package to output port 
-    3. Output port
-- Input port and output port queue management:
-    1. FIFO
-    2. Priority Queue: FIFO within same priority
-    3. round robin queuing discipline (most popular in current routers): Rount robin predefined queues. 
-- DHCP (Dynamic Host Configuration)
-    1. DHCP discover message (dest =&gt; 255.255.255.255; source: 0.0.0.0)
-    2. DHCP offer message (Recommended IP for client)
-    3. DHCP request message (Client pick one and send it back to server)
-    4. DHCP ACK message
-- NAT (Network Address Translation)
-    1. NAT router has an internal NAT tranlation table with records of randomly generated port number and machine port number match. 
-    2. All messages sent out from router will use the randomly generated port number.
-    3. NAT router will use translation table to translate port number and route message to internal machine.
-- General data plane
-    1. A general data translation table for match(link, IP, TCP) and action (transfer, discard, rewrite bits of message)    
-</code></pre>
-<h4 id="Control-Plane（路由选择）"><a href="#Control-Plane（路由选择）" class="headerlink" title="Control Plane（路由选择）"></a>Control Plane（路由选择）</h4><pre><code>- Global routing from one address to another address outside of router    
-- Finished in software layer 
-    1. Software-Defined Networking (SDN)
-- Every router control(distributed control) vs central control
-- Routing algorithm:
-    1. Centralized routing algorithm vs distributed routing algorithm
-        - Centralized needs all Link State in the whole network
-            1. Dijkstra: traverse all nodes and in every round, find the node with minimum D[i] (D is array of distance between start node and current node) NOT visited
-        - Distributed doesn&#39;t need all info from the whole network. Every router has its own cost estimate, and use recursion to calculate.
-            1. DV (Distance Vector): Update own routing table everytime any neighbor node send updates (Any change in distance vertor)
-    2. Static vs Dymaic routing algorithm
-    3. Load-sensitive vs load-incensitive routing algorithm
-- OSPF in intra-AS (Autonomous System)
-    1. intra-autonomous system routing protocol
-    2. Dijkstra in local AS like every ISP itself
-- BGP (Border Gateway Protocol 边际网关协议) 
-    - inter-autonomous system routing protocol
-    - Most important protocol (same as IP) to linking thousands of different ISP
-    - AS External BGP (eBGP) vs AS Internal BGP (iBGP)
-    - route includes BGP attribute and prefix
-        1. IP of NEXT-HOP (Start router IP address)
-        2. Next path
-            - AS2 AS3
-        3. Prefix                
-        4. &quot;IP: AS2 AS3; x&quot; 
-    - BGP Route pick algorithm:
-        1. Local preference which may be learned by another router within same AS
-        2. Shortest AS-PATH not router
-        3. Hot potato routing: fewest router need pass to next AS  
-- How to register a new DNS domain:
-    1. Get IP address range (/24) from ISP (Your Internet service provider)
-    2. Buy a domain and bind your DNS server IP address
-    3. ISP will use BGP broadcast IP address
-</code></pre>
-<h4 id="SDN"><a href="#SDN" class="headerlink" title="SDN"></a>SDN</h4><pre><code>- 4 features:
-    1. Transfer based on flow:
-        - Compared with router based on IP address, SDN can transfer package based on 11 different header bits in package header
-    2. Split data plane and control plane
-        - Data plane: switch
-        - Control plane: server and its running software used for determining and managing flow chart in switch 
-    3. Network control feature is outside of switch 
-    4. Programmable network functions in software level            
-- Functions:
-    1. Communication between SDN controller and swiches controlled by controller
-    2. Network state management including state updates and recalculate after new state update
-    3. REST API for higher level network application like route picker         
-</code></pre>
-<h4 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h4><pre><code>- Used for communication between PC and router
-- Typically used for error detection
-</code></pre>
-<h4 id="Network-management-and-SNMP-Simple-Network-Management-Protocol"><a href="#Network-management-and-SNMP-Simple-Network-Management-Protocol" class="headerlink" title="Network management and SNMP (Simple Network Management Protocol)"></a>Network management and SNMP (Simple Network Management Protocol)</h4><pre><code>- Key parts:
-    1. Managing server
-    2. Managed device
-    3. MIB (Management Information base)
-        - Counter like couter of bad IP data
-        - Managed device will update MIB
-    4. Network management agent:
-        - Communication between Managing server and MIB
-    5. Netwrok management protocol:
-        - It will not manage devices but it is the protocol for network adminitrator to manage the system
-        - SNMP            
-</code></pre>
-<hr>
-<h2 id="Link-layer"><a href="#Link-layer" class="headerlink" title="Link layer"></a><code>Link layer</code></h2><h3 id="Link-layer-summary"><a href="#Link-layer-summary" class="headerlink" title="Link layer summary"></a>Link layer summary</h3><pre><code>- Link layer provided services:
-    1. framing
-        - wrap network layer data and include link layer header
-    2. MAC (Medium Access Control)
-        - MAC protocol is useful when there are multiple nodes listening on same link
-    3. Reliable data transmission
-    4. Error detection and correction
-- Link layer is mostly living in Network Adapter or called Network Interface Card (NIC 网卡)
-    - Nowadays, network interface card has been included in main board 
-</code></pre>
-<h3 id="Error-detection-and-correction"><a href="#Error-detection-and-correction" class="headerlink" title="Error detection and correction"></a>Error detection and correction</h3><pre><code>1. 奇偶校验
-2. checksum
-3. CRC (Cyclic Redundancy Check) most used
-    - Also called polynominal code
-    - D * 2^r XOR R = nG
-    - D: data bits
-    - R: CRC bits R = D * 2^r % G
-    - G: Internation standards known number
-</code></pre>
-<h3 id="Multiple-access-link-and-protocol"><a href="#Multiple-access-link-and-protocol" class="headerlink" title="Multiple access link and protocol"></a>Multiple access link and protocol</h3><pre><code>1. point to point link
-2. broadcast link
-    - 3 types of protocols:
-        1. Channel partitioning protocol
-            - TDM: TimeFrame / N nodes
-            - FDM: R bps / N nodes
-            - CDMA (Code Division Multiple Access): Every node use its own special way to Code message and receiver knows how to revert it back 
-        2. Random access protocol
-            1. ALOHA
-                - Don&#39;t do carrier senseing collision detection
-                - When collision happened, always retransmit at possibility p and (1 - p) wait for another time slot
-            2. CSMA(Carrier Sense Multiple Access) and CSMA / CD (Collection Detection)
-                - Carrier sensing: before transmission, it will listen on broadcast channel. It will wait until channel becomes quiet and send its own message
-                - Collection Detection: while sending message, if node heard another node sending message signal. It will give up immediately and wait for a random time slot before resend message
-                - Binary exponential backoff: the random time slot will be picked up randomly from &#123;0, 1, 2, ...., 2^n - 1&#125;. The more times collision happened, the above combination will be larger.
-        3. taking-turns protocol
-            1. Polling protocol: main node asking every node and behave like administrator
-            2. token-passing protocol: nodes passing token
-3. LAN (Local Area Network)
-    - MAC addresss
-        - MAC Address will never change
-        - IP Address is like mailing address. It will change while you are moving
-        - Broadcast MAC address: FF-FF-FF-FF-FF-FF
-        - Only PC or router have MAC address. Not switch
-    - ARP (Address Resolution Protocol)
-        - IP and MAC relation
-        - Local network: search ARP table on its own machine and find MAC address and put it in link data
-        - Outside network: need find first router address in ARP table
-    - Ethernet frame
-        1. Data
-        2. Target MAC address
-            - Adapter only accept message with its MAC address or broadcast address
-        3. Source MAC address
-        4. Type
-            - Translate message for upper level protocol (like IP in network layer)
-        5. CRC
-        6. Preamble
-            - First 7 bytes are 10101010 used by receiver adapter to calculate link layer transmission speed
-            - Last byte is 10101011 and last 2 bits are 11 to inform real data coming in     
-    - Switch (More popular for LAN because of having better performance than broadcast)
-        - Transparent to server or router. Server is not asking switch for address
-        - How switch works:
-            1. Filtering
-                - Switch tale: MAC Address, Port, saved time 
-            2. forwarding
-                - No record for MAC Address in switch table =&gt; broadcast to all ports excluding incoming port
-                - Has record for MAC address
-                    1. record port == incoming port =&gt; discard message (It has been broadcast before. Duplicate)
-                    2. record port != incoming port =&gt; save message to record port sending message queue
-        - Self-learning:
-            1. Empty at first
-            2. Every message received, one record with MAC Address, Port and time will be saved in swtich table
-            3. After some aging time, old records will be deleted automatically. Removed PC records will be retired in this way.
-        - Compared to router:
-            - Switch: 
-                1. Plug and play device
-                2. Used for fewer PC like hundreds machines LAN
-            - Router:
-                1. Route optimization
-                2. Better protection and data seperation to reduce broadcast
-                3. Used for larger network
-        - VLAN 
-            - Use software to create groups of ports
-</code></pre>
-<h3 id="Example-of-making-web-request-process"><a href="#Example-of-making-web-request-process" class="headerlink" title="Example of making web request process"></a>Example of making web request process</h3><pre><code>1. Preparing DHCP, UDP, IP and Ethernet
-    - IN SHORT: send DHCP UDP message to get IP address from router DHCP ACK 
-    - DHCP request to get an IP address from router connected to ISP provider
-    - IP datagram including the DHCP request will be wrapped into an ethernet frame with broadcast MAC also with its own MAC address
-    - Router received the message and decrypt it into UDP segment and it will allocate one IP for the request user. Create an UDP segment(DHCP ACK) and compose it into an IP datagram and ethernet frame back to request user with MAC address.
-    - Switch is self-learning and has saved the user MAC and port relationship. It will send the frame back to user
-2. Preparing DNS and ARP
-    - User PC already knows the its LAN router IP address and its ISP DNS server IP address. It needs get IP address from ISP DNS server by url. It does not know its LAN router MAC address
-    - It will send a broadcast ARP message to its LAN router and gets response from there. In previous DHCP message, it does not include router MAC address.  
-3. Routing to DNS Server and Get IP address from url
-4. TCP and HTTP
-    - 3 handshakes for TCP connection
-</code></pre>
-<hr>
-<h2 id="Security"><a href="#Security" class="headerlink" title="Security"></a><code>Security</code></h2><h3 id="Security-Summary"><a href="#Security-Summary" class="headerlink" title="Security Summary"></a>Security Summary</h3><pre><code>- Scure communication features:
-    1. Confidentiality
-        - PlainText =&gt; CipherText with Encryption Algorithm
-        - 2 key systems:
-            1. Symmetric key system
-            2. Public key system
-                - RSA: Pick public key numbers and use mod to calculate
-                - Session key: RSA is too much for whole message. Encrypt session key only
-    2. Message integrity
-        - MD5 and SHA-1 (Cryptographic hash function)
-        - MAC (Message Authentication Code) used authentication key to generate
-        - MAC and Digital Signature
-            - They both use hash function to get constant length hashed value.
-            - MAC does NOT use key to encrypt message but Digital Signature will use private key to encrypt hashed value generated by hash function
-        - (SSL) Public key certification
-            1. CA (Certification Authority) verify one authority&#39;s (person or router) real identity 
-            2. Once passed verification, CA will create a certificate for its authority as a binding between it and its real idetity
-            3. Authority can use its certificate from CA to to digital signature to claim its identity
-        - Allowed subject name and allowed issuer name (CA) are always used in coding to verify whether cert is valid 
-    3. end-point authenticaiton
-        - Need confirm 2 things while create conversation between 2 ends:
-            1. I am talking to someone who claimed he is
-            2. Person I am talking to is still active
-        - Strategy like (TCP)
-            1. Client sends request 
-            2. Server responds with a nounce (unique number and will never be duplicate)
-            3. Client will use symmetric key (which is only known by client and server) to encrypt the nounce and responds to server
-            4. Server can verify the response from client by decrypting the response message with nounce it sent before
-    4. Operational security
-</code></pre>
-<h3 id="Network-Security-Examples"><a href="#Network-Security-Examples" class="headerlink" title="Network Security Examples"></a>Network Security Examples</h3><pre><code>1. Email
-    - Confidentiality
-        1. Generate random symmetric key
-        2. use the symmetric key to encrypt message
-        3. use the receiver public key to encrypt symmetric key in step 1 and send it with encrypted message as well
-        4. receiver will use its private key to decrypt the symmetric key and decrypt the message using the decrpted symmetric key 
-    - Message integrity and end-point authenticaiton
-        1. Hash
-        2. Private key encrypt hash value and send encrypted hash value with message together
-        3. Receiver descrpty message by public key and compare result with using same hash function on message
-2. SSL TCP Connection
-    - How it is working:
-        1. Client sent server its algorithms list and a nounce (Unique random number)
-        2. Server pick a symmetric algorithm, key algorithm (for encrypt) and a MAC algorithm (for integrity). Server will send back its certificate and a nounce from server including the algorithm selection
-            - Nounce will prevent anyone who can get all messages for a TCP connection and try to resend later. Because every TCP connection will have a different nounce in order to have a different key . 
-        3. Client verified the cert and get the server public key. Generate a PMS (Pre-Master Secret) and encrypt it using server public key.
-        4. Decrypt message using private key. Get 4 keys using same function from same nounce and PMS.
-        5. Client sends all handshake messages in one MAC
-        6. Server also sends all handshake messages in one MAC
-            - last 2 steps can prevent any modification because it will send all handshake message including it sent before. If any sent message has been changed by middle man, TCP connection will stop
-    - SSL message record:
-        - Type: TCP connection or real data messaage
-        - Version
-        - Data length
-        - Data
-        - MAC (Data and MAC will be encrypted)
+<h3 id="Service-decomposition"><a href="#Service-decomposition" class="headerlink" title="Service decomposition"></a>Service decomposition</h3><pre><code>- Microservice decompose steps
+    1. Translate user case to system operation
+        - Create data model for different subdomain (from User story nounce)
+        - System operation definition and correlate operations with data model subdomains (from User story verbs)
+            - Command and query
+            - Operation definition:
+                1. Operation (param1, param2)
+                2. Return value
+                3. pre-requisite
+                4. post-requisite
+    2. Decompose Service
+        1. By business capability
+            - Top level capability and sub level capability
+            - Top level capability is always a service and sometimes sub level can also be a service. It depends
+            - Good: capability is not always changing and services structure is stable
+            - But services by capability may still need change in the future like too many talks between 2 services and they should become one single service 
+        2. By subdomain
+            - Need analyzing the business and its organizational structure
+        3. principles:
+            - SRP: single responsibility principle
+                - One service should only have one single responsibility and only one reason to change it not influenced by others
+                - Good for reliability
+            - CCP: common closure principle
+                - One closure should contain types which are coupled and have to be changed in sequence
+                - Good for maintenance
+    3. Service API definition
+        - Service category:
+            - Internal service call only
+            - Both internal and outer client service call 
+- Microservice design obstacles:
+    1. Network delay
+        - Solution: Request in batch or have to combine 2 servcies
+    2. Service synchronous communication
+        - Problem: REST may reduce the reliability. One service down may cause the whole service not working
+    3. Data integrity across service
+        - SAGA can achieve eventual consistency but still ACID cannot be achieved like old 2-phase commit
+    4. Remove GOD class
+        - DDD: domain driven and decompose large object into different domain
 </code></pre>
 <hr>
 
@@ -912,6 +316,17 @@ d. flow-control service
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tags</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -962,7 +377,7 @@ d. flow-control service
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/05/31/Learning-networt-from-top-to-down/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/07/17/Microservice-Pattern/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -976,18 +391,9 @@ d. flow-control service
   
 <nav id="article-nav">
   
-    <a href="/2021/07/17/Microservice-Pattern/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Learning Microservice Pattern
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/05/31/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a href="/2021/05/31/Learning-networt-from-top-to-down/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Learning network from top to down</div>
       <i class="icon-circle-right"></i>
     </a>
   
