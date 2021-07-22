@@ -272,7 +272,14 @@
     3. Service API definition
         - Service category:
             - Internal service call only
-            - Both internal and outer client service call 
+            - Both internal and outer client service call
+        - Steps:
+            - Get starting service for a system operation
+            - Get all needed API for all other relying services
+            - 3 ways for communication between services
+                1. Real time API call like REST api call
+                2. Asynchronous like message queue
+                3. Self contained service like saving a copy of another service data and listening on update events
 - Microservice design obstacles:
     1. Network delay
         - Solution: Request in batch or have to combine 2 servcies
@@ -284,6 +291,7 @@
         - DDD: domain driven and decompose large object into different domain
 </code></pre>
 <hr>
+<h2 id="Chapter-3-Service-Communication"><a href="#Chapter-3-Service-Communication" class="headerlink" title="Chapter 3 Service Communication"></a>Chapter 3 <em><strong>Service Communication</strong></em></h2><hr>
 
       
 
