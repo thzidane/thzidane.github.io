@@ -291,7 +291,15 @@
         - DDD: domain driven and decompose large object into different domain
 </code></pre>
 <hr>
-<h2 id="Chapter-3-Service-Communication"><a href="#Chapter-3-Service-Communication" class="headerlink" title="Chapter 3 Service Communication"></a>Chapter 3 <em><strong>Service Communication</strong></em></h2><hr>
+<h2 id="Chapter-3-Service-Communication"><a href="#Chapter-3-Service-Communication" class="headerlink" title="Chapter 3 Service Communication"></a>Chapter 3 <em><strong>Service Communication</strong></em></h2><h3 id="Communication-style"><a href="#Communication-style" class="headerlink" title="Communication style"></a>Communication style</h3><pre><code>1. Synchsonous Communication
+    - To stop failure spreading, use timeout, request upper limit and circuit breaker        
+    - Need service discovery either use Kubernetes platform or client keeps service table    
+2. Asynchronous Communication        
+    - Better and should be used as much as possible (Higher reliability)
+    - Save message becomes part of transaction        
+    - A seperate process to do polling publisher or transaction log miner to get message and sent to message broker
+</code></pre>
+<hr>
 
       
 
