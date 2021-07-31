@@ -16,7 +16,7 @@
 <meta property="og:description" content="Chapter 1 Microservice summaryWhat is microservice and its good and bad- What is microservice     1. Communictation between services:         - Use light protocol like REST or gRPC     2. Data managme">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-07-18T04:22:34.000Z">
-<meta property="article:modified_time" content="2021-07-26T17:33:20.336Z">
+<meta property="article:modified_time" content="2021-07-31T19:45:39.194Z">
 <meta property="article:author" content="Hao Tang">
 <meta property="article:tag" content="tags">
 <meta name="twitter:card" content="summary">
@@ -301,6 +301,40 @@
     - Better and should be used as much as possible (Higher reliability)
     - Save message becomes part of transaction        
     - A seperate process to do polling publisher or transaction log miner to get message and sent to message broker
+</code></pre>
+<hr>
+<h2 id="Chapter-4-Saga"><a href="#Chapter-4-Saga" class="headerlink" title="Chapter 4 Saga"></a>Chapter 4 <em><strong>Saga</strong></em></h2><h3 id="Saga"><a href="#Saga" class="headerlink" title="Saga"></a>Saga</h3><pre><code>1. 2 Phase commit is not for some application and SAGA is the answer
+    - Application operation may need transaction which spans multiple services and 2PC is not achievable since that may need every microservice to agree and waiting for reply through network.
+    - Every microservice will update its local data store and needs compensation if the whole saga transaction failed
+2. 2 types of Saga
+    1. Choreography-based saga(协同式)
+        - only used for Simplest business logic
+        - services communicate with each other for next step
+    2. Orchestration-based saga（编排式)
+        - Complicate business logic
+        - Have single master saga manager to send commands to participants
+        - Benefits:
+            1. Easy for testing and development with state machine
+3. Saga is missing I in ACID
+    - Need different strategies to achieve isolation
+        0. Sematic lock
+            - Order table add PENDING_APPROVE lock and other operation cannot update
+        1. Pessimistic
+            - Reorder service calls to remove dirty read possibility
+        2. Commutative
+            - Operation are Commutative =&gt; operations sequence not matter 
+        3. Add version to non commutative operations
+            - Can process based on version sequence
+        4. Read again and compare before update
+4. Implementation example:
+    1. Order service
+        - Order class
+        - Service API
+        - repository
+    2. Create order saga
+        - Saga manager and saga state
+    3. Order command handlers
+        - Saga participants
 </code></pre>
 <hr>
 
