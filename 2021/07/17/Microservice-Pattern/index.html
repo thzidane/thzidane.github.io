@@ -16,7 +16,7 @@
 <meta property="og:description" content="Chapter 1 Microservice summaryWhat is microservice and its good and bad- What is microservice     1. Communictation between services:         - Use light protocol like REST or gRPC     2. Data managme">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-07-18T04:22:34.000Z">
-<meta property="article:modified_time" content="2021-07-31T19:45:39.194Z">
+<meta property="article:modified_time" content="2021-08-04T03:09:25.430Z">
 <meta property="article:author" content="Hao Tang">
 <meta property="article:tag" content="tags">
 <meta name="twitter:card" content="summary">
@@ -335,6 +335,112 @@
         - Saga manager and saga state
     3. Order command handlers
         - Saga participants
+</code></pre>
+<hr>
+<h2 id="Chapter-5-Business-logic-design-patterns"><a href="#Chapter-5-Business-logic-design-patterns" class="headerlink" title="Chapter 5 Business logic design patterns"></a>Chapter 5 <em><strong>Business logic design patterns</strong></em></h2><h3 id="2-design-patterns"><a href="#2-design-patterns" class="headerlink" title="2 design patterns"></a>2 design patterns</h3><pre><code>1. Transaction
+    - Procedural
+    - Good for simple business logic and not easy for extension
+    - Order service has list of all operations provided
+    - Order DAO for Database operations
+    - Order class only has properties and no function implementation detail 
+2. Domain driven
+    - OOP
+    - Order service still provides operations API
+    - Order repository for database queries
+    - Order class has state and function for business logic actions
+    - Benefits:
+        1. Easy for understanding and maintenance
+        2. Easy for testing
+</code></pre>
+<h3 id="Domain-driven-design"><a href="#Domain-driven-design" class="headerlink" title="Domain-driven design"></a>Domain-driven design</h3><pre><code>- Key concepts:
+    1. Entity
+        - Persistable object with ID
+    2. Value object
+        - asset of values. Objects with same values are same objects
+    3. Factory
+    4. Repository
+    5. Service
+    6. Aggregates
+- Aggregates in domain design model
+    - Aggregates has clear boundary
+    - Aggregates rules:
+        1. Only reference root object which is good for unchanged rules always check
+        2. Aggregate should use primary key to reference other aggregate
+        3. One transaction can only update or create one aggregate
+            - Benefits for microservice:
+                1. Transaction will not span to multiple aggregates and domains
+                2. Saga is solution for managing multiple aggregates operations 
+</code></pre>
+<h3 id="Domain-Event"><a href="#Domain-Event" class="headerlink" title="Domain Event"></a>Domain Event</h3><pre><code>- A domain event as something that has happened to an aggregate
+    - Pattern =&gt; When X happpens do Y  
+- How to create a domain event and publish
+    - Domain type class will not have domain event publisher but service can have because of dependency injection
+    - 2 ways
+        1. (Service&#39;s methods do it seperately)Create a method in Aggregate to return a list of events and let service call when state changed 
+            - Problem: It needs refactor for non-void methods
+        2. (Super class has property to save and publish multiple aggregate&#39;s events together) Extends super class and save events
+            - Problem: Aggregate root type always has the method to save events to super class but other types needs some way to publish events to root type
+- Kitchen service as an example
+    - Aggrete Ticket Type:
+        1. Properties
+            - Use Id not object as reference to other types
+        2. Functions
+            - Update state properties
+            - Create event list for publish back state updates
+    - Domain service KitchenService:
+        1. accept()
+            - Use repository to query DB and create entity object (Ticket ticket)
+            - Call implementation and get list of publish back domain events =&gt; ticket.accept()
+            - domainEventPublisher publish events
+        2. Order service it needs create saga after publish
+    - Adapter to handle saga commands KitchenServiceCommandHandler
+        1. commandHandlers()
+            - return mapping of command type and related handler method
+        2. Handler method:
+            - Call kitchenService related methods
+            - return status withSuccess(), withFailure().... 
+</code></pre>
+<h3 id="Difference-between-DDD-and-OOP"><a href="#Difference-between-DDD-and-OOP" class="headerlink" title="Difference between DDD and OOP"></a>Difference between DDD and OOP</h3><pre><code>1. DDD aggregate has retricted rule and implemented in root aggregate type
+    - Reference to other types is by primary key not by object memory address (ACID is within single microservice. No direct reference to other types)
+    - Transaction only updates or creates single aggregate not multiple class objects like OOP
+2. Saga has been used to do transaction events to keep data integrity across different aggregates
+</code></pre>
+<hr>
+<h2 id="Chapter-6-Event-sourcing"><a href="#Chapter-6-Event-sourcing" class="headerlink" title="Chapter 6 Event sourcing"></a>Chapter 6 <em><strong>Event sourcing</strong></em></h2><h3 id="Event-sourcing"><a href="#Event-sourcing" class="headerlink" title="Event sourcing"></a>Event sourcing</h3><pre><code>- Old way to persist object
+    1. Impedance mismatch
+        - DB model is a table not same as oo design
+    2. No aggregate change history. Only has current state in DB.
+    3. Hard for auditing and easy for mistake because of No 2
+    4. Event publishing is seperate from business logic
+- What is event sourcing
+    - Compare to old persist way: Instead of only saving current state for persisting object, event sourcing will replay all events on the default new object.
+        1. Load all events
+        2. Create default new object
+        3. Replay all events to get latest state
+    - Old way event is driven by receiver (what information is needed) vs Event sourcing every event is about a state change and has more rigid requirements
+        - Event will have all data needed for create or update domain object
+        - Create (Class factory method will be replaced by process and apply):
+            1. Create default object
+            2. process() =&gt; generate create*Event
+            3. apply(create*Event)
+            4. save create*Event into events db
+        - Update:
+            1. Load all events from events db
+            2. create default object
+            3. apply(allLoadedEvents)
+            4. generate update*Event
+            5. apply(update*Event)
+            6. save(update*Event) into events db
+        - Optimistic lock (version like events list count for aggregate)
+        - Publish events to message publish proxy:
+            1. Direct Select query not published events
+            2. Read DB table transaction logs
+        - Snapshot to improve performance for old items
+            - Create object from snapshot and only play events after snapshot timestamp
+        - Idempotent Message
+            - Remove duplicate messages:
+                1. Relation DB: save message ID as part of event transaction
+                2. NoSQL: Always fire event after processed message to include message ID
 </code></pre>
 <hr>
 
