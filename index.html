@@ -438,6 +438,113 @@
             - Remove duplicate messages:
                 1. Relation DB: save message ID as part of event transaction
                 2. NoSQL: Always fire event after processed message to include message ID
+        - Upcast message to latest like script do SQL schema upgrade
+        - Benefits:
+            1. Publish domain event reliably
+            2. Have aggregate history
+            3. Good solution to Impedance mismatch
+                - DB model is a table not same as oo design
+            4. Back to old days possibility for developers
+        - Drawbacks:
+            1. Learning curve
+            2. message communication is complex
+                - like handle and remove duplicate message
+            3. Event version
+            4. Delete data
+            5. Query event store
+</code></pre>
+<h3 id="Event-store"><a href="#Event-store" class="headerlink" title="Event store"></a>Event store</h3><pre><code>- Mix of DB saving events and message broker
+- 3 parts
+    1. DB like mysql
+        - 3 primary tables:
+            1. events
+                - table for event or message received
+                - foreign key to entity
+                - Column triggering_event has the message id to remove duplicate message
+            2. entities
+                - Has latest entity version and used for optimistic lock (update after compare vesion)
+                - Create entity =&gt; Add a new line in this table
+                - Update entity =&gt; Update column entity_version
+            3. snapshots
+                - find() will check snapshots
+    2. Message broker like Kafka
+        - Topic per aggregate like order topic and customer topic
+    3. Message relay
+        - Copy of events table by replay DB log like binlog in mysql
+</code></pre>
+<hr>
+<h2 id="Chapter-7-Microservice-Data-Query"><a href="#Chapter-7-Microservice-Data-Query" class="headerlink" title="Chapter 7 Microservice Data Query"></a>Chapter 7 <em><strong>Microservice Data Query</strong></em></h2><h3 id="API-Composition-and-CQRS"><a href="#API-Composition-and-CQRS" class="headerlink" title="API Composition and CQRS"></a>API Composition and CQRS</h3><pre><code>- API Composition
+    - Components:
+        1. API Composer
+            - web app or another service like API gateway
+        2. Provider service
+    - 3 ways to realize API Composer:
+        1. Web app
+        2. API gateway to handle
+        3. Seperate service only used for query
+            - Useful for more complicated query scenario that needs an alone service 
+    - Benefits: It a simple way to query data in a microservice architecture
+    - Drawbacks: Some queries would result in inefficient, in-memory joins of large datasets.
+- Pattern: Command Query Responsibility Segregation (CQRS)
+    - Problems API composition facing in some scenarios:
+        1. Single service query challenge:
+            - Service not supported
+            - Undelying DB not supported
+        2. Service responsibility isolation
+            - copy of data not directly query original data
+            - How to implement:
+                - Seperate view database only used for R
+                - Still has relational DB for CUD and view database subscribed to this relational CUD event
+    - Benifits:
+        1. Supports multiple denormalized views that are scalable and performant
+        2. Improved separation of concerns = simpler command and query models
+        3. Necessary in an event sourced architecture
+    - Drawbacks:
+        1. Increased complexity
+        2. Potential code duplication
+        3. Replication lag/eventually consistent views
+</code></pre>
+<hr>
+<h2 id="Chapter-8-External-API"><a href="#Chapter-8-External-API" class="headerlink" title="Chapter 8 External API"></a>Chapter 8 <em><strong>External API</strong></em></h2><h3 id="Problems-and-Forces"><a href="#Problems-and-Forces" class="headerlink" title="Problems and Forces"></a>Problems and Forces</h3><pre><code>- Problem
+    - How do the clients of a Microservices-based application access the individual services?
+- Forces
+    - The granularity of APIs provided by microservices is often different than what a client needs
+    - Different clients need different data
+    - Network performance is different for different types of clients
+    - The number of service instances and their locations (host+port) changes dynamically
+    - Partitioning into services can change over time and should be hidden from clients
+    - Services might use a diverse set of protocols, some of which might not be web friendly
+</code></pre>
+<h3 id="API-Gateway-and-backends-for-frontends"><a href="#API-Gateway-and-backends-for-frontends" class="headerlink" title="API Gateway and backends for frontends"></a>API Gateway and backends for frontends</h3><pre><code>- API gateway
+    - Routing request to specific service
+    - API composition
+    - Protocol switch between like gRPC and HTTP
+    - Customized design based on used case
+    - Edge function
+        1. Identity authentication
+        2. Authorization check
+        3. Speed control
+        4. Cache
+        5. Monitoring
+        6. Handle requests for Logs
+    - Benefits:
+        - Insulates the clients from how the application is partitioned into microservices
+        - Provides the optimal API for each client
+        - Reduces the number of requests/roundtrips. 
+        - Simplifies the client by moving logic for calling multiple services from the client to API gateway
+        - Translates from a “standard” public web-friendly API protocol to whatever protocols are used internally
+    - Drawbacks:
+        - Increased complexity
+        - Increased response time due to the additional network hop through the API gateway 
+        - How implement the API gateway? An event-driven/reactive approach is best if it must scale to scale to handle high loads. On the JVM, NIO-based libraries such as Netty, Spring Reactor, etc. make sense. NodeJS is another option.
+- Backends for frontends
+    - Every application team has its own API gateway and API gateway specific team own public shared part like edge function (Authenticatio and authorization)
+    - Mobile device API gateway, Browser API gateway and public API (for third partner)
+- Most existing API gateway frameworkds cannot achieve all functions need including edge function, API composition and routing
+    - Spring cloud gateway is a good one
+    - GraphQL is another option. Combined with express to build a API gateway service (P272 has the structure and Page279 has the express implementation code)
+        - Graph oriented data model and supported query (Type and query)
+        - resolvers mapping type and query to service
 </code></pre>
 <hr>
 
