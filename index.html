@@ -547,6 +547,24 @@
         - resolvers mapping type and query to service
 </code></pre>
 <hr>
+<h2 id="Chapter-9-and-10-Test-Strategy"><a href="#Chapter-9-and-10-Test-Strategy" class="headerlink" title="Chapter 9 and 10 Test Strategy"></a>Chapter 9 and 10 <em><strong>Test Strategy</strong></em></h2><h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><pre><code>- Test steps
+    1. Initialzation
+    2. Run test
+    3. Compare output and expected
+    4. Cleanup
+- Test types (金字塔)
+    - Unit test (simple and should have more)
+    - End to end test (difficult, slow and expensive and should be fewer)
+- Pattern:
+    - Service Integration Contract Test for REST
+        1. (Service consumer like API gateway) Create contracts including HTTP request and expected HTTP response
+        2. Using Sping cloud contract to generate tests and testing contracts
+        3. Push contracts to Maven
+        4. API gateway will use published to Maven contract to test its code
+    - Spring cloud contract Test also worked for Publisher and Subscriber
+        - Contract contains domain event sample 
+</code></pre>
+<hr>
 
       
 
