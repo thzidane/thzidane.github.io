@@ -16,7 +16,7 @@
 <meta property="og:description" content="Chapter 2 Introduction to Operating SystemsWhat is operating system- What happens when a program runs:     1. Processor fetches an instruction from memory     2. Decodes it     3. Executes it - Operat">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-08-21T04:17:49.000Z">
-<meta property="article:modified_time" content="2021-08-21T22:52:03.486Z">
+<meta property="article:modified_time" content="2021-09-10T17:57:15.388Z">
 <meta property="article:author" content="Hao Tang">
 <meta name="twitter:card" content="summary">
   
@@ -181,6 +181,84 @@
         1. Virtualizing CPU
         2. Virtualizing Memory
     - IS a resource manager
+    - Persistence
+        - OS is sometimes seen as a standard library for accessing devices through its system calls
+        - Software in the operating system to usually manage the disk is called file system
+        - No virtual for file system because users will want to share information that is in files
+        - Handle the problems of system crashes during writes
+            1. journaling
+            2. copy-on-write
+- Design goals
+    - virtualizes, concurrency, persistently
+    - Goals:
+        1. abstraction
+        2. performance
+            - minimize the overhead:
+                1. time (more instructions) 
+                2. space (in memory or on disk)
+        3. protection
+            - isolation between processes
+        4. reliability
+</code></pre>
+<hr>
+<h2 id="Chapter-3-11-Virtualization"><a href="#Chapter-3-11-Virtualization" class="headerlink" title="Chapter 3 - 11 Virtualization"></a>Chapter 3 - 11 <em><strong>Virtualization</strong></em></h2><h3 id="Processes"><a href="#Processes" class="headerlink" title="Processes"></a><code>Processes</code></h3><pre><code>- Virtualizing CPU for multiple process running same time illusion
+    - Low level mechanisms =&gt; Like time sharing mechanism
+    - On top of mechanisms resides policies=&gt; Like scheduling policy
+- The Abstraction: A Process
+    - Machine state
+        1. Memory
+            - Address space is the memory that the process can address
+        2. Registers
+        3. I/O information
+- Process API
+    1. Create
+    2. Destroy
+    3. wait
+    4. miscellaneous control like stop for some time and resume
+    5. status such as how long it has run for, or what state it is in
+- Process creation
+    - Load code and any static data into memory from disk
+    - Allocate memory for run-time stack
+        1. local variables 
+        2. function parameters
+        3. return addresses
+    - Allocate memory for heap
+    - do some other initialization tasks, particularly as related to input/output (I/O)
+    - main()
+- Process states are Running, Ready, Blocked
+</code></pre>
+<h3 id="Process-API"><a href="#Process-API" class="headerlink" title="Process API"></a><code>Process API</code></h3><pre><code>- Fork() =&gt; create a new child process
+- Wait() =&gt; wait for a child process to finish what it has been doing
+- exec() =&gt; create a new process and execute new code that is pointing to
+    - the heap and stack and other parts of the memory space of the program are re-initialized
+</code></pre>
+<h3 id="Limited-Direct-Execution"><a href="#Limited-Direct-Execution" class="headerlink" title="Limited Direct Execution"></a><code>Limited Direct Execution</code></h3><pre><code>- Restricted Operations
+    - User mode vs Kernal mode
+    - Kernal
+        - kernel set up a trap table at boot time and informs the hardware of the location of these trap handler =&gt; the hardware (CPU) knows what to do (i.e., what code to jump to) when system calls and other exceptional events take place.
+        - 2 Phases in the limited direct execution (LDE) protocol
+            1. At boot time, kernel initializes athe trap table and the CPU remembers its location for subsequent use
+            2. Running a process
+                - Need traps back into the OS when the process wishes to issue a system call
+                - Returns control back to process via a return-from-trap 
+        - Context switch
+            - Scheduler determines which process to run and timer will interrupt CPU in X ms
+            - 2 types of register saves/restores
+                1. Timer interrupt occurs
+                    - User registers of the running process will be implicitly saved by hardware using the kernel stack of the process
+                2. OS decides to switch process
+                    - Kernel registers are explicitly saved by the software(OS) into memory in the process stucture of the process
+    - How it works
+        1. Set up the trap handlers and starting an interrupter timer
+        2. Running a process in restricted mode
+        3. Require OS to perform privileged operations or switch process when one process has occupied CPU for too long
+</code></pre>
+<h3 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a><code>Scheduler</code></h3><pre><code>- Metrics: turnaround time and fairness
+- FIFO
+    - Convoy effect: a number of relatively-short potential consumers of a resource get queued behind a heavyweight resource consumer
+- Shortest Job Frist(SJF)
+- Shortest Time-to-Completion First (STCF)
+    - Any time a new job enters the system, the STCF scheduler determines which of the remaining jobs (including the new job) has the least time left, and schedules that one. 
 </code></pre>
 <hr>
 
