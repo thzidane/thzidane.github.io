@@ -455,12 +455,268 @@
         2. Running a process in restricted mode
         3. Require OS to perform privileged operations or switch process when one process has occupied CPU for too long
 </code></pre>
-<h3 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a><code>Scheduler</code></h3><pre><code>- Metrics: turnaround time and fairness
-- FIFO
-    - Convoy effect: a number of relatively-short potential consumers of a resource get queued behind a heavyweight resource consumer
-- Shortest Job Frist(SJF)
-- Shortest Time-to-Completion First (STCF)
-    - Any time a new job enters the system, the STCF scheduler determines which of the remaining jobs (including the new job) has the least time left, and schedules that one. 
+<h3 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a><code>Scheduler</code></h3><pre><code>- Metrics: 
+    - Turnaround time: completion - arrival
+    - Fairness
+    - Response time: first run - arrival
+- two families of approaches
+    1. First category: Run the shortest job remaining =&gt; optimizes turnaround time
+    - FIFO
+        - Convoy effect: a number of relatively-short potential consumers of a resource get queued behind a heavyweight resource consumer
+    - Shortest Job Frist (SJF)
+    - Shortest Time-to-Completion First (STCF)
+        - Any time a new job enters the system, the STCF scheduler determines which of the remaining jobs (including the new job) has the least time left, and schedules that one.
+    2. Second category: alternates between all jobs =&gt; optimizes response time
+        - Round-Robin (time slicing)
+            - the length of a time slice must be a multiple of the timer-interrupt period
+</code></pre>
+<h3 id="Multi-level-Feedback-Queue-MLFQ"><a href="#Multi-level-Feedback-Queue-MLFQ" class="headerlink" title="Multi-level Feedback Queue (MLFQ)"></a><code>Multi-level Feedback Queue (MLFQ)</code></h3><pre><code>- MLFQ: Basic Rules
+    - MLFQ has a number of distinct queues, each assigned a different priority level.
+- Summary
+    - Rule 1: If Priority(A) &gt; Priority(B), A runs (B doesn’t).
+    - Rule 2: If Priority(A) = Priority(B), A &amp; B run in round-robin fashion using the time slice (quantum length) of the given queue.
+    - Rule 3: When a job enters the system, it is placed at the highest priority (the topmost queue).
+    - Rule 4: Once a job uses up its time allotment at a given level (regardless of how many times it has given up the CPU), its priority is reduced (i.e., it moves down one queue).
+    - Rule 5: After some time period S, move all the jobs in the system to the topmost queue.
+</code></pre>
+<h3 id="SCHEDULING-PROPORTIONAL-SHARE"><a href="#SCHEDULING-PROPORTIONAL-SHARE" class="headerlink" title="SCHEDULING: PROPORTIONAL SHARE"></a><code>SCHEDULING: PROPORTIONAL SHARE</code></h3><pre><code>- Ticket mechanism
+    - Every process has tickets number. Pick random number and compare with tickets each process has
+- Stride scheduling
+    - Stride: inverse in proportion to the number of tickets it has
+    - Benefits vs lottery scheduling =&gt; Lottery scheduling achieves the proportions probabilistically over time; stride scheduling gets them exactly right at the end of each scheduling cycle
+    - Drawbacks vs lottery scheduling =&gt; Lottery is easier. With lottery scheduling, there is no global state per process; we simply add a new process with whatever tickets it has, update the single global variable to track how many total tickets we have, and go from there
+</code></pre>
+<h3 id="Completely-Fair-Scheduler-CFS-of-Linux"><a href="#Completely-Fair-Scheduler-CFS-of-Linux" class="headerlink" title="Completely Fair Scheduler (CFS) of Linux"></a><code>Completely Fair Scheduler (CFS) of Linux</code></h3><pre><code>- Weighted round-robin with dynamic time slices, but built to scale and perform well under load
+- virtual runtime (vruntime)
+    - When a scheduling decision occurs, CFS will pick the process with the lowest vruntime to run next
+- sched_latency
+    - CFS uses this value to determine how long one process should run before considering a switch
+    - A typical sched latency value is 48 (milliseconds)
+    - CFS divides this value by the number (n) of processes running on the CPU to determine the time slice for a process
+- min_granularity
+    - usually set to a value like 6 ms
+- Weighting (Niceness)
+    - enabling users or administrators to give some processes a higher share of the CPU
+    - Positive nice values imply lower priority and negative values imply higher priority
+- Dealing With I/O And Sleeping Processes
+    - Sets the vruntime of that job to the minimum value found in the tree
+</code></pre>
+<h3 id="MULTIPROCESSOR-SCHEDULING"><a href="#MULTIPROCESSOR-SCHEDULING" class="headerlink" title="MULTIPROCESSOR SCHEDULING"></a><code>MULTIPROCESSOR SCHEDULING</code></h3><pre><code>- Background: Multiprocessor Architecture
+    - cache coherence for CPU cache
+        - locality
+            1. temporal locality: when a piece of data is accessed, it is likely to be accessed again in the near future
+            2. spatial locality: if a program accesses a data item at address x, it is likely to access data items near x as well
+    - Synchronization
+        - the number of CPUs grows, access to a synchronized shared data structure becomes quite slow (mutex the lock on shared data)
+    - Cache Affinity
+        - A process, when run on a particular CPU, builds up a fair bit of state in the caches (and TLBs) of the CPU. Runs a process on a different CPU each time, the performance of the process will be worse, as it will have to reload the state each time it runs
+        - Preferring to keep a process on the same CPU if at all possible
+- Solutions
+    1. Single-Queue Scheduling
+        - Simple and looks like same as single CPU
+        - Problems with scalibility:
+            1. Lock is expensive
+            2. Cache affinity
+                - Implement some complex theme to make jobs always on same CPU
+    2. multi-queue multiprocessor scheduling (or MQMS)
+        - Scalable
+            - Each queue will likely follow a particular scheduling discipline, such as round robin
+            - It is scheduled essentially independently, thus avoiding the problems of information sharing and synchronization found in the single-queue approach
+        - Load imbalance
+            - Job switch like work stealing
+                - a (source) queue that is low on jobs will occasionally peek at another (target) queue, to see how full it is
+                -  If the target queue is (notably) more full than the source queue, the source will “steal” one or more jobs from the target to help balance load.
+</code></pre>
+<hr>
+<h2 id="Chapter-13-23-Virtualization-of-memory"><a href="#Chapter-13-23-Virtualization-of-memory" class="headerlink" title="Chapter 13 - 23 Virtualization of memory"></a>Chapter 13 - 23 <em><strong>Virtualization of memory</strong></em></h2><h3 id="Address-space"><a href="#Address-space" class="headerlink" title="Address space"></a><code>Address space</code></h3><pre><code>- easy to use abstraction of physical memory
+- all of the memory state of the running program
+    - CODE of the program
+    - STACK
+        - Keep track of where it is in the function call chain
+        - local variables and pass parameters and return values to and from routines
+    - HEAP
+        - dynamically-allocated, user-managed memory like new in java
+</code></pre>
+<h3 id="Mechanism-Address-Translation"><a href="#Mechanism-Address-Translation" class="headerlink" title="Mechanism: Address Translation"></a><code>Mechanism: Address Translation</code></h3><pre><code>- Goal: create an illusion =&gt; the program has its own private memory, where its own code and data reside
+- Address translation
+    - physical address = virtual address + base address
+    - Base register(in CPU) =&gt; was set to the base physical memory address value when process starts
+    - Each memory reference generated by the process is a virtual address
+    - Bound registers =&gt; If a process generates a virtual address that is greater than the bounds, or one that is negative, the CPU will raise an exception, and the process will likely be terminated
+- Hardware requirements:
+    - Privileged mode to prevent user-mode processes from executing privileged operations
+    - Base/bound registers
+    - Ability to translate virtual address to physical address and check if within bounds
+    - Privileged instruction to update base/bounds
+    - Privileged instruction to register exception handlers
+    - Ability to raise exceptions
+- OS responsibilites
+    - Have free list to allocate memory when new process created
+    - Reclaim memory for terminated process and add it back to free list
+    - Save and restore base/bounds register from memory per process(process structure or process control block) while context switch
+    - Exception handler
+        - OS installs these handlers at boot time (CPU knows which code to call when exception happens) 
+</code></pre>
+<h3 id="Segmentation"><a href="#Segmentation" class="headerlink" title="Segmentation"></a><code>Segmentation</code></h3><pre><code>- 3 segments for code, statck and heap; each has its own base / bounds segment registers
+- 2 way to determine which segment address is pointing to
+    - Expilicit: top bits for which segment and rest of bits for offset
+    - Implicit: the address was generated from the program counter (i.e., it was an instruction fetch), then the address is within the code segment =&gt; ; if the address is based off of the stack or base pointer, it must be in the stack segment; any other address must be in the heap.
+- Stack memory is growing negative
+    - Need one more register for growing direction
+    - Stack physical address = base - segement length + offset
+- Sharing like code segments can be shared between processes
+    - Need one more register value to for protection like read-write and read execute
+    - Hardware also needs to check whether a particular access is permissible
+- OS support
+    - Context switch =&gt; need save and restore more register values comparing to previous simple method
+    - Segments grow or shrink =&gt; find new large enough spot in physical memory
+    - managing free space in physical memory =&gt;  When a new address space is created, the OS has to be able to find space in physical memory for its segments
+        - Compact current existing framentation
+        - Keep a free list and have some algorithm to pick next available fit spot
+</code></pre>
+<h3 id="Free-Space-Management"><a href="#Free-Space-Management" class="headerlink" title="Free-Space Management"></a><code>Free-Space Management</code></h3><pre><code>- Low level mechanism
+    - Splitting and Coalescing
+        - Split chunk of free memory when need malloc a smaller space than current chunks in list
+        - Coalese chunks of free memory sitting adjacent to current chunk waiting for free and make it a continous large chunk
+    - Need include size info into header since free() only needs pointer and no size passed in
+        - Real memory chunk needs to free = user allocate + header
+- Strategies for managing free space
+    - Basic
+        1. Best fit
+            - Find the smallest fit
+            - Benefits =&gt; reduce wasted space
+            - Drawbacks =&gt; performance penalty to search fro the correct free block
+        2. Worst fit
+            - Find the largest fit
+            - Worse, most studies show that it performs badly, leading to excess fragmentation while still having high overheads
+        3. First fit
+            - finds the first block that is big enough
+            - One approach is to use address-based ordering
+            - by keeping the list ordered by the address of the free space, coalescing becomes easier, and fragmentation tends to be reduced
+        4. Next fit
+            - keeps an extra pointer to the location within the list where one was looking last
+            - The idea is to spread the searches for free space throughout the list more uniformly, thus avoiding splintering of the beginning of the list.
+    - Other approaches
+        - Segregated Lists
+            - keep list of objects of one or a few popular-sized
+        - Buddy Allocation
+            - good for coalescing
+            - One example binary buddy allocator
+                - Always divide free space by two until a block that is big enough to accommodate the request is found
+                - coalescing will happen recursively to check whether buddy block can coalesce into a large one
+</code></pre>
+<h3 id="Paging"><a href="#Paging" class="headerlink" title="Paging"></a><code>Paging</code></h3><pre><code>- Fixed size of memory
+- Advantages
+    - Flexibility
+    - Simplicity
+        - Page table (per-process) for virtual page and physical page mapping
+        - Translate
+            - Vitrual address bits = VPN (Virtual page number) + offset
+            - Page table =&gt; VPN to physical frame number (PFN) (also sometimes called the physical page number or PPN
+            - Offset is same in physical page
+- PTE (Page table entry)
+    - Valid bit =&gt; indicate virtual is valid or not
+    - Protection bits =&gt; read, write or execute
+    - Present bit =&gt; page in physical memory or on disk
+    - Drity bit =&gt; page has been modified or not
+    - Reference bit =&gt; track a page has been accessed or not
+</code></pre>
+<h3 id="Paging-Faster-Translations-TLBs"><a href="#Paging-Faster-Translations-TLBs" class="headerlink" title="Paging: Faster Translations (TLBs)"></a><code>Paging: Faster Translations (TLBs)</code></h3><pre><code>- TLB (translation-lookaside buffer)
+    - TLB hit
+    - TLB miss =&gt; Access memory page table and save into TLB
+- Cache =&gt; take advantage of locality
+    - temporal locality: an instruction or data item that has been recently accessed will likely be re-accessed soon in the future
+    - spatial locality: if a program accesses memory at address x, it will likely soon access memory near x
+- Who Handles The TLB Miss?
+    - Hardware-managed TLBs
+    - Software-managed TLB
+        - trap handler
+            1. The code will lookup the translation in the page table, use special “privileged” instructions to update the TLB, and return from the trap;
+            2. At this point, the hardware retries the instruction (resulting in a TLB hit)
+        - the hardware must save a different PC when trapping into the OS for trap handler because it is different from regular return-from-trap. The hardware must resume execution at the instruction that caused the trap not excecute the next instruction after causing trap instruction
+        - needs to be extra careful not to cause an infinite chain of TLB misses to occur.
+            - keep TLB miss handlers in physical memory
+            - reserve some entries in the TLB for permanently-valid translations
+        - Advantages
+            - Flexibility: the OS can use any data structure it wants to implement the page
+            - Simplicity: The hardware doesn’t do much on a miss: just raise an exception and let the OS TLB miss handler do the rest
+- TLB Contents: What’s In There?
+    - VPN | PFN | other bits
+        - valid bit
+        - protection bits
+        - address-space identifier
+        - a dirty bit
+- TLB Issue: Context Switches
+    - TLB is per process
+    - Methods:
+        - Flush all TLB entry by marking valid bit to be false =&gt; too costly while context switches usually happen in OS
+        - Hardware systems provide an address space identifier (ASID) field in the TLB
+            - ASID act same as PID (Process identifier)
+            - TLB can hold translations from different processes at the same time without any confusion
+            - the OS must, on a context switch, set some privileged register to the ASID of the current process
+- Cache replacement
+    - LRU
+    - Random
+</code></pre>
+<h3 id="Paging-Smaller-Tables"><a href="#Paging-Smaller-Tables" class="headerlink" title="Paging: Smaller Tables"></a><code>Paging: Smaller Tables</code></h3><pre><code>- Simple Solution: Bigger pages
+    - It will cause waste of memory resource (known as internal fragmentation)
+- Hybrid Approach: Paging and Segments
+    - Segmentation like code, stack and heap
+    - Virtual address include segment number
+    - When TLB miss happen, it will
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SN = (VirtualAddress &amp; SEG_MASK) &gt;&gt; SN_SHIFT</span><br><span class="line">VPN = (VirtualAddress &amp; VPN_MASK) &gt;&gt; VPN_SHIFT</span><br><span class="line">AddressOfPTE = Base[SN] + (VPN * sizeof(PTE))</span><br></pre></td></tr></table></figure>
+    - The only difference compared to linear page tables is the use of one of three segment base registers instead of the single page table base register.
+- Multi-level Page Tables
+    - Basic idea behind a multi-level page table
+        1. chop up the page table into page-sized units; 
+        2. if an entire page of page-table entries (PTEs) is invalid, don’t allocate that page of the page table at all.
+    - Page directory =&gt; track whether a page of the page table is valid (and if valid, where it is in memory)
+        - either can be used to tell you where a page of the page table is 
+        - or that the entire page of the page table contains no valid pages.
+    - page directory, in a simple two-level table, contains one entry per page of the page table
+        - a number of page directory entries (PDE) 
+        - A PDE (minimally) has a valid bit 
+        - a page frame number (PFN), similar to a PTE
+    - Advantages
+        1. save space: allocates page-table space in proportion to the amount of address space you are using
+        2. making it easier to manage memory
+    - Drawbacks:
+        1. time-space trade-off: 2 instructions for one TLB miss (one for page directory and one for the PTE), in contrast to just one load with a linear page table.
+        2. complexity
+    - VPN =&gt; PTE in Page table
+        - PDEAddr = PageDirBase + (PDIndex * sizeof(PDE))
+            - page-directory index (PDIndex for short)
+            - page-directory entry (PDE)
+            - If the page-directory entry is marked invalid, we know that the access is invalid, and thus raise an exception
+        - (First 4 bits in example) Page Directory Index =&gt; Page directory entry and find the actual page of page table
+        - (Next 4 bits in example) Page Table Index =&gt; Page table entry
+</code></pre>
+<h3 id="BEYOND-PHYSICAL-MEMORY-MECHANISMS"><a href="#BEYOND-PHYSICAL-MEMORY-MECHANISMS" class="headerlink" title="BEYOND PHYSICAL MEMORY: MECHANISMS"></a><code>BEYOND PHYSICAL MEMORY: MECHANISMS</code></h3><pre><code>- swap space
+    - OS will need to remember the disk address of a given page
+- Page fault: the act of accessing a page that is not in physical memory
+    - TLB hit
+    - TLB miss =&gt; search in page table and load it into TLB from memory(Present bit is 1)
+    - Present bit is 0 =&gt; Page fault
+- OS will handle page fault and has page fault handler code
+    - Looks in the PTE to find the address
+    - issues the request to disk to fetch the page into memory
+- Swap daemon will run in background
+    - low watermark =&gt; trigger swap daemon
+    - high watermark =&gt; swap will end until reaching the high watermark of free pages in memory
+</code></pre>
+<h3 id="BEYOND-PHYSICAL-MEMORY-Policies"><a href="#BEYOND-PHYSICAL-MEMORY-Policies" class="headerlink" title="BEYOND PHYSICAL MEMORY: Policies"></a><code>BEYOND PHYSICAL MEMORY: Policies</code></h3><pre><code>- The Optimal Replacement Policy: replaces the page that will be accessed furthest in the future
+- Simple policies: FIFO and Random are intelligent in picking which blocks to evict
+- Using History: LRU
+    - recency of access
+    - principle of locality
+- Approximating LRU
+    - Clock algorithm: A clock hand points to some particular page to begin with (it doesn’t really matter which). When a replacement must occur, the OS checks if the currently-pointed to page P has a use bit of 1 or 0
+    - Use bit is provide by hardware
+- Considering Dirty Pages
+    - Dirty pages(has been modified) is more expensive than clean pages to evict
+- Other VM Policies
+    - On-demand paging (most systems do) or prefeching =&gt; when to bring the page into memory when it is accessed
+    - cluster writing
 </code></pre>
 <hr>
 
