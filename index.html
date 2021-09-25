@@ -717,6 +717,124 @@
 - Other VM Policies
     - On-demand paging (most systems do) or prefeching =&gt; when to bring the page into memory when it is accessed
     - cluster writing
+- Thrashing
+    - Need kill some process when memory is oversubscribed
+</code></pre>
+<h3 id="COMPLETE-VIRTUAL-MEMORY-SYSTEMS"><a href="#COMPLETE-VIRTUAL-MEMORY-SYSTEMS" class="headerlink" title="COMPLETE VIRTUAL MEMORY SYSTEMS"></a><code>COMPLETE VIRTUAL MEMORY SYSTEMS</code></h3><pre><code>- VAX/VMS
+    - User address space is under OS kernel portion address space
+    - lazy optimizations
+        - demand zeroing: only create an entry in page table but only zero page and allocate real page when process access it 
+        - copy-on-write: 
+            - when the OS needs to copy a page from one address space to another, instead of copying it, it can map it into the target address space and mark it readonly in both address spaces
+            - only allocate a new page when either process is trying to write
+- Linux
+    - User and kernel address spaces are separate
+    - Kernel address has 2 parts
+        1. Kernel logical address
+            - Continuous in vitual as physical and easy to access
+        2. kernel virtual address
+            - Not continuous
+            - Allocating large chunk of memory
+    - 4 level of page directory structure for page table
+    - TLB performance gains drive large page support
+</code></pre>
+<hr>
+<h2 id="Chapter-26-33-Concurrency"><a href="#Chapter-26-33-Concurrency" class="headerlink" title="Chapter 26 - 33 Concurrency"></a>Chapter 26 - 33 <em><strong>Concurrency</strong></em></h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><pre><code>- Single thread state is similar as single process
+    - Differences between thread and process
+        1. Context switch the address space remains the same
+        2. One stack per thread
+- Why use thread
+    - Parallelism: transforming your standard single-threaded program into a program that does this sort of work on multiple CPUs
+    - avoid blocking program progress due to slow I/O: enables overlap of I/O with other activities within a single program 
+    - Could use multiple process to do either of these 2 but multi-thread makes it easy to share data
+- Heart of the problem
+    - Race condition on shared across threads execution
+    - one thread wait for another
+</code></pre>
+<h3 id="locks"><a href="#locks" class="headerlink" title="locks"></a>locks</h3><pre><code>- Evaluating locks
+    - Basic task: mutual exclusion between different threads
+    - Fairness
+    - Performance
+- Ways to add locks
+    1. Controlling Interrupts
+        - lock() =&gt; DisableInterrupts()
+        - disadvantages:
+            1. allow any calling thread to perform a privileged operation
+            2. does not work on multiprocessors (thread is running on another processor)
+            3. Inefficiency
+    2. A Failed Attempt: Just Using Loads/Stores
+        - sets the flag to 1 to indicate that the thread now holds the lock
+        - Other threads while spin-wait
+        - easily produce a case where both threads set the flag to 1 and both threads are thus able to enter the critical section
+    3. Working Spin Locks with Test-And-Set
+        - Test-And-Set: It returns the old value pointed to by the old ptr, and simultaneously updates said value to new. 
+        - The key =&gt; this sequence of operations is performed atomically
+    4. Compare-And-Swap
+    5. Load-Linked and Store-Conditional
+        - key difference compared to a typical load instruction =&gt; with the store-conditional, which only succeeds (and updates the value stored at the address just load-linked from) if no intervening store to the address has taken place
+        - the store-conditional=&gt;  only one of these threads will succeed in updating the flag to 1 and thus acquire the lock when two threads have each executed the load-linked
+    6. Fetch-And-Add
+        - atomically increments a value while returning the old value at a particular address
+        - Only run when (myturn == turn) for a given thread
+        -  Once a thread is assigned its ticket value, it will be scheduled at some point in the future (no such guarantee existed in other methods)
+- Hardware provides locks mechanism =&gt; Complete multiple actions atomically
+- Software (OS) can support to avoid spinning
+    - A Simple Approach: Yield
+        - A thread can be in one of three states (running, ready, or blocked); 
+        - yield is simply a system call that moves the caller from the running state to the ready state, and thus promotes another thread to running
+        - still costly (Context switch) and does not resolve starving
+</code></pre>
+<h3 id="Lock-based-Concurrent-Data-Structures"><a href="#Lock-based-Concurrent-Data-Structures" class="headerlink" title="Lock-based Concurrent Data Structures"></a>Lock-based Concurrent Data Structures</h3><pre><code>- Concurrent Counters
+    - Local counter per core and periodically updates global counter
+</code></pre>
+<h3 id="Condition-variable"><a href="#Condition-variable" class="headerlink" title="Condition variable"></a>Condition variable</h3><pre><code>- Condition variable
+    - an explicit queue that threads can put themselves on when some state of execution (i.e., some condition) is not as desired (by waiting on the condition);
+    - some other thread, when it changes said state, can then wake one (or more) of those waiting threads and thus allow them to continue (by signaling on the condition)
+- Always use while not if do check
+</code></pre>
+<h3 id="Semaphores"><a href="#Semaphores" class="headerlink" title="Semaphores"></a>Semaphores</h3><pre><code>- definition
+    - sem_wait(sem_t *s): decrement the value of semaphore s by one wait if value of semaphore s is negative
+    - sem_post(sem_t *s): increment the value of semaphore s by one if there are one or more threads waiting, wake one
+    - negative value == number of waiting thread
+- Binary Semaphores (locks)
+    - Initial value should be 1
+- Semaphores For Ordering (condition variable)
+    - Initial value should be 0
+- Semaphores solution for The Producer/Consumer (Bounded Buffer) Problem
+    - sem_init(&amp;empty, 0, MAX); // MAX are empty
+    - sem_init(&amp;full, 0, 0); // 0 are full
+    - Producer             
+        - sem_wait(&amp;empty); // Line P1
+        - sem_wait(&amp;mutex); // Line P0 (NEW LINE)
+        - sem_post(&amp;full); // Line P3
+    - void *consumer(void *arg) &#123;
+        - sem_wait(&amp;full); // Line C1
+        - sem_wait(&amp;mutex); // Line C0 (NEW LINE)
+        - sem_post(&amp;empty); // Line C3
+- Reader-Writer Locks
+    - First reader will acquire write lock
+    - Reader always acquires read lock and increase the readers count
+    - After last reader is done, release the write lock
+    - Possible optimization: prevent more readers acquire read lock when writer has already been in queue waiting for write lock
+</code></pre>
+<h3 id="Common-Concurrency-Problems"><a href="#Common-Concurrency-Problems" class="headerlink" title="Common Concurrency Problems"></a>Common Concurrency Problems</h3><pre><code>- Non-Deadlock Bugs
+    - Atomicity-Violation Bugs =&gt; Add locks
+    - Order-Violation Bugs =&gt; Add lock and condition variable
+- Deadlock Bugs
+    - Four conditions need to hold for a deadlock to occur:
+        1. Mutual exclusion: Threads claim exclusive control of resources that they require (e.g., a thread grabs a lock).
+        2. Hold-and-wait: Threads hold resources allocated to them (e.g., locks that they have already acquired) while waiting for additional resources (e.g., locks that they wish to acquire).
+        3. No preemption: Resources (e.g., locks) cannot be forcibly removed from threads that are holding them.
+        4. Circular wait: There exists a circular chain of threads such that each thread holds one or more resources (e.g., locks) that are being requested by the next thread in the chain.
+    - Prevention
+        1. Circular Wait: provide a total ordering on lock acquisition
+        2. Hold-and-wait: Add global prevention lock
+            - Not good for encapsulation
+        3. No Preemption: tryLock()
+        4. Mutual Exclusion: using powerful hardware instructions, you can build data structures in a manner that does not require explicit locking
+            - Like compare-and-swap
+        5. Deadlock Avoidance via Scheduling
+        6. Detect and Recover
 </code></pre>
 <hr>
 
