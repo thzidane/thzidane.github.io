@@ -739,7 +739,7 @@
     - TLB performance gains drive large page support
 </code></pre>
 <hr>
-<h2 id="Chapter-26-33-Concurrency"><a href="#Chapter-26-33-Concurrency" class="headerlink" title="Chapter 26 - 33 Concurrency"></a>Chapter 26 - 33 <em><strong>Concurrency</strong></em></h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><pre><code>- Single thread state is similar as single process
+<h2 id="Chapter-26-33-Concurrency"><a href="#Chapter-26-33-Concurrency" class="headerlink" title="Chapter 26 - 33 Concurrency"></a>Chapter 26 - 33 <em><strong>Concurrency</strong></em></h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a><code>Introduction</code></h3><pre><code>- Single thread state is similar as single process
     - Differences between thread and process
         1. Context switch the address space remains the same
         2. One stack per thread
@@ -751,7 +751,7 @@
     - Race condition on shared across threads execution
     - one thread wait for another
 </code></pre>
-<h3 id="locks"><a href="#locks" class="headerlink" title="locks"></a>locks</h3><pre><code>- Evaluating locks
+<h3 id="locks"><a href="#locks" class="headerlink" title="locks"></a><code>locks</code></h3><pre><code>- Evaluating locks
     - Basic task: mutual exclusion between different threads
     - Fairness
     - Performance
@@ -784,15 +784,15 @@
         - yield is simply a system call that moves the caller from the running state to the ready state, and thus promotes another thread to running
         - still costly (Context switch) and does not resolve starving
 </code></pre>
-<h3 id="Lock-based-Concurrent-Data-Structures"><a href="#Lock-based-Concurrent-Data-Structures" class="headerlink" title="Lock-based Concurrent Data Structures"></a>Lock-based Concurrent Data Structures</h3><pre><code>- Concurrent Counters
+<h3 id="Lock-based-Concurrent-Data-Structures"><a href="#Lock-based-Concurrent-Data-Structures" class="headerlink" title="Lock-based Concurrent Data Structures"></a><code>Lock-based Concurrent Data Structures</code></h3><pre><code>- Concurrent Counters
     - Local counter per core and periodically updates global counter
 </code></pre>
-<h3 id="Condition-variable"><a href="#Condition-variable" class="headerlink" title="Condition variable"></a>Condition variable</h3><pre><code>- Condition variable
+<h3 id="Condition-variable"><a href="#Condition-variable" class="headerlink" title="Condition variable"></a><code>Condition variable</code></h3><pre><code>- Condition variable
     - an explicit queue that threads can put themselves on when some state of execution (i.e., some condition) is not as desired (by waiting on the condition);
     - some other thread, when it changes said state, can then wake one (or more) of those waiting threads and thus allow them to continue (by signaling on the condition)
 - Always use while not if do check
 </code></pre>
-<h3 id="Semaphores"><a href="#Semaphores" class="headerlink" title="Semaphores"></a>Semaphores</h3><pre><code>- definition
+<h3 id="Semaphores"><a href="#Semaphores" class="headerlink" title="Semaphores"></a><code>Semaphores</code></h3><pre><code>- definition
     - sem_wait(sem_t *s): decrement the value of semaphore s by one wait if value of semaphore s is negative
     - sem_post(sem_t *s): increment the value of semaphore s by one if there are one or more threads waiting, wake one
     - negative value == number of waiting thread
@@ -817,7 +817,7 @@
     - After last reader is done, release the write lock
     - Possible optimization: prevent more readers acquire read lock when writer has already been in queue waiting for write lock
 </code></pre>
-<h3 id="Common-Concurrency-Problems"><a href="#Common-Concurrency-Problems" class="headerlink" title="Common Concurrency Problems"></a>Common Concurrency Problems</h3><pre><code>- Non-Deadlock Bugs
+<h3 id="Common-Concurrency-Problems"><a href="#Common-Concurrency-Problems" class="headerlink" title="Common Concurrency Problems"></a><code>Common Concurrency Problems</code></h3><pre><code>- Non-Deadlock Bugs
     - Atomicity-Violation Bugs =&gt; Add locks
     - Order-Violation Bugs =&gt; Add lock and condition variable
 - Deadlock Bugs
@@ -835,6 +835,277 @@
             - Like compare-and-swap
         5. Deadlock Avoidance via Scheduling
         6. Detect and Recover
+</code></pre>
+<h3 id="Event-based-Concurrency-Like-web-server"><a href="#Event-based-Concurrency-Like-web-server" class="headerlink" title="Event-based Concurrency (Like web server)"></a><code>Event-based Concurrency (Like web server)</code></h3><pre><code>- Event loop to keep getting events and handle event to event handler
+- select() =&gt; query network sockets for events
+- No locks needed
+- No blocking calls are allowed
+- Asynchronous I/O: enable an application to issue an I/O request and return control immediately to the caller, before the I/O has completed
+    1. Query system to check if I/O is done
+    2. some systems provide an approach based on the interrupt. Using UNIX signals to inform applications when an asynchronous I/O completes =&gt; removing the need to repeatedly ask the system
+- State Management: manual stack management
+- What Is Still Difficult With Events
+    - All systems moved from a single CPU to multiple CPUs
+    - it does not integrate well with certain kinds of systems activity, such as paging
+    - event-based code can be hard to manage overtime
+    - Difficult to intergrate with other system
+</code></pre>
+<hr>
+<h2 id="Chapter-35-51-Persistence"><a href="#Chapter-35-51-Persistence" class="headerlink" title="Chapter 35 - 51 Persistence"></a>Chapter 35 - 51 <em><strong>Persistence</strong></em></h2><h3 id="I-O-Devices"><a href="#I-O-Devices" class="headerlink" title="I/O Devices"></a><code>I/O Devices</code></h3><pre><code>- System Architecture
+    1. By memory bus
+        - CPU and Main memory
+    2. By general I/O bus
+        - graphics and some other higher-performance I/O devices
+    3. peripheral bus
+        - slow devices to the system, including disks, mice, and keyboards
+- A Canonical Device
+    - Interface: status register, commnd register and data register            
+    - Internal structure
+- The Canonical Protocol
+    1. OS waits until the device is ready to receive a command by repeatedly reading the status register
+    2. OS sends some data down to the data register
+    3. OS writes a command to the command register
+    4. OS waits for the device to finish by again polling it in a loop, waiting to see if it is finished
+- Lowering CPU Overhead With Interrupts
+    - Instead of polling the device repeatedly, 
+        1. OS can issue a request, put the calling process to sleep, and context switch to another task 
+        2. When the device is finally finished with the operation, it will raise a hardware interrupt, causing the CPU to jump into the OS at a predetermined interrupt service routine (ISR) or more simply an interrupt handler
+    - it may be best to use a hybrid that polls for a little while and then, if the device is not yet finished, uses interrupts. This two-phased approach may achieve the best of both worlds
+    - Another reason not to use interrupts arises in networks. When a huge stream of incoming packets each generate an interrupt, it is possible for the OS to livelock
+    - Another interrupt-based optimization is coalescing. 
+        - In such a setup, a device which needs to raise an interrupt first waits for a bit before delivering the interrupt to the CPU. - While waiting, other requests may soon complete, and thus multiple interrupts can be coalesced into a single interrupt delivery =&gt; lowering the overhead of interrupt processing
+- More Efficient Data Movement With Direct Memory Access (DMA)
+    - To transfer data to the device, for example, the OS would program the DMA engine by telling it 
+        - where the data lives in memory
+        - how much data to copy
+        - which device to send it to 
+    - At that point, the OS is done with the transfer and can proceed with other work.
+    - When the DMA is complete, the DMA controller raises an interrupt, and the OS thus knows the transfer is complete
+- Methods Of Device Interaction
+    - I/O instructions
+        - These instructions specify a way for the OS to send data to specific device registers
+        - instructions are usually privileged
+    - memory-mapped I/O
+        - the hardware makes device registers available as if they were memory locations
+        - To access a particular register, the OS issues a load (to read) or store (to write) the address; the hardware then routes the load/store to the device instead of main memory
+- Fitting Into The OS: The Device Driver
+    - device driver is the software knows the detail of device and encapsulate the detail
+    - Application =&gt; File System =&gt; Generic Block interface =&gt; Specific Block Interface (Device Driver)
+    - Downsides:
+        1. Have to provide generic interface and may sacrifice device&#39;s special capabilities
+        2. Huge percentage of kernel code
+</code></pre>
+<h3 id="Hard-Disk-Drives"><a href="#Hard-Disk-Drives" class="headerlink" title="Hard Disk Drives"></a><code>Hard Disk Drives</code></h3><pre><code>- The Interface
+    - The drive consists of a large number of sectors (512-byte blocks), each of which can be read or written
+    - The sectors are numbered from 0 to n − 1 on a disk with n sectors
+    - 0 to n − 1 is thus the address space of the drive
+- the only guarantee drive manufacturers make is that a single 512-byte write is atomic
+- assumptions
+    1. accessing two blocks1 near one-another within the drive’s address space will be faster than accessing two blocks that are far apart
+    2. accessing blocks in a contiguous chunk (i.e., a sequential read or write) is the fastest access mode, and usually much faster than any more random access pattern
+- Disk Scheduling
+    1. SSTF: Shortest Seek Time First =&gt; orders the queue of I/O requests by track, picking requests on the nearest track to complete first
+        - Drawbacks
+            1. the drive geometry is not available to the host OS
+                - OS can simply implement nearest-block-first (NBF)
+            2. starvation: if there were a steady stream of requests to the inner track, Requests to any other tracks would then be ignored completely
+    2. Elevator (a.k.a. SCAN or C-SCAN) =&gt; simply moves back and forth across the disk servicing requests in order across the tracks
+    3. SPTF: Shortest Positioning Time First
+        - seek time VS rotational delay
+        - OS does not know =&gt; SPTF is usually performed inside a drive
+</code></pre>
+<h3 id="RAID"><a href="#RAID" class="headerlink" title="RAID"></a><code>RAID</code></h3><pre><code>- Redundant Array of Inexpensive Disks
+- A RAID system is often built as a separate hardware box
+    - a microcontroller that runs firmware to direct the operation of the RAID
+    - volatile memory such as DRAM to buffer data blocks as they are read and written, and in some cases
+    - non-volatile memory to buffer writes safely 
+    - perhaps even specialized logic to perform parity calculations
+- RAID Level 0: Striping =&gt; no redundancy
+    1. Capacity: perfect
+    2. reliability: worst 
+        - any disk failure will lead to data loss
+    3. performance: excellent
+- RAID Level 1: Mirroring =&gt; 2 copy of same block
+    - half the available bandwidth
+- RAID Level 4: Saving Space With Parity =&gt; adding redundancy to a disk array known as parity
+    - 1 extra disk for parity
+    - Allow at most 1 disk data loss
+    - Override parity when bits change
+        1. additive parity
+            - Read all other disks and recalculate
+        2. subtractive parity
+            - Pnew = (Cold XOR Cnew) XOR Pold
+- RAID Level 5: Rotating Parity =&gt; no extra parity disk
+- Conclusion
+    1. Strictly want performance and do not care about reliability =&gt; striping (RAID 0)
+    2. Random I/O performance and reliability =&gt; mirroring (RAID 1)
+        - Cost =&gt; lost capacity. 
+    3. Capacity and reliability are main goals =&gt; RAID5 is the winner
+        - Cost =&gt; small-write performance. 
+    4. Always doing sequential I/O and want to maximize capacity =&gt; RAID-5
+</code></pre>
+<h3 id="Files-and-Directories"><a href="#Files-and-Directories" class="headerlink" title="Files and Directories"></a><code>Files and Directories</code></h3><pre><code>- File
+    - Low-level name is inode number (user is not aware of)
+    - OS does not know much about the structure of the file 
+    - responsibility of the file system =&gt; simply to store such data persistently on disk and make sure that when you request the data again, you get what you put there in the first place
+- directory
+    - Like a file, also has a low-level name (i.e., an inode number), but - Its contents are quite specific: it contains a list of (user-readable name, low-level name) pairs
+    - Each entry in a directory refers to either files or other directories. By placing directories within other directories, users are able to build an arbitrary directory tree
+    - The directory hierarchy starts at a root directory (in UNIX-based systems, the root directory is simply referred to as /) and uses some kind of separator to name subsequent sub-directories until the desired file or directory is named
+- API
+    - Create files
+        - open() =&gt; returns a file descriptor
+        - A file descriptor is just an integer, private per process, and is used in UNIX systems to access files
+        - once a file is opened, you use the file descriptor to read or write the file
+    - Reading And Writing Files
+        - cat
+            - Firstly needs open() and use file descriptor returned from open() to read bytes from file
+            - each running process already has three files open
+                1. standard input (which the process can read to receive input)
+                2. standard output (which the process can write to in order to dump information to the screen)
+                3. standard error (which the process can write error messages to)
+    - Reading And Writing, But Not Sequentially
+        - off_t lseek(int fildes, off_t offset, int whence);
+            1. The first argument is familiar (a file descriptor). 
+            2. The second argument is the offset, which positions the file offset to a particular location within the file. 
+            3. The third argument, called whence for historical reasons, determines exactly how the seek is performed. From the man page:
+                -  If whence is SEEK_SET, the offset is set to offset bytes.
+                - If whence is SEEK_CUR, the offset is set to its current location plus offset bytes.
+                - If whence is SEEK_END, the offset is set to the size of the file plus offset bytes.
+    - Shared File Table Entries: fork() And dup()
+        - Even if some other process reads the same file at the same time, each will have its own entry in the open file table
+        - In a few cases, an entry in the open file table is shared
+            - a parent process and a child process created with fork() by parent
+            - reference count to determine when to remove the entry in the table
+        - dup() call allows a process to create a new file descriptor that refers to the same underlying open file as an existing descriptor
+    - Writing Immediately With fsync()
+        - write()
+            - The file system, for performance reasons, will buffer such writes in memory for some time (say 5 seconds, or 30); at that later point in time, the write(s) will actually be issued to the storage device
+        - fsync()
+            - the file system responds by forcing all dirty (i.e., not yet written) data to disk, for the file referred to by the specified file descriptor
+    - Renaming Files: mv
+        - rename() call is that it is (usually) implemented as an atomic call with respect to system crashes
+    - Getting Information About Files: stat
+        - metadata: the file system to keep a fair amount of information about each file it is storing
+        - stat
+            - its size (in bytes)
+            - its low-level name (i.e., inode number)
+            - some ownership information
+            - some information about when the file was accessed or modified
+    - Removing Files: rm
+        - call unlink() underneath
+    - Making Directories: mkdir
+        - mkdir will create an empty directory including
+            1. “.” (dot) directory =&gt; refers to itself
+            2. “..” (dot-dot) =&gt; refers to its parent
+    - Reading Directories: ls
+        - ls will give just mapping the name to the inode number, along with a few other details
+        - ls -l will get more information such as its length or other detailed information
+    - Deleting Directories: rmdir
+        - If you try to delete a non-empty directory, the call to rmdir() simply will fail
+    - Hard Links: ln
+        - takes two arguments, an old pathname and a new one
+        - creates another name in the directory you are creating the link to, and refers it to the same inode number (i.e., low-level name) of the original file
+        - When create a file
+            1. Making a structure (the inode) that will track virtually all relevant information about the file, including its size, where its blocks are on disk, and so forth
+            2. linking a human-readable name to that file, and putting that link into a directory
+        - unlink 
+            1. remove the “link” between the human-readable name (the file that is being deleted) to the given inode number
+            2. decrements the reference count
+            3. only when the reference count reaches zero does the file system also free the inode and related data blocks, and thus truly “delete” the file
+    - Symbolic Links or Soft link: ln -s
+        - Different between soft and hard link
+            1. a symbolic link is actually a file itself, of a different type.
+            2. because of the way symbolic links are created, they leave the possibility for what is known as a dangling reference =&gt; the link to point to a pathname that no longer exists
+    - Permission Bits And Access Control Lists
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">prompt&gt; ls -l foo.txt</span><br><span class="line">-rw-r--r-- 1 remzi wheel 0 Aug 24 16:29 foo.txt</span><br></pre></td></tr></table></figure>
+        - The first character =&gt; shows the type of the file
+            1. - for a regular file (which foo.txt is)
+            2. d for a directory
+            3. l for a symbolic link
+        - Next 9 bits are permission bits
+            - determine exactly who can access it and how for each regular file, directory, and other entities
+            - consist of three groupings
+                1. what the owner of the file can do to it
+                2. what someone in a group can do to the file
+                3. what anyone (sometimes referred to as other)
+            - read the file, write it, or execute it
+</code></pre>
+<h3 id="File-System-Implementation"><a href="#File-System-Implementation" class="headerlink" title="File System Implementation"></a><code>File System Implementation</code></h3><pre><code>- 2 key questions
+    1. data structures of the file system
+    2. access methods
+- Overall Organization
+    - divide the disk into blocks
+        - Data blocks 
+        - Inodes
+            - metadata to track information about each file
+        - Allocation structures
+            1. data bitmap
+            2. inode bitmap
+        - Superblck
+            - information about this particular file system, including, for example, how many inodes and data blocks are in the file system (80 and 56, respectively in this instance), where the inode table begins (block 3), and so forth
+- File Organization: The Inode
+    - metadata: any information inside the file system that isn’t pure user data
+    - Include
+        1. type (e.g., regular file, directory, etc.)
+        2. size
+        3. the number of blocks allocated to it
+        4. protection information (such as who owns the file, as well as who can access it)
+        5. time information
+            - including when the file was created, modified, or last accessed
+        6. information about where its data blocks reside on disk (e.g., pointers of some kind)
+-  Directory Organization
+    - a directory basically just contains a list of (entry name, inode number) pairs
+    - each directory has two extra entries, . “dot” and .. “dot-dot”
+    - a directory has an inode, somewhere in the inode table
+- Free Space Management
+    - Bit map is one way
+- Access Paths: Reading and Writing
+    - Reading A File From Disk
+        1. Search from root directory and read root directory inode (In most UNIX file systems, the root inode number is 2)
+        2. Once the inode is read in, the FS can look inside of it to find pointers to data blocks, which contain the contents of the root directory =&gt; looking for (foo, inode_nbr)
+        3. recursively traverse the pathname until the desired inode is found
+        4. read bar’s inode into memory
+        5. the FS then does a final permissions check
+        6. allocates a file descriptor for this process in the per-process open-file table, and returns it to the user
+        7. Once open, the program can then issue a read() system call to read from the file
+        8. The first read (at offset 0 unless lseek() has been called) will thus read in the first block of the file, consulting the inode to find the location of such a block
+        9. it may also update the inode with a new lastaccessed time
+        10. The read will further update the in-memory open file table for this file descriptor, updating the file offset such that the next read will read the second file block
+    - Writing A File To Disk (Writing to a file is a similar process)
+        1. the file must be opened
+        2. the application can issue write() calls to update the file with new contents
+            - Unlike reading, writing to the file may also allocate a block
+                - 5 I/Os
+                    1. read the data bitmap (which is then updated to mark the newly-allocated block as used)
+                    2. write the bitmap (to reflect its new state to disk)
+                    3. two more to read and write the inode (which is updated with the new block’s location)
+                    5. write the actual block itself
+        3. the file is closed.
+</code></pre>
+<h3 id="LOCALITY-AND-THE-FAST-FILE-SYSTEM"><a href="#LOCALITY-AND-THE-FAST-FILE-SYSTEM" class="headerlink" title="LOCALITY AND THE FAST FILE SYSTEM"></a><code>LOCALITY AND THE FAST FILE SYSTEM</code></h3><pre><code>- divides the disk into a number of cylinder groups
+    - a single cylinder group:
+        1. super block (S)
+        2. per-group inode bitmap (ib) and data bitmap (db)
+        3. inode and data block regions
+- basic rule: keep related stuff together (and its corollary, keep unrelated stuff far apart)
+    - directories: find the cylinder group with a low number of allocated directories (to balance directories across groups) and a high number of free inodes (to subsequently be able to allocate a bunch of files), and put the directory data and inode in that group
+    - files: FFS does two things
+        1. it makes sure (in the general case) to allocate the data blocks of a file in the same group as its inode, thus preventing long seeks between inode and data (as in the old file system).
+        2. it places all files that are in the same directory in the cylinder group of the directory they are in
+</code></pre>
+<h3 id="Crash-Consistency-FSCK-and-Journaling"><a href="#Crash-Consistency-FSCK-and-Journaling" class="headerlink" title="Crash Consistency: FSCK and Journaling"></a><code>Crash Consistency: FSCK and Journaling</code></h3><pre><code>- CANNOT move the file system from one consistent state (e.g., before the file got appended to) to another atomically (e.g., after the inode, bitmap, and new data block have been written to disk)
+- Solution 1 FSCK
+    - A UNIX tool for finding such inconsistencies and repairing them
+- Solution 2 Journaling (or Write-Ahead Logging)
+    - Data Journaling
+        - The transaction begin (TxB) tells us about this update, including information about the pending update to the file system (e.g., the final addresses of the blocks I[v2], B[v2], and Db), and some kind of transaction identifier (TID)
+        - The middle three blocks just contain the exact contents of the blocks themselves; this is known as physical logging
+        - The final block (TxE) is a marker of the end of this transaction, and will also contain the TID
+    - protocol to update the file system
+        1. Journal write: Write the contents of the transaction (including TxB, metadata, and data) to the log; wait for these writes to complete.
+        2. Journal commit: Write the transaction commit block (containing TxE) to the log; wait for write to complete; transaction is said to be committed.
+        3. Checkpoint: Write the contents of the update (metadata and data) to their final on-disk locations.
 </code></pre>
 <hr>
 
