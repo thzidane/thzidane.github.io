@@ -192,9 +192,196 @@
             - Hide information
                 - Hiding complexity =&gt; hide implementation detail
                 - Hiding sources of change =&gt; effects are localized when change occurs
+            - Identify, seperate and isolate items that are or seem likely to change
+                - Areas likely to change
+                    - Status variable
+                        1. use enum instead of bool
+                        2. use routine rathen check the variable directly
+            - Loose coupling: create classes and routines with small, direct, visible and flexiblke relations to other classes and routines
+                - Tight definition: sin() &lt; InitVars(var1, var2, ...) &lt; multiple classes depend on each other&#39;s use of same global data
+                - Using a module should not require focus on more than one thing
+                    - Bad: need knowledge of its internal working, modification to global data, uncertain functionality
     4. Division into data and routines within classes
     5. Internal routine design
 </code></pre>
+<hr>
+<h2 id="Working-Classes"><a href="#Working-Classes" class="headerlink" title="Working Classes"></a>Working Classes</h2><h3 id="Class-Foundations-Abstract-Data-Types-ADTs"><a href="#Class-Foundations-Abstract-Data-Types-ADTs" class="headerlink" title="Class Foundations: Abstract Data Types(ADTs)"></a><code>Class Foundations: Abstract Data Types(ADTs)</code></h3><pre><code>- ADT provide better abstraction =&gt; protect against future changes and easy to work with (no need to focus on implementation details)
+- Class == ADT + Inheritance and Polymorphism
+</code></pre>
+<h3 id="Good-Class-Interfaces"><a href="#Good-Class-Interfaces" class="headerlink" title="Good Class Interfaces"></a><code>Good Class Interfaces</code></h3><pre><code>- Good Abstraction
+    - Provide less and only belonging to current class public APIs 
+    - Provide services in pairs with their opposites like turn on light vs turn off light
+    - Reduce semantic (Routine A has to be called after routine B: put it in comment) =&gt; easy to get messy
+        - Asserts
+- Good encapsulation
+    - Prefer private than public
+    - Don&#39;t expose member data in public and use object pointer instead of literally importing class definition
+</code></pre>
+<h3 id="Design-and-Implementation-issues"><a href="#Design-and-Implementation-issues" class="headerlink" title="Design and Implementation issues"></a><code>Design and Implementation issues</code></h3><pre><code>- Containment (&quot;has a&quot; Relationships)
+    - If a class has more than 7 private members, should consider create small classes instead of a giant one because we mostly can only remember 7 objects in mind.
+- Inheritance (&quot;is a&quot; Relationships)
+    - make decisions:
+        - For each member routine:
+            1. visible to derived classes
+            2. have a default implementation
+            3. default implementation overridable
+        - For each data member
+            1. visible to derived classes
+    - When derived class is not going to adhere completely to the same interface contract as base class
+        1. Containment may be solution than inheritance OR
+        2. Change further up the inheritance hierarchy
+    - All the routines defined in the base class should mean the same thing when they are used in each of the derived classes
+    - Be suspicious of classes of which there is only one instance of derived class
+        - Except from singleton, maybe derived class is not necessary
+    - Be suspicious of classes of which there is only one derived class
+        - May be unnecessary future &quot;Designing ahead&quot;
+    - Be suspicious of classes that override a routine and do nothing inside the derived routine
+        - May need a new class and insert object into orginal base class when you want to call old default function
+    - Case vs Polymorphism
+        - If all function with case is doing totally different things, should still keep as case not polymorphism
+    - Data private and only provide protected accessory if necessary
+    - ***RULES***
+        1. If multiple classes share common data but not behavior, create a common object that those classes can contain
+        2. If multiple classes share common behavior but not data, derive them from a common base class that defines the common routines
+        3. If multiple classes share common data and behavior, inherit from a common base class that defines the common data and routines
+        4. Inherit when you want the base class to control your interface; contain when you want to control your interface
+- Constructors
+    - Initialize all member data in all constructors if possible
+- Classes to avoid
+    1. If a class spends its time retrieviing data from other classes using Get() and Set() routines =&gt; funsitionality might better be organized into other classes
+    2. If a class consists only of data and no behavior =&gt; demote class data and becomes attributes of one or more other classes
+    3. If a class has only behavior but no data =&gt; turn a class to a routine in another class
+</code></pre>
+<hr>
+<h2 id="High-Quality-Routines"><a href="#High-Quality-Routines" class="headerlink" title="High-Quality Routines"></a>High-Quality Routines</h2><h3 id="Reasons-to-Create-a-Routine"><a href="#Reasons-to-Create-a-Routine" class="headerlink" title="Reasons to Create a Routine"></a><code>Reasons to Create a Routine</code></h3><pre><code>- How to create a Routine
+    1. more readable (function name self-documenting)
+    2. less error prone: avoid duplicate code and code in multiple places for future change
+</code></pre>
+<h3 id="Design-at-the-Routine-level"><a href="#Design-at-the-Routine-level" class="headerlink" title="Design at the Routine level"></a><code>Design at the Routine level</code></h3><pre><code>- Not ideal patterns of cohesion
+    1. Sequential cohesion
+        - Operations must be performed in a specific order, that share data step by step
+        - Solution: create a new function for each step
+    2. Communication cohesion
+        - Operations make use of same data but are related in any other way
+        - Solution: seperate operations into functions and pass same data
+    3. Temporal cohesion
+        - Operations combined into a routine because they are all done at the same time
+        - Solution: make old routine as top level function and call new functions with meaningful name representing what it actually does
+    4. Others
+        - Ideal solution for big if or case statement is to move logic into its own function and use if like dispatch command to call newly created function
+</code></pre>
+<h3 id="Good-routine-names"><a href="#Good-routine-names" class="headerlink" title="Good routine names"></a><code>Good routine names</code></h3><pre><code>- Use a description of the return value
+- More meaningful and as long as possible. Too long may be bad
+- Use a strong verb followed by an object
+    - Ommit class name for routine if it can derived
+</code></pre>
+<h3 id="How-to-use-routine-parameters"><a href="#How-to-use-routine-parameters" class="headerlink" title="How to use routine parameters"></a><code>How to use routine parameters</code></h3><pre><code>- input, input and output, output
+- Status variable last
+- Don&#39;t modify parameter value or create a local copy variable
+- If several routines use similar parameters, put the similar parameters in a consistent order
+- Document interface assumptions about parameters
+    1. input-only, modified, or output only
+    2. Units
+    3. status codes and error values if enum types aren&#39;t used
+    4. Ranges of expected values
+    5. Specific values that should never appear
+- Limit number of parameters to 7
+    - Create a composite data type containing as one chunk of data for parameters
+- Pass the variables specifically or objects
+    - If creating the object specifially for calling a routine, that means should use variables instead of object
+    - If frequently change the parameter list with same object, that means should pass object instead of variables 
+</code></pre>
+<h3 id="special-consideration-in-the-use-of-functions"><a href="#special-consideration-in-the-use-of-functions" class="headerlink" title="special consideration in the use of functions"></a><code>special consideration in the use of functions</code></h3><pre><code>- Add output status variable or create a local variable for function returned status result
+- Check all possible return paths and add a default value at the beginning for return as default
+</code></pre>
+<hr>
+<h2 id="Defensive-programming"><a href="#Defensive-programming" class="headerlink" title="Defensive programming"></a>Defensive programming</h2><h3 id="Assertions"><a href="#Assertions" class="headerlink" title="Assertions"></a><code>Assertions</code></h3><pre><code>- assert bool_expression : error_message
+- Exceutable documentation 
+- Compiled into the code during development; compiled out of the code for prod&#39;
+- Use error-handling code for conditions you expect to occur; use assertions for conditions that should never occur
+</code></pre>
+<h3 id="Error-Handling-Techniques"><a href="#Error-Handling-Techniques" class="headerlink" title="Error-Handling Techniques"></a><code>Error-Handling Techniques</code></h3><pre><code>- Return something meaningful based on scenario
+- Log 
+- Throw exception or return error code
+- Central error handler (Not ideal for portable app)
+</code></pre>
+<h3 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a><code>Exceptions</code></h3><pre><code>- Avoid throwing exception in constructors and destructors
+- Log or document for empty catch block
+- Standardize project&#39;s use of exceptions
+    - Consider creating own project-specific exception class, which can serve as the base class for all exceptions thrown on project =&gt; supports centralize and standardizing logging, error reporting
+- Error-handling alternatives:
+    1. Handle the error locally
+    2. Propagate the error by using an error code
+    3. Log debug information to a file
+    4. Shut donw the system
+</code></pre>
+<h3 id="Barricade-program-to-contain-the-damage-caused-by-errors"><a href="#Barricade-program-to-contain-the-damage-caused-by-errors" class="headerlink" title="Barricade program to contain the damage caused by errors"></a><code>Barricade program to contain the damage caused by errors</code></h3><pre><code>- Designate certain interfaces or class level functions to sanitize input data
+</code></pre>
+<h3 id="Defensive-programming-1"><a href="#Defensive-programming-1" class="headerlink" title="Defensive programming"></a><code>Defensive programming</code></h3><pre><code>- Make it crash hard for fatal errors while development, but for prod it should crash gracefully or maybe just log the error message
+</code></pre>
+<hr>
+<h2 id="The-Pseudocode-Programming-Process"><a href="#The-Pseudocode-Programming-Process" class="headerlink" title="The Pseudocode Programming Process"></a>The Pseudocode Programming Process</h2><pre><code>- Use english and no programming language syntax to describe the function
+- Self documented after function is done
+- Define the problem the routine will solve like following
+    1. Information the routine will hide
+    2. Inputs
+    3. Outputs
+    4. Precondition guaranteed to be true
+    5. Postcondition guarantees will be true
+- Steps to create a routine
+    1. Name the routine
+    2. Decide how to test
+    3. Research if someone has created similar wheel
+    4. Think about error handling
+    5. Think about efficiency
+    6. Research the algorithms and data types
+    7. Write the pseudocode
+        - General summary as header
+        - Detail for high level of what function will do
+    8. Think about the data
+    9. Check the pseudocode and try a few ideas in pseudocode, and keep the best
+        - General idea is that pseudocode has been simple enough to fill in actual code and original pseudocode can become comments
+</code></pre>
+<hr>
+<h2 id="General-Issues-in-Using-variable"><a href="#General-Issues-in-Using-variable" class="headerlink" title="General Issues in Using variable"></a>General Issues in Using variable</h2><h3 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a><code>Scope</code></h3><pre><code>- Initialize variables used in a loop immediately before the loop rather than back at the beginning of the function containing the loop
+- Don&#39;t assign a value to a variable until just before the value is used
+- Group statements
+- Break groups of related statements into separate functions
+- Begin with most restricted visibility, and expand the variables&#39;s scope only if necessary
+</code></pre>
+<hr>
+<h2 id="The-power-of-variable-names"><a href="#The-power-of-variable-names" class="headerlink" title="The power of variable names"></a>The power of variable names</h2><h3 id="Considerations-in-Choosing-Good-Names"><a href="#Considerations-in-Choosing-Good-Names" class="headerlink" title="Considerations in Choosing Good Names"></a><code>Considerations in Choosing Good Names</code></h3><pre><code>- The most important Naming considerations
+    1. Naming a variable is that the name fully and accurately describe the entity the variable represents
+    2. Names should as specific as possible
+- Problem orientation
+    - prefer problem than computing like employeedData &gt; inputRec
+- The effect of scope on variable names
+    - longer names are better for rarely used variables or global variables
+    - shroter names are better for local variables or loop variables
+    - use qualifiers on names that are in the global namespace like UserInterfaceSubsystem:::Employee
+- Computed-value qualifiers in Variable Names
+    - Put the modifier like Total, Sum, Average, Max/Min, Record, String, or Pointer at the end of the name
+        - Benefits:
+            1. The part that gives the variable most of its meaning is at the front
+            2. Avoid the confusion after establishing convention
+            3. A pleasing symmetry
+            4. Improves readability and eases maintenance
+    - *Num* is confusing at beginning as count and ending as index
+        - Better to use customerCount instead of numCustomer, and use customerIndex instead of customerNum
+</code></pre>
+<h3 id="Naming-Specific-Types-of-Data"><a href="#Naming-Specific-Types-of-Data" class="headerlink" title="Naming Specific Types of Data"></a><code>Naming Specific Types of Data</code></h3><ul>
+<li>Naming loop indexes<ul>
+<li>Only use i,j and k for very simple loops</li>
+<li>Use more meaningful name instead</li>
+</ul>
+</li>
+<li>Naming Status Variables<ul>
+<li>Use enum or constant value definition</li>
+<li>A flag should never have flag in its name</li>
+<li><em>if (reportType == ReportType_Annual)</em> better than <em>if (printFlag == 16)</em>  </li>
+</ul>
+</li>
+</ul>
 <hr>
 
       
