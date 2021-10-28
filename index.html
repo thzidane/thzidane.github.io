@@ -343,32 +343,48 @@
         - General idea is that pseudocode has been simple enough to fill in actual code and original pseudocode can become comments
 </code></pre>
 <hr>
-<h2 id="General-Issues-in-Using-variable"><a href="#General-Issues-in-Using-variable" class="headerlink" title="General Issues in Using variable"></a>General Issues in Using variable</h2><h3 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a><code>Scope</code></h3><pre><code>- Initialize variables used in a loop immediately before the loop rather than back at the beginning of the function containing the loop
-- Don&#39;t assign a value to a variable until just before the value is used
-- Group statements
-- Break groups of related statements into separate functions
-- Begin with most restricted visibility, and expand the variables&#39;s scope only if necessary
-</code></pre>
+<h2 id="General-Issues-in-Using-variable"><a href="#General-Issues-in-Using-variable" class="headerlink" title="General Issues in Using variable"></a>General Issues in Using variable</h2><h3 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a><code>Scope</code></h3><ul>
+<li>Initialize variables used in a loop immediately before the loop rather than back at the beginning of the function containing the loop</li>
+<li>Don’t assign a value to a variable until just before the value is used</li>
+<li>Group statements</li>
+<li>Break groups of related statements into separate functions</li>
+<li>Begin with most restricted visibility, and expand the variables’s scope only if necessary</li>
+</ul>
 <hr>
-<h2 id="The-power-of-variable-names"><a href="#The-power-of-variable-names" class="headerlink" title="The power of variable names"></a>The power of variable names</h2><h3 id="Considerations-in-Choosing-Good-Names"><a href="#Considerations-in-Choosing-Good-Names" class="headerlink" title="Considerations in Choosing Good Names"></a><code>Considerations in Choosing Good Names</code></h3><pre><code>- The most important Naming considerations
-    1. Naming a variable is that the name fully and accurately describe the entity the variable represents
-    2. Names should as specific as possible
-- Problem orientation
-    - prefer problem than computing like employeedData &gt; inputRec
-- The effect of scope on variable names
-    - longer names are better for rarely used variables or global variables
-    - shroter names are better for local variables or loop variables
-    - use qualifiers on names that are in the global namespace like UserInterfaceSubsystem:::Employee
-- Computed-value qualifiers in Variable Names
-    - Put the modifier like Total, Sum, Average, Max/Min, Record, String, or Pointer at the end of the name
-        - Benefits:
-            1. The part that gives the variable most of its meaning is at the front
-            2. Avoid the confusion after establishing convention
-            3. A pleasing symmetry
-            4. Improves readability and eases maintenance
-    - *Num* is confusing at beginning as count and ending as index
-        - Better to use customerCount instead of numCustomer, and use customerIndex instead of customerNum
-</code></pre>
+<h2 id="The-power-of-variable-names"><a href="#The-power-of-variable-names" class="headerlink" title="The power of variable names"></a>The power of variable names</h2><h3 id="Considerations-in-Choosing-Good-Names"><a href="#Considerations-in-Choosing-Good-Names" class="headerlink" title="Considerations in Choosing Good Names"></a><code>Considerations in Choosing Good Names</code></h3><ul>
+<li>The most important Naming considerations<ol>
+<li>Naming a variable is that the name fully and accurately describe the entity the variable represents</li>
+<li>Names should as specific as possible</li>
+</ol>
+</li>
+<li>Problem orientation<ul>
+<li>prefer problem than computing like employeedData &gt; inputRec</li>
+</ul>
+</li>
+<li>The effect of scope on variable names<ul>
+<li>longer names are better for rarely used variables or global variables</li>
+<li>shroter names are better for local variables or loop variables</li>
+<li>use qualifiers on names that are in the global namespace like UserInterfaceSubsystem:::Employee</li>
+</ul>
+</li>
+<li>Computed-value qualifiers in Variable Names<ul>
+<li>Put the modifier like Total, Sum, Average, Max/Min, Record, String, or Pointer at the <em><strong>end</strong></em> of the name<ul>
+<li>Benefits:<ol>
+<li>The part that gives the variable most of its meaning is at the front</li>
+<li>Avoid the confusion after establishing convention</li>
+<li>A pleasing symmetry</li>
+<li>Improves readability and eases maintenance</li>
+</ol>
+</li>
+<li><em>Num</em> is confusing at beginning as count and ending as index<ul>
+<li>Better to use customerCount instead of numCustomer, and use customerIndex instead of customerNum</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h3 id="Naming-Specific-Types-of-Data"><a href="#Naming-Specific-Types-of-Data" class="headerlink" title="Naming Specific Types of Data"></a><code>Naming Specific Types of Data</code></h3><ul>
 <li>Naming loop indexes<ul>
 <li>Only use i,j and k for very simple loops</li>
@@ -378,7 +394,54 @@
 <li>Naming Status Variables<ul>
 <li>Use enum or constant value definition</li>
 <li>A flag should never have flag in its name</li>
-<li><em>if (reportType == ReportType_Annual)</em> better than <em>if (printFlag == 16)</em>  </li>
+<li><em>if (reportType == ReportType_Annual)</em> better than <em>if (printFlag == 16)</em></li>
+</ul>
+</li>
+<li>Naming Boolean Variables<ul>
+<li>Keep typical boolean names in mind<ol>
+<li>done</li>
+<li>error</li>
+<li>found</li>
+<li>success or ok</li>
+</ol>
+</li>
+<li>Give boolean variable names that simply true or false<ul>
+<li>status =&gt; statusOk</li>
+<li>sourceFile =&gt; sourceFileFound</li>
+<li><em>is</em> is not a good name: isFound &lt; *<strong>found</strong></li>
+</ul>
+</li>
+<li>Use positive boolean variable names<ul>
+<li>notFound &lt; <em><strong>not found</strong></em></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Naming Constants<ul>
+<li>Do not include number into name</li>
+<li>name the abstract entity the constant represents rather than the number the constants refer to</li>
+</ul>
+</li>
+</ul>
+<h3 id="Informal-Naming-Conventions"><a href="#Informal-Naming-Conventions" class="headerlink" title="Informal Naming Conventions"></a><code>Informal Naming Conventions</code></h3><ul>
+<li>Global variables: g_ prefix</li>
+<li>Member variables: m_ prefix</li>
+<li>Constants variables: all upper case for java or c_ prefix</li>
+</ul>
+<h3 id="Creating-short-names-that-are-readable"><a href="#Creating-short-names-that-are-readable" class="headerlink" title="Creating short names that are readable"></a><code>Creating short names that are readable</code></h3><ul>
+<li>General guidelines:<ul>
+<li>Remove all nonleading vowels</li>
+<li>Remove articles: and, or, the</li>
+<li>Use first letter or first few letters of each word</li>
+<li>Use the first and last letter</li>
+<li>Truncate consistently after the first, second, third character of each word</li>
+<li>Remove useless suffixex - ing, ed</li>
+</ul>
+</li>
+<li>Comments on abbreviations<ul>
+<li>Don’t abbreviate by removing one character from a word</li>
+<li>Abbreviate consistently</li>
+<li>Create names that you can pronouce</li>
 </ul>
 </li>
 </ul>
