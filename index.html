@@ -446,6 +446,67 @@
 </li>
 </ul>
 <hr>
+<h2 id="Fundamental-Data-Types"><a href="#Fundamental-Data-Types" class="headerlink" title="Fundamental Data Types"></a>Fundamental Data Types</h2><h3 id="Numbers-in-General"><a href="#Numbers-in-General" class="headerlink" title="Numbers in General"></a><code>Numbers in General</code></h3><ul>
+<li>Put all numbers in to constants except 0 and 1</li>
+<li>Use hard-coded 0s or 1s if needed</li>
+<li>Make type conversions obvious</li>
+<li>Avoid mixed-type comparisons</li>
+</ul>
+<h3 id="Floating-point-numbers"><a href="#Floating-point-numbers" class="headerlink" title="Floating-point numbers"></a><code>Floating-point numbers</code></h3><ul>
+<li>Avoid additions and subtractions on numbers that have greatly different manitutudes<ul>
+<li>Sort and start from smallest</li>
+</ul>
+</li>
+<li>Avoid equality comparisons<ul>
+<li>Check if they are close enough</li>
+</ul>
+</li>
+</ul>
+<h3 id="Characters-and-strings"><a href="#Characters-and-strings" class="headerlink" title="Characters and strings"></a><code>Characters and strings</code></h3><ul>
+<li>Avoid magic characters and string<ul>
+<li>Use constant variables instead</li>
+</ul>
+</li>
+</ul>
+<h3 id="Boolean-variables"><a href="#Boolean-variables" class="headerlink" title="Boolean variables"></a><code>Boolean variables</code></h3><ul>
+<li>Use boolean variables to document instead a long if clause</li>
+</ul>
+<h3 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a><code>Arrays</code></h3><ul>
+<li>Multidimensional array consider use meaningful index names instead of i,j</li>
+</ul>
+<hr>
+<h2 id="Using-conditionals"><a href="#Using-conditionals" class="headerlink" title="Using conditionals"></a>Using conditionals</h2><h3 id="If-statements"><a href="#If-statements" class="headerlink" title="If statements"></a><code>If statements</code></h3><ul>
+<li>Put the normal case after the <em>if</em> rather than after the <em>else</em></li>
+</ul>
+<h3 id="case-statements"><a href="#case-statements" class="headerlink" title="case statements"></a><code>case statements</code></h3><ul>
+<li>Use the default clause to detect errors or use the default clause to a real default not a legitimate case</li>
+</ul>
+<hr>
+<h2 id="General-control-issues"><a href="#General-control-issues" class="headerlink" title="General control issues"></a>General control issues</h2><h3 id="Boolean-expressions"><a href="#Boolean-expressions" class="headerlink" title="Boolean expressions"></a><code>Boolean expressions</code></h3><ul>
+<li>In if statements, convert negatives to positives and flip-flop the code in the if and else clauses</li>
+<li>Simplify boolean tests with negatives<ul>
+<li>not A or not B =&gt; not (A and B)</li>
+</ul>
+</li>
+<li>Writing Numeric Expressions in Number-Line order<ul>
+<li>MIN_VALUE &lt;= i and i &lt;= MAX_VALUE</li>
+<li>i &lt; MIN_VALUE or i &gt; MAX_VALUE</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Developer-testing"><a href="#Developer-testing" class="headerlink" title="Developer testing"></a>Developer testing</h2><h3 id="Bag-of-Testing-Tricks"><a href="#Bag-of-Testing-Tricks" class="headerlink" title="Bag of Testing Tricks"></a><code>Bag of Testing Tricks</code></h3><ul>
+<li>min number of cases needed for basis testing<ol>
+<li>Start with 1 of the straight path through the routine</li>
+<li>Add 1 for <em><strong>if, while, repeat, for, and, and or</strong></em></li>
+<li>Add 1 for each case in a case statement<ul>
+<li>If case doesn’t have a default case, add 1 more</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
 
       
 
