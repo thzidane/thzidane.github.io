@@ -6,17 +6,13 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>SQL knowledge summary | Hexo</title>
+  <title>Archives: 2022/5 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Designing Data-Intensive Application Chapter 7 TransactionsACID- Atomicity:     - If an error occurs halfway through a sequence of writes, the transaction should be aborted, and the writes made up to">
-<meta property="og:type" content="article">
-<meta property="og:title" content="SQL knowledge summary">
-<meta property="og:url" content="http://example.com/2021/08/21/SQL-knowledge-summary/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/archives/2022/05/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Designing Data-Intensive Application Chapter 7 TransactionsACID- Atomicity:     - If an error occurs halfway through a sequence of writes, the transaction should be aborted, and the writes made up to">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-08-21T18:03:23.000Z">
-<meta property="article:modified_time" content="2021-08-22T18:19:03.989Z">
 <meta property="article:author" content="Hao Tang">
 <meta name="twitter:card" content="summary">
   
@@ -148,306 +144,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-SQL-knowledge-summary" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      SQL knowledge summary
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2022" class="archive-year">2022</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2022/05/31/gulimall-summary/" class="archive-article-date">
+  	<time datetime="2022-05-31T23:05:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-31</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2022/05/31/gulimall-summary/">gulimall-summary</a>
     </h1>
   
 
-        
-        <a href="/2021/08/21/SQL-knowledge-summary/" class="archive-article-date">
-  	<time datetime="2021-08-21T18:03:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Designing-Data-Intensive-Application-Chapter-7-Transactions"><a href="#Designing-Data-Intensive-Application-Chapter-7-Transactions" class="headerlink" title="Designing Data-Intensive Application Chapter 7 Transactions"></a>Designing Data-Intensive Application Chapter 7 <em><strong>Transactions</strong></em></h2><h3 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a><code>ACID</code></h3><pre><code>- Atomicity:
-    - If an error occurs halfway through a sequence of writes, the transaction should be aborted, and the writes made up to that point should be discarded. (The database should save you from having to worry about partial failure, by giving an all-or-nothing guarantee)
-- Isolation
-    - Concurrently running transactions should&#39;t interfere with each other 
-</code></pre>
-<h3 id="Weak-Isolation-levels"><a href="#Weak-Isolation-levels" class="headerlink" title="Weak Isolation levels"></a><code>Weak Isolation levels</code></h3><h4 id="Read-Committed"><a href="#Read-Committed" class="headerlink" title="Read Committed"></a>Read Committed</h4><pre><code>- 2 promise:
-    1. No Dirty Reads: When reading from the database, you will only see data that has been committed
-        - Solution: 
-            1. Read lock: TOO MUCH for most database except IBM DB2 and Microsoft SQL Server in the read_committed_snapshot=off configuration
-            2. DB has 2 values, one for old committed and the other one for uncommitted transaction. Only when the new values is committed do transactions switch over to reading the new value.
-    2. No Dirty Writes: When writing to the database, you will only overwrite data that has been committed
-        - Solution:
-            1. Write lock: when a transaction want to modify a particular object(row or document), it must acquire a lock on that object. It must then hold the lock for any given object until transaction is committed or aborted. Other transactions must wait until the first transaction is committed or aborted before it can acquire the lock
-</code></pre>
-<h4 id="Snapshot-Isolation-and-Repeatable-Read-Some-DBs-use-latter-one-for-same-isolation-level"><a href="#Snapshot-Isolation-and-Repeatable-Read-Some-DBs-use-latter-one-for-same-isolation-level" class="headerlink" title="Snapshot Isolation and Repeatable Read (Some DBs use latter one for same isolation level)"></a>Snapshot Isolation and Repeatable Read (Some DBs use latter one for same isolation level)</h4><pre><code>- Snapshot isolation is the most common solution. 
-    - Each transaction reads from a consistent snapshot of the database. Even if the data is subsequently changed by another transaction, each transaction sees only the old data from that particular point in time.
-- Implement snapshot isolation
-    - Key principle: readers never block writer, and writers never block readers
-    - MVCC (multi-version concurrency control)
-        - How: 
-            1. Every transaction is given a unique and always-increasing transaction ID (txid) when transaction started
-            2. Every row has a createdBy and deletedBy fields which will be filled with txid
-            3. Insert a new row will put its txid to createdBy and deletedBy will be empty
-            4. Update a row will create a new row and mark old row deletedBy with its current new txid
-                - GC will collect old row when there is no transaction referencing the old row
-        - Visibility rules for observing a consistent snapshot
-            1. Ignore all in progress transactions
-            2. Ignore aborted transactions
-            3. Ignore any writes with later transaction id
-        - Index for MVCC
-            1. All different versions of index living in one single point and filter out versions later than current query txid. GC will collection table rows and their index
-            2. append-only/copy-on-write: 
-                - Every write creates a new page of index from root for only affected part
-                - No need filter because every write will not change the old index tree and every new write is seperate root
-                - Needs background compaction and GC
-        - Storage engines that support snapshot isolation typically use MVCC for their read committed isolation. A typical approach is that read committed uses a separate snapshot for each QUERY, while snapshot isolation uses the same snapshot for an entire TRANSACTION (Per QUERY vs Per TRANSACTION)
-</code></pre>
-<h4 id="Preventing-Lost-Updates"><a href="#Preventing-Lost-Updates" class="headerlink" title="Preventing Lost Updates"></a>Preventing Lost Updates</h4><pre><code>- In read-write-modify cycle(An application reads some value from the database, modifies it, and writes back the modified value), if 2 transactions do this concurrently, one of the modifications can be lost, because the second write does not include the first modification
-- Solutions:
-    - Foring the read-write-modify cycles to happen sequentially 
-        1. Use DB provided atomic operation if possible
-        2. Explicit locking
-            - FOR UPDATE clause indicates that the DB should take a lock on all rows returned by this query
-            - Easy to forget to add a necessary lock somewhere in the code, and thus introduce a race condition
-    - DB does lost update detection: Allow concurrent transactions run parallel, and transaction manager detects a lost update, abort the transaction and force it to retry its read-write-modify cycle
-        - It doesn&#39;t require application code to use any special database features. Lost update detection happens automatically and is thus less error-prone
-    - Compare-and-set(In databases that don&#39;t provide transactions)
-        - Update only when the value has not changed since you last read it
-        - It will not work if DB is snapshot isolation because you may read an old snapshot
-    - Replicated databases:
-        - locks and compare-and-set assumes that there is a single up-to-date copy of the data
-        - For Database with mutliple-leader or leaderless replication
-            - Linearizability like 2 phase commit
-            - Allow conflicting versions of value
-                - Application code handling conflict
-                - LWW(last write wins) is the defaut in many replicated databases
-            - Atomic operations can work well in a replicated context especially if they are commutative
-</code></pre>
-<h4 id="Write-Skew-and-Phantoms"><a href="#Write-Skew-and-Phantoms" class="headerlink" title="Write Skew and Phantoms"></a>Write Skew and Phantoms</h4><pre><code>- Write Skew is generalization of the lost update problem
-    1. Write Skew can occur if 2 transactions read the same objects, and then update some of those objects(different transactions may update different objects)
-    2. Speical case where different transactions update the same object, it is a dirty read or lost update (depend on timing)
-- Solutions:
-    1. Serializable isolation (Preferable for rows not existing and try to insert)
-        - Another option is materializing conflicts =&gt; Create a table only for locking
-    2. Explicitly lock the rows that the transaction depends on like FOR UPDATE clause in SQL (Only worked for rows existing)
-- Phantoms causing write skew
-    1. A SELECT query checks whether some requirement is satisfied by searching for rows that match some search condition
-    2. Depending on the result of the first query, the application code decides how to continue
-    3. If the application decides to go ahead, it makes a write
-</code></pre>
-<h3 id="Serializability"><a href="#Serializability" class="headerlink" title="Serializability"></a><code>Serializability</code></h3><h4 id="Single-node-databases"><a href="#Single-node-databases" class="headerlink" title="Single-node databases"></a>Single-node databases</h4><pre><code>- 3 techniques
-    1. Literally executing transactions in serial order
-    2. Two-phase locking
-    3. Optimistic concurrency control techniques such as serializable snapshot isolation
-</code></pre>
-<h4 id="Actual-Serial-Execution"><a href="#Actual-Serial-Execution" class="headerlink" title="Actual Serial Execution"></a>Actual Serial Execution</h4><pre><code>- 2 Developments caused rethink to change to make single-threaded excution
-    1. RAM became cheap enough that for many cases it is now feasible to kep the entire active dataset in memory
-    2. OLTP transactions are usually short and only make a small number of reawds and writes
-- Encapsulating transactions in stored procedures
-    - On the web, one transaction per HTTP request and every new request starts a new transaction
-    - Drawbacks for stored procedures
-        1. Each database has its own language
-        2. Code running in a database is difficult to manage
-        3. A database is often much more performance-sensitive than an application server
-    - Partitioning for high write throughput applications
-        - Every CPU core has its own transaction processing thread running independently per partition
-        - cross-partition needs to be in lock-step across all partitions
-- Summary of serial execution
-    1. Every transaction must be small and fast
-    2. It is limited to use cases where the active dataset can fit into memory(Newest in-memory DB like VoltDB/H-Store, Redis and Datomic. Not old-way SQL DB)
-    3. Write thoughtput should be low enough to be handled on a single CPU core, or else transactions need to be partitioned without requiring cross-partition coordination
-    4. Cross-partition transactions are possible, but there is a hard limit to the extent to which they can be used
-</code></pre>
-<h4 id="Two-Phase-Locking-2PL"><a href="#Two-Phase-Locking-2PL" class="headerlink" title="Two-Phase Locking (2PL)"></a>Two-Phase Locking (2PL)</h4><pre><code>- Lock can either be in shared mode or in exclusive mode
-    - Transaction must first acquire the lock in SHARED mode before READ 
-        - Lock in shared mode =&gt; allowed multiple transactions to hold the lock in shared mode
-        - Lock in exclusive mode =&gt; wait until lock released
-    - Trasaction must first acquire the lock in EXCLUSIVE mode before WRITE
-        - Lock in shared mode =&gt; wait until lock released 
-        - Lock in exclusive mode =&gt; wait until lock released
-    - Transaction may upgrade lock from SHARED to EXCLUSIVE if it wants to WRITE after READ (Same as acquire exclusive lock)
-        - Lock in shared mode =&gt; wait until lock released 
-        - Lock in exclusive mode =&gt; wait until lock released
-    - Transaction will hold the lock until the end of transaction (2 phasae lock)
-        1. First phase =&gt; the lock are acquired
-        2. Second phase =&gt; all the locks are released
-- Deadlock is happening easily
-    - Database needs to detect and abort one of the transaction to let others make progress
-    - Application needs to retry aborted transaction by itself
-- Performance of two-phase locking
-    - Acquiring and releasing locks
-    - (Mainly) reduce concurrency
-    - Wasted effors to retry after transaction aborted 
-- Predicate locks for Phantoms or write skew
-    1. Transaction A must acquire a shared-mode predicate lock on the conditions of the query (Wants to read objects matching some condition before doing insert or update)
-        - If another transaction B has an exclusive lock on any object matching those conditions =&gt; A must wait untile B releases lock
-    2. Transaction A must first check whether either the old or the new value matches any existing predicate lock. 
-        - If there is a matching predicate lock held by another transaction B, it must wait
-- Index-range locks (PREFERRED)
-    - Index-range locks acquire shared lock on a bigger range of objects than is strictly necessary to mains serializability(Predicate locks)
-    - It has much better performance than predicate locks because predicate locks will create a lot of locks by active transactions
-</code></pre>
-<h4 id="Serializable-Snapshot-Isolation-SSI"><a href="#Serializable-Snapshot-Isolation-SSI" class="headerlink" title="Serializable Snapshot Isolation (SSI)"></a>Serializable Snapshot Isolation (SSI)</h4><pre><code>- Pessimistic vs optimistic concurrency control
-    - Pessimistic =&gt; 2 phase locking and each transaction has an exclusive lock on the entire DB
-    - Optimistic =&gt; Always let transactions make progress and abort when it tries to commit
-- Decisions based on an outdated premise
-    - 2 cases to consider
-        1. Detecting reads of a stale MVCC version object (uncommitted write occurred before the read committed finally)
-            - DB keeps ignored uncommitted transactions
-            - When the transaction wants to commit, the database checks whether any of ignored transactions has been committed
-        2. Detecting writes that affect prior reads (the writes occurs after the read)
-            - Database can use index entry to record the fact that which  transaction ids are reading this data. The information will be kept before transactions have finished
-            - When a transaction writes to the database, it must look into the indexes of any other transactions that have recently read the affected data. Database will notify the affected transactions that their prior read is outdated
-- Performance
-    1. Compared to 2 phase locking:
-        - Makes query latency much more predictable and less variable. 
-        - Read-only queries can run on a consistent snapshot without requiring any locks, which is very appealing for read-heavy workloads
-    2. Compared to serial execution
-        - not limited to the throughput of a single CPU core
-        - less sensitive than serial execution and 2 phase locking to slow transactions
-</code></pre>
-<hr>
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Distributed System</a>
+        		</li>
+      		
+		</ul>
+	</div>
 
-      
+          
 
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
         </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/08/21/SQL-knowledge-summary/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2021/10/03/Learning-redis/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Learning-redis
-        
-      </div>
-    </a>
   
   
-    <a href="/2021/08/20/Operating-System-three-pieces/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Operating System: three pieces</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -471,8 +221,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
