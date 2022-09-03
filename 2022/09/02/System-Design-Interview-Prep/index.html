@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives: 2021 | Hexo</title>
+  <title>System-Design-Interview-Prep | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2021/index.html">
+  <meta name="description" content="Learning from System Design Interview Youtube ChannelSystem Design Interview – Step By Step Guide System Design Interview – Step By Step Guide Requirements clarification Users&#x2F;Customers Who will use t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="System-Design-Interview-Prep">
+<meta property="og:url" content="http://example.com/2022/09/02/System-Design-Interview-Prep/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Learning from System Design Interview Youtube ChannelSystem Design Interview – Step By Step Guide System Design Interview – Step By Step Guide Requirements clarification Users&#x2F;Customers Who will use t">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-09-02T16:27:06.000Z">
+<meta property="article:modified_time" content="2022-09-03T16:14:23.936Z">
 <meta property="article:author" content="Hao Tang">
+<meta property="article:tag" content="System Design">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -144,222 +149,249 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-System-Design-Interview-Prep" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      System-Design-Interview-Prep
+    </h1>
+  
+
+        
+        <a href="/2022/09/02/System-Design-Interview-Prep/" class="archive-article-date">
+  	<time datetime="2022-09-02T16:27:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-09-02</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Learning-from-System-Design-Interview-Youtube-Channel"><a href="#Learning-from-System-Design-Interview-Youtube-Channel" class="headerlink" title="Learning from System Design Interview Youtube Channel"></a>Learning from System Design Interview Youtube Channel</h2><h3 id="System-Design-Interview-–-Step-By-Step-Guide"><a href="#System-Design-Interview-–-Step-By-Step-Guide" class="headerlink" title="System Design Interview – Step By Step Guide"></a><code>System Design Interview – Step By Step Guide</code></h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=bUHFg8CZFws">System Design Interview – Step By Step Guide</a></li>
+<li>Requirements clarification<ol>
+<li>Users/Customers<ul>
+<li>Who will use the system?<ul>
+<li>like for video view count: for video owner or internal usage only</li>
+</ul>
+</li>
+<li>How the system will be used<ul>
+<li>machine learning recommendation system</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Scale (read and write)<ul>
+<li>How many read queries per second</li>
+<li>How much data is queried per request?</li>
+<li>How many video views are processed per second</li>
+<li>Can there be spikes in traffic</li>
+</ul>
+</li>
+<li>Performance<ul>
+<li>What is expected write-to-read data delay</li>
+<li>What is expected p99 latency for read queries       </li>
+</ul>
+</li>
+<li>Cost<ul>
+<li>Should the design minimize the cost of development<ul>
+<li>Use open source framework</li>
+</ul>
+</li>
+<li>Should the design minimize the cost of maintenance<ul>
+<li>use public cloud service</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>Functional requirements - API<ul>
+<li>The system has to <strong>count video view events</strong><ul>
+<li>countViewEvent(videoId)</li>
+<li>countEvent(videoId, eventType)<ul>
+<li>EventType<ul>
+<li>“View”,”like”,”share”</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>processEvent(videoId, eventType, function)<ul>
+<li>function<ul>
+<li>“count”,”sum”,”average”</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>processEvents(listOfEvents)<ul>
+<li>Batch updates</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>The system has to return <strong>video views count for a time period</strong><ul>
+<li>getViewsCount(videoId, startTime, endTime)</li>
+<li>getCount(videoId, eventType, startTime, endTime)</li>
+<li>getStats(videoId, eventType, function, startTime, endTime)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Non-functional requirements<ul>
+<li>Scalable (tens of thousands of video views per second)</li>
+<li>Highly Performant (few tens of milliseconds to return total views count for a vide)</li>
+<li>Highly Available (survives hardware / network failures, no single point of failure)</li>
+<li>CAP theorem tells to choose between Availability and Consistency. Go with Availability for video views count<ul>
+<li>Consistency</li>
+<li>Cost (hardware, development, maintenance)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/10/15/Code-complete/" class="archive-article-date">
-  	<time datetime="2021-10-16T00:30:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/10/15/Code-complete/">Code complete</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/10/03/Learning-redis/" class="archive-article-date">
-  	<time datetime="2021-10-03T20:57:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/10/03/Learning-redis/">Learning-redis</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/08/21/SQL-knowledge-summary/" class="archive-article-date">
-  	<time datetime="2021-08-21T18:03:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/08/21/SQL-knowledge-summary/">SQL knowledge summary</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/08/20/Operating-System-three-pieces/" class="archive-article-date">
-  	<time datetime="2021-08-21T04:17:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/08/20/Operating-System-three-pieces/">Operating System: three pieces</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/17/Microservice-Pattern/" class="archive-article-date">
-  	<time datetime="2021-07-18T04:22:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/17/Microservice-Pattern/">Learning Microservice Pattern</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tags</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">System Design</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2022/09/02/System-Design-Interview-Prep/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/05/31/Learning-networt-from-top-to-down/" class="archive-article-date">
-  	<time datetime="2021-05-31T23:10:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-31</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2022/05/31/gulimall-summary/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">gulimall-summary</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/05/31/Learning-networt-from-top-to-down/">Learning network from top to down</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/05/31/hello-world/" class="archive-article-date">
-  	<time datetime="2021-05-31T23:08:08.727Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-31</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/05/31/hello-world/">Hello World</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -383,8 +415,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

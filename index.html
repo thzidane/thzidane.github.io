@@ -146,6 +146,162 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-System-Design-Interview-Prep" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/09/02/System-Design-Interview-Prep/">System-Design-Interview-Prep</a>
+    </h1>
+  
+
+        
+        <a href="/2022/09/02/System-Design-Interview-Prep/" class="archive-article-date">
+  	<time datetime="2022-09-02T16:27:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-09-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Learning-from-System-Design-Interview-Youtube-Channel"><a href="#Learning-from-System-Design-Interview-Youtube-Channel" class="headerlink" title="Learning from System Design Interview Youtube Channel"></a>Learning from System Design Interview Youtube Channel</h2><h3 id="System-Design-Interview-–-Step-By-Step-Guide"><a href="#System-Design-Interview-–-Step-By-Step-Guide" class="headerlink" title="System Design Interview – Step By Step Guide"></a><code>System Design Interview – Step By Step Guide</code></h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=bUHFg8CZFws">System Design Interview – Step By Step Guide</a></li>
+<li>Requirements clarification<ol>
+<li>Users/Customers<ul>
+<li>Who will use the system?<ul>
+<li>like for video view count: for video owner or internal usage only</li>
+</ul>
+</li>
+<li>How the system will be used<ul>
+<li>machine learning recommendation system</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Scale (read and write)<ul>
+<li>How many read queries per second</li>
+<li>How much data is queried per request?</li>
+<li>How many video views are processed per second</li>
+<li>Can there be spikes in traffic</li>
+</ul>
+</li>
+<li>Performance<ul>
+<li>What is expected write-to-read data delay</li>
+<li>What is expected p99 latency for read queries       </li>
+</ul>
+</li>
+<li>Cost<ul>
+<li>Should the design minimize the cost of development<ul>
+<li>Use open source framework</li>
+</ul>
+</li>
+<li>Should the design minimize the cost of maintenance<ul>
+<li>use public cloud service</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>Functional requirements - API<ul>
+<li>The system has to <strong>count video view events</strong><ul>
+<li>countViewEvent(videoId)</li>
+<li>countEvent(videoId, eventType)<ul>
+<li>EventType<ul>
+<li>“View”,”like”,”share”</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>processEvent(videoId, eventType, function)<ul>
+<li>function<ul>
+<li>“count”,”sum”,”average”</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>processEvents(listOfEvents)<ul>
+<li>Batch updates</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>The system has to return <strong>video views count for a time period</strong><ul>
+<li>getViewsCount(videoId, startTime, endTime)</li>
+<li>getCount(videoId, eventType, startTime, endTime)</li>
+<li>getStats(videoId, eventType, function, startTime, endTime)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Non-functional requirements<ul>
+<li>Scalable (tens of thousands of video views per second)</li>
+<li>Highly Performant (few tens of milliseconds to return total views count for a vide)</li>
+<li>Highly Available (survives hardware / network failures, no single point of failure)</li>
+<li>CAP theorem tells to choose between Availability and Consistency. Go with Availability for video views count<ul>
+<li>Consistency</li>
+<li>Cost (hardware, development, maintenance)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">System Design</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/09/02/System-Design-Interview-Prep/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-gulimall-summary" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -3925,6 +4081,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">System Design</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">tags</a>
