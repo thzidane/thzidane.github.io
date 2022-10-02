@@ -168,44 +168,92 @@
       
         <h2 id="Learning-from-System-Design-Interview-Youtube-Channel"><a href="#Learning-from-System-Design-Interview-Youtube-Channel" class="headerlink" title="Learning from System Design Interview Youtube Channel"></a>Learning from System Design Interview Youtube Channel</h2><h3 id="System-Design-Interview-–-Step-By-Step-Guide"><a href="#System-Design-Interview-–-Step-By-Step-Guide" class="headerlink" title="System Design Interview – Step By Step Guide"></a><code>System Design Interview – Step By Step Guide</code></h3><ul>
 <li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=bUHFg8CZFws">System Design Interview – Step By Step Guide</a></li>
-<li>Requirements clarification<ol>
+<li><strong>Requirements clarification</strong><ul>
+<li>4 aspects<ol>
 <li>Users/Customers<ul>
 <li>Who will use the system?<ul>
 <li>like for video view count: for video owner or internal usage only</li>
 </ul>
 </li>
 <li>How the system will be used<ul>
-<li>machine learning recommendation system</li>
+<li>Maybe used by marketing department only to generate some monthly reports =&gt; Data is not retrieved very often</li>
+<li>Maybe used by real-time machine learning recommendation system =&gt; Data is retrieved in high pace</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>Scale (read and write)<ul>
+<li>How much data is coming to the system and how much data is retrieved from the system</li>
+<li>Example questions<ul>
 <li>How many read queries per second</li>
 <li>How much data is queried per request?</li>
 <li>How many video views are processed per second</li>
 <li>Can there be spikes in traffic</li>
 </ul>
 </li>
-<li>Performance<ul>
-<li>What is expected write-to-read data delay</li>
-<li>What is expected p99 latency for read queries       </li>
+</ul>
+</li>
+<li>Performance =&gt; evaluate different design options<ul>
+<li>What is expected write-to-read data delay<ul>
+<li>For example, for counting videos views  <ul>
+<li>If we can count views several hours later than these views actually happened, both batch data processing and stream processing design opotions can be considered.</li>
+<li>If we have to count views on the fly, batch is not an option.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>What is expected p99 latency for read queries<ul>
+<li>For example, if we want the delay as small as possible when reading video view counts, <ul>
+<li>we must count views when we write data </li>
+<li>should do minimal or no counting when we read data =&gt; data must already be aggregated</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>Cost<ul>
 <li>Should the design minimize the cost of development<ul>
-<li>Use open source framework</li>
+<li>For example, we can use open source framework to reduce the dev cost</li>
 </ul>
 </li>
 <li>Should the design minimize the cost of maintenance<ul>
-<li>use public cloud service</li>
+<li>For example, we can use public cloud service to reduce the maintenance cost</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Overall summary on thinking process</strong><ul>
+<li>Think along the 4 categaries<ul>
+<li>Think about data<ul>
+<li>what data</li>
+<li>how it gets in and gets out of the system</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
 </li>
-<li>Functional requirements - API<ul>
+<li>Functional vs non-functional requirements<ul>
+<li>Functional requirements (what system will do) vs non-functional requirements (how system supposed to be)</li>
+<li>Functional requirements - API (Set of operations the system will support)<ul>
+<li>Identify<ul>
+<li>Names of APIs</li>
+<li>input parameters</li>
+<li>If needed, make several iterations to generalize APIs</li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=537">Good example of final view and thinking process</a></li>
+</ul>
+</li>
+<li>Write down few sentences like following after requirements clarification. <ul>
+<li>Count view events is the actual action the system performs<ul>
+<li>Video(VideoID) becomes the input</li>
+<li>If need provide broader set of events, add another parameter for event type</li>
+<li>If need provide not just count function, add another parameter for function type</li>
+</ul>
+</li>
+<li>Sentence examples for video view events count<ul>
 <li>The system has to <strong>count video view events</strong><ul>
 <li>countViewEvent(videoId)</li>
 <li>countEvent(videoId, eventType)<ul>
@@ -231,14 +279,18 @@
 <li>The system has to return <strong>video views count for a time period</strong><ul>
 <li>getViewsCount(videoId, startTime, endTime)</li>
 <li>getCount(videoId, eventType, startTime, endTime)</li>
-<li>getStats(videoId, eventType, function, startTime, endTime)</li>
+<li>getStats(videoId, eventType, function, startTime, endTime)        </li>
 </ul>
 </li>
 </ul>
 </li>
-<li>Non-functional requirements<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>Non-functional requirements (System qualities, such as fast, fault-tolerant, secure)<ul>
 <li>Scalable (tens of thousands of video views per second)</li>
-<li>Highly Performant (few tens of milliseconds to return total views count for a vide)</li>
+<li>Highly Performant (few tens of milliseconds to return total views count for a video)</li>
 <li>Highly Available (survives hardware / network failures, no single point of failure)</li>
 <li>CAP theorem tells to choose between Availability and Consistency. Go with Availability for video views count<ul>
 <li>Consistency</li>
@@ -247,6 +299,283 @@
 </li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>High-level architecture</strong><ul>
+<li>Define Data Model (what we store)<ul>
+<li>Invividual events vs aggregate data collection<ul>
+<li>Pros and cons<table>
+<thead>
+<tr>
+<th></th>
+<th>Individual events (every click)</th>
+<th>Aggregate data (e.g. per minute) in real-time</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Good</td>
+<td>Fast writes</td>
+<td>Fast reads</td>
+</tr>
+<tr>
+<td>Good</td>
+<td>Can slice and dice data however we need</td>
+<td>Data is ready for decision making</td>
+</tr>
+<tr>
+<td>Good</td>
+<td>Can recalculate numbers if needed</td>
+<td></td>
+</tr>
+<tr>
+<td>Bad</td>
+<td>Slow reads</td>
+<td>Can query only the way data was aggregated</td>
+</tr>
+<tr>
+<td>Bad</td>
+<td>Costly for a large scale (many events)</td>
+<td>Requires data aggregation pipeline</td>
+</tr>
+<tr>
+<td>Bad</td>
+<td></td>
+<td>Hard or even impossible to fix errors</td>
+</tr>
+</tbody></table>
+</li>
+<li>Ask interviewer to help make decision which way is better<ul>
+<li>If we need aggregate of total count in minutes, we need aggregate data on the fly</li>
+<li>If we can wait for hours with total count, we can collect individual events and calculate in background</li>
+<li>Combined solution may be a better one<ul>
+<li>Save all individual events for weeks and purge data after specific time interval. <ul>
+<li>Invididual events will be good for future different ways to aggregate data</li>
+</ul>
+</li>
+<li>Also calculate aggregate data on the fly and make it ready for users in minutes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Where we store<ul>
+<li>Where we store: List of non-functional requirements<ul>
+<li>Scalability, Performance, and Availability</li>
+<li>Question list can be use for all different interview questions<ol>
+<li><strong>Scale writes and reads</strong><ul>
+<li>How to scale writes?</li>
+<li>How to scale reads?</li>
+<li>How to make both writes and reads fast?</li>
+</ul>
+</li>
+<li><strong>Data consistency</strong><ul>
+<li>How not to lose data in case of hardware faults and network partitions?</li>
+<li>How to achieve strong consistency? What are the tradoffs?</li>
+<li>How to recover data in case of an outage?</li>
+</ul>
+</li>
+<li><strong>Security and Extendibility</strong><ul>
+<li>How to secure data security?</li>
+<li>How to make it extensible for data model changes in the future?</li>
+</ul>
+</li>
+<li><strong>Cost</strong><ul>
+<li>Where to run (cloud vs on-premises data centrers)?</li>
+<li>How much money will it all cost?</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>Where we store: How SQL database handle these requirements<ul>
+<li>Scalability, Performance<ul>
+<li>Sharding (Horizontal Scale)<ul>
+<li>Introduce <strong>cluster proxy</strong> which needs to know<ul>
+<li>Which shard each SQL server has for proxy routing</li>
+<li>Lifecycle of one shard<ul>
+<li>when some shard dies or become unavailable due to network partition</li>
+<li>when new shard is added database cluster</li>
+<li><strong>How to achieve</strong><ul>
+<li>Introduce Configuration Service (e.g. ZooKeeper)<ul>
+<li>Always knows what databaase machines are available</li>
+<li>Health monitoring by listening on HeartBeat of each machine</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Introduce <strong>shard proxy</strong> sits in front of SQL database<ul>
+<li>Main Functions<ul>
+<li>Cache query result</li>
+<li>Monitor database instance health</li>
+<li>Publish metrics</li>
+<li>Terminate queries that take too long to return data</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=1221">Big picture</a><ul>
+<li>Write Process: Browser -&gt; Processing Service -&gt; Cluster Proxy -&gt; Shard Proxy -&gt; MySQL DB</li>
+<li>Read Process: Browser -&gt; Query Service -&gt; Cluster Proxy -&gt; Shard Proxy -&gt; MySQL DB</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Availability<ul>
+<li>Introduce Database replicas<ul>
+<li>Write -&gt; Master </li>
+<li>Read -&gt; Both Master and Replicas</li>
+</ul>
+</li>
+<li>Replica and master in different data center</li>
+<li>Data replicated to replica from master synchronously or asynchronously</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Where to store: About NoSql: Cassandra<ul>
+<li>Scalability, Performance<ul>
+<li>Still using Shards like SQL</li>
+<li>No cluster proxy and configuration service<ul>
+<li>All shards talk to each other and exchange information about their state</li>
+<li>Reduce network load, every sec shard may exchange information with a few other shards, no more than 3 =&gt; (Gossip protocol) Quickly enough state information about every node propagates throughout the cluster</li>
+<li>Since every node knows every all shards server, clients can call any node in cluster. Node knows where to route the request<ul>
+<li>While in SQL, we have to call the special component cluster proxy</li>
+<li>Consistent hashing to pick the node</li>
+</ul>
+</li>
+<li>Initial node(coordinator node) decision<ul>
+<li>Round robin</li>
+<li>Smarter like calculate client network distance and chooses the closest one</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Quorum writes and reads<ul>
+<li>Quorum writes: replicas data and only need to wait for majority nodes’ success</li>
+<li>Quorum reads: use majority nodes’ responses<ul>
+<li>Why: some replicas may have stale data or unavaiblable when previous writes coming in and syncing up yet</li>
+<li>Cassandra using version to determine staleness of data</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Availability<ul>
+<li>Like SQL, save data copy into replicas in different data center</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>How we store: data modelling for sql vs nosql<ul>
+<li>SQL<ul>
+<li>Build SQL Table from scratch<ul>
+<li>Start with nouns and convert nouns into tables</li>
+<li>Use foreign keys to reference related data</li>
+</ul>
+</li>
+<li>SQL features<ul>
+<li>Using join tables for query</li>
+<li>Normalized data =&gt; minimize data duplication across different tables<ul>
+<li>Good for relational database since we only need to update data in one place</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=1628">Example</a><table>
+<thead>
+<tr>
+<th>Report</th>
+<th>Video</th>
+<th>Views</th>
+<th>Channel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>In SQL DB (MySQL)</td>
+<td>Video_info</td>
+<td>Video_Stats</td>
+<td>Channel_Info</td>
+</tr>
+<tr>
+<td>SQL table Columns Example</td>
+<td>VideoId, Name, …, ChannelId</td>
+<td>VideoId, Timestamp(hour), Count</td>
+<td>ChannelId, Name, …</td>
+</tr>
+<tr>
+<td>In NoSQL DB(cassandra, logical view)</td>
+<td>Denormalized data</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>NoSQL Columns exmaple</td>
+<td>VideoId, Channel Name, Video Name, 15:00, 16:00, 17:00</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li>NoSQL<ul>
+<li>4 types of NoSQL databases:<ul>
+<li>column<ul>
+<li>Cassandra is a wide column-oriented database <ul>
+<li>supports asynchronous masterless replication</li>
+<li>Supports multi datacenter replication</li>
+<li>works well with time-series data</li>
+</ul>
+</li>
+<li>Hbase database is another column-oriented database has a master based architecture like cassandra </li>
+</ul>
+</li>
+<li>document<ul>
+<li>MongoDB is a documented-oriented database<ul>
+<li>Use leader-based replication</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>key-value</li>
+<li>graph</li>
+</ul>
+</li>
+<li>NoSQL features<ul>
+<li>Denormalized data</li>
+<li>Save data into columns instead of rows like we can put each hour view counts into one column</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Data processing path</li>
+<li>Data processing: Data aggregation basics</li>
+<li>Data procesing: Processing service detailed design</li>
+<li>Data Ingestion pipeline</li>
+<li>Data Retrieval path</li>
+<li>Data flow simulation</li>
+</ul>
+</li>
+<li><strong>Technology stack</strong></li>
+<li><strong>Bottleneck, tradeoffs and more</strong></li>
+<li><strong>Summary</strong></li>
 </ul>
 <hr>
 
