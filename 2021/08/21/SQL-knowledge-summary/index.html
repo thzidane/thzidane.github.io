@@ -16,7 +16,7 @@
 <meta property="og:description" content="Designing Data-Intensive Application Chapter 7 TransactionsACID- Atomicity:     - If an error occurs halfway through a sequence of writes, the transaction should be aborted, and the writes made up to">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-08-21T18:03:23.000Z">
-<meta property="article:modified_time" content="2021-08-22T18:19:03.989Z">
+<meta property="article:modified_time" content="2022-10-02T18:20:09.783Z">
 <meta property="article:author" content="Hao Tang">
 <meta name="twitter:card" content="summary">
   
@@ -173,6 +173,8 @@
 - Isolation
     - Concurrently running transactions should&#39;t interfere with each other 
 </code></pre>
+<span id="more"></span>
+
 <h3 id="Weak-Isolation-levels"><a href="#Weak-Isolation-levels" class="headerlink" title="Weak Isolation levels"></a><code>Weak Isolation levels</code></h3><h4 id="Read-Committed"><a href="#Read-Committed" class="headerlink" title="Read Committed"></a>Read Committed</h4><pre><code>- 2 promise:
     1. No Dirty Reads: When reading from the database, you will only see data that has been committed
         - Solution: 
