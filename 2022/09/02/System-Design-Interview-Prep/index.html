@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>System-Design-Interview-Prep | Hexo</title>
+  <title>System Design Interview Prep | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Learning from System Design Interview Youtube ChannelSystem Design Interview – Step By Step Guide System Design Interview – Step By Step Guide Requirements clarification 4 aspects Users&#x2F;Customers Who">
+  <meta name="description" content="Learning from System Design Interview Youtube ChannelSystem Design Interview – Step By Step Guide System Design Interview – Step By Step Guide  Requirements clarification4 aspectsUsers&#x2F;Customers   Who">
 <meta property="og:type" content="article">
-<meta property="og:title" content="System-Design-Interview-Prep">
+<meta property="og:title" content="System Design Interview Prep">
 <meta property="og:url" content="http://example.com/2022/09/02/System-Design-Interview-Prep/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Learning from System Design Interview Youtube ChannelSystem Design Interview – Step By Step Guide System Design Interview – Step By Step Guide Requirements clarification 4 aspects Users&#x2F;Customers Who">
+<meta property="og:description" content="Learning from System Design Interview Youtube ChannelSystem Design Interview – Step By Step Guide System Design Interview – Step By Step Guide  Requirements clarification4 aspectsUsers&#x2F;Customers   Who">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-09-02T16:27:06.000Z">
-<meta property="article:modified_time" content="2022-10-02T18:20:41.828Z">
+<meta property="article:modified_time" content="2022-10-03T04:20:26.166Z">
 <meta property="article:author" content="Hao Tang">
 <meta property="article:tag" content="System Design">
 <meta name="twitter:card" content="summary">
@@ -156,7 +156,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      System-Design-Interview-Prep
+      System Design Interview Prep
     </h1>
   
 
@@ -171,9 +171,9 @@
       
         <h2 id="Learning-from-System-Design-Interview-Youtube-Channel"><a href="#Learning-from-System-Design-Interview-Youtube-Channel" class="headerlink" title="Learning from System Design Interview Youtube Channel"></a>Learning from System Design Interview Youtube Channel</h2><h3 id="System-Design-Interview-–-Step-By-Step-Guide"><a href="#System-Design-Interview-–-Step-By-Step-Guide" class="headerlink" title="System Design Interview – Step By Step Guide"></a><code>System Design Interview – Step By Step Guide</code></h3><ul>
 <li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=bUHFg8CZFws">System Design Interview – Step By Step Guide</a></li>
-<li><strong>Requirements clarification</strong><ul>
-<li>4 aspects<ol>
-<li>Users/Customers<ul>
+</ul>
+<h3 id="Requirements-clarification"><a href="#Requirements-clarification" class="headerlink" title="Requirements clarification"></a><code>Requirements clarification</code></h3><h4 id="4-aspects"><a href="#4-aspects" class="headerlink" title="4 aspects"></a><code>4 aspects</code></h4><p><span style="color: #5bdaed; font-size:1.1em;">Users/Customers</span> </p>
+<ul>
 <li>Who will use the system?<ul>
 <li>like for video view count: for video owner or internal usage only</li>
 </ul>
@@ -184,8 +184,8 @@
 </ul>
 </li>
 </ul>
-</li>
-<li>Scale (read and write)<ul>
+<p><span style="color: #5bdaed; font-size:1.1em;">Scale (read and write)</span></p>
+<ul>
 <li>How much data is coming to the system and how much data is retrieved from the system</li>
 <li>Example questions<ul>
 <li>How many read queries per second</li>
@@ -195,8 +195,8 @@
 </ul>
 </li>
 </ul>
-</li>
-<li>Performance =&gt; evaluate different design options<ul>
+<p><span style="color: #5bdaed; font-size:1.1em;">Performance =&gt; evaluate different design options</span></p>
+<ul>
 <li>What is expected write-to-read data delay<ul>
 <li>For example, for counting videos views  <ul>
 <li>If we can count views several hours later than these views actually happened, both batch data processing and stream processing design opotions can be considered.</li>
@@ -214,8 +214,8 @@
 </ul>
 </li>
 </ul>
-</li>
-<li>Cost<ul>
+<p><span style="color: #5bdaed; font-size:1.1em;">Cost</span></p>
+<ul>
 <li>Should the design minimize the cost of development<ul>
 <li>For example, we can use open source framework to reduce the dev cost</li>
 </ul>
@@ -225,23 +225,24 @@
 </ul>
 </li>
 </ul>
-</li>
-<li><strong>Overall summary on thinking process</strong><ul>
+<p><span style="color: #AE87FA; font-size:1.2em;"><strong>Overall summary on thinking process</strong></span></p>
+<ul>
 <li>Think along the 4 categaries<ul>
 <li>Think about data<ul>
 <li>what data</li>
-<li>how it gets in and gets out of the system<span id="more"></span></li>
+<li>how it gets in and gets out of the system</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-</li>
-</ol>
-</li>
-<li>Functional vs non-functional requirements<ul>
-<li>Functional requirements (what system will do) vs non-functional requirements (how system supposed to be)</li>
-<li>Functional requirements - API (Set of operations the system will support)<ul>
+<span id="more"></span>
+
+<hr>
+<h4 id="Functional-vs-non-functional-requirements"><a href="#Functional-vs-non-functional-requirements" class="headerlink" title="Functional vs non-functional requirements"></a><code>Functional vs non-functional requirements</code></h4><p><span style="color: #AE87FA; font-size:1.2em;"><strong>Functional requirements (what system will do) vs non-functional requirements (how system supposed to be)</strong></span></p>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Functional requirements - API (Set of operations the system will support)</span></p>
+<ul>
 <li>Identify<ul>
 <li>Names of APIs</li>
 <li>input parameters</li>
@@ -282,7 +283,7 @@
 <li>The system has to return <strong>video views count for a time period</strong><ul>
 <li>getViewsCount(videoId, startTime, endTime)</li>
 <li>getCount(videoId, eventType, startTime, endTime)</li>
-<li>getStats(videoId, eventType, function, startTime, endTime)        </li>
+<li>getStats(videoId, eventType, function, startTime, endTime)</li>
 </ul>
 </li>
 </ul>
@@ -290,8 +291,9 @@
 </ul>
 </li>
 </ul>
-</li>
-<li>Non-functional requirements (System qualities, such as fast, fault-tolerant, secure)<ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Non-functional requirements (System qualities, such as fast, fault-tolerant, secure)</span></p>
+<ul>
 <li>Scalable (tens of thousands of video views per second)</li>
 <li>Highly Performant (few tens of milliseconds to return total views count for a video)</li>
 <li>Highly Available (survives hardware / network failures, no single point of failure)</li>
@@ -301,14 +303,9 @@
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>High-level architecture</strong><ul>
-<li>Define Data Model (what we store)<ul>
-<li>Invividual events vs aggregate data collection<ul>
+<hr>
+<h3 id="High-level-architecture"><a href="#High-level-architecture" class="headerlink" title="High-level architecture"></a><code>High-level architecture</code></h3><h4 id="Define-Data-Model-what-we-store"><a href="#Define-Data-Model-what-we-store" class="headerlink" title="Define Data Model (what we store)"></a><code>Define Data Model (what we store)</code></h4><p><span style="color: #5bdaed; font-size:1.1em;">Invividual events vs aggregate data collection</span></p>
+<ul>
 <li>Pros and cons<table>
 <thead>
 <tr>
@@ -363,11 +360,9 @@
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-</li>
-<li>Where we store<ul>
-<li>Where we store: List of non-functional requirements<ul>
+<hr>
+<h4 id="Where-we-store"><a href="#Where-we-store" class="headerlink" title="Where we store"></a><code>Where we store</code></h4><p><span style="color: #5bdaed; font-size:1.1em;"> Where we store: List of non-functional requirements</span></p>
+<ul>
 <li>Scalability, Performance, and Availability</li>
 <li>Question list can be use for all different interview questions<ol>
 <li><strong>Scale writes and reads</strong><ul>
@@ -395,8 +390,9 @@
 </ol>
 </li>
 </ul>
-</li>
-<li>Where we store: How SQL database handle these requirements<ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Where we store: How SQL database handle these requirements</span></p>
+<ul>
 <li>Scalability, Performance<ul>
 <li>Sharding (Horizontal Scale)<ul>
 <li>Introduce <strong>cluster proxy</strong> which needs to know<ul>
@@ -406,7 +402,7 @@
 <li>when new shard is added database cluster</li>
 <li><strong>How to achieve</strong><ul>
 <li>Introduce Configuration Service (e.g. ZooKeeper)<ul>
-<li>Always knows what databaase machines are available</li>
+<li>Always knows what database machines are available</li>
 <li>Health monitoring by listening on HeartBeat of each machine</li>
 </ul>
 </li>
@@ -428,7 +424,7 @@
 </li>
 </ul>
 </li>
-<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=1221">Big picture</a><ul>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=1221">Whole picture</a><ul>
 <li>Write Process: Browser -&gt; Processing Service -&gt; Cluster Proxy -&gt; Shard Proxy -&gt; MySQL DB</li>
 <li>Read Process: Browser -&gt; Query Service -&gt; Cluster Proxy -&gt; Shard Proxy -&gt; MySQL DB</li>
 </ul>
@@ -446,8 +442,9 @@
 </ul>
 </li>
 </ul>
-</li>
-<li>Where to store: About NoSql: Cassandra<ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Where we store: About NoSql: Cassandra</span></p>
+<ul>
 <li>Scalability, Performance<ul>
 <li>Still using Shards like SQL</li>
 <li>No cluster proxy and configuration service<ul>
@@ -481,11 +478,9 @@
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-</li>
-<li>How we store: data modelling for sql vs nosql<ul>
-<li>SQL<ul>
+<hr>
+<h4 id="How-we-store-data-modelling-for-sql-vs-nosql"><a href="#How-we-store-data-modelling-for-sql-vs-nosql" class="headerlink" title="How we store: data modelling for sql vs nosql"></a><code>How we store: data modelling for sql vs nosql</code></h4><p><span style="color: #5bdaed; font-size:1.1em;">SQL</span></p>
+<ul>
 <li>Build SQL Table from scratch<ul>
 <li>Start with nouns and convert nouns into tables</li>
 <li>Use foreign keys to reference related data</li>
@@ -494,7 +489,7 @@
 <li>SQL features<ul>
 <li>Using join tables for query</li>
 <li>Normalized data =&gt; minimize data duplication across different tables<ul>
-<li>Good for relational database since we only need to update data in one place</li>
+<li>Good for relational database since we only need to update data in one place  </li>
 </ul>
 </li>
 </ul>
@@ -535,8 +530,9 @@
 </tbody></table>
 </li>
 </ul>
-</li>
-<li>NoSQL<ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">NoSQL</span></p>
+<ul>
 <li>4 types of NoSQL databases:<ul>
 <li>column<ul>
 <li>Cassandra is a wide column-oriented database <ul>
@@ -565,22 +561,225 @@
 </ul>
 </li>
 </ul>
+<hr>
+<h4 id="Data-processing-path"><a href="#Data-processing-path" class="headerlink" title="Data processing path"></a><code>Data processing path</code></h4><p><span style="color: #5bdaed; font-size:1.1em;">Target and Thinking Process</span></p>
+<ul>
+<li>Target:<ul>
+<li>When user opens youtube, total count needs to be displayed<ul>
+<li>It means we need to calculate view count on the fly (in real-time)</li>
+</ul>
+</li>
+<li>Youtube video owner also needs total counts and counts per hour<ul>
+<li>It means we get a video event increment several counters<ul>
+<li>total</li>
+<li>per hour counters</li>
+</ul>
 </li>
 </ul>
 </li>
-<li>Data processing path</li>
-<li>Data processing: Data aggregation basics</li>
-<li>Data procesing: Processing service detailed design</li>
-<li>Data Ingestion pipeline</li>
-<li>Data Retrieval path</li>
-<li>Data flow simulation</li>
 </ul>
 </li>
-<li><strong>Technology stack</strong></li>
-<li><strong>Bottleneck, tradeoffs and more</strong></li>
-<li><strong>Summary</strong></li>
+<li>Scalability, Performance, and Availability target and questions<ul>
+<li>How to scale?</li>
+<li>How to achieve high throughput?</li>
+<li>How not to lose data when processing node crashes?</li>
+<li>What to do when database is unavailable or slow?</li>
+</ul>
+</li>
+<li>General ideas<ul>
+<li>Scalable == Partitioning</li>
+<li>Reliable == Replication and checkpointing</li>
+<li>Fast == In-memory instead of disk read/write</li>
+</ul>
+</li>
 </ul>
 <hr>
+<h4 id="Data-processing-Data-aggregation-basics"><a href="#Data-processing-Data-aggregation-basics" class="headerlink" title="Data processing: Data aggregation basics"></a><code>Data processing: Data aggregation basics</code></h4><p><span style="color: #5bdaed; font-size:1.1em;">Data aggregation basics</span></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=1919">Should we pre-aggragate data in the processing service</a><ul>
+<li>Option 1: increment count for every view event</li>
+<li>Option 2: accumulate in memory in some time interval(like several seconds) and save final count into database </li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=1938">Push or pull?</a><ul>
+<li>Definition<ul>
+<li>Push: other servise sends event synchrously to processing service</li>
+<li>Pull: processing service pulls events from some temporary storage</li>
+</ul>
+</li>
+<li>Push vs pull<ul>
+<li>Pull has more advantages<ul>
+<li>Better for fault tolerant<ul>
+<li>Push: While processing service aggregate counts in memory crashes, data will be lost</li>
+<li>Pull: users events firstly saved into a temporary storage. Processing service pull data from temporary storage and even processing service crashes, events are still in temporary storage and not lost.</li>
+</ul>
+</li>
+<li>Easy to scale</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Checkpointing (Stream data processing’s important concept)<ul>
+<li>Use Queue for pull model <ul>
+<li>Events are saved in order with offset, and will be consumed in order </li>
+<li>Offset are increasing while saving new events</li>
+<li>Processing service will write the offset into persistent storage and new processing service machine can pickup left not processed events after failover</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Partitioning<ul>
+<li>Same as database</li>
+<li>Each queue has a subset of events</li>
+<li>For example, use hash number of offset to partition events into different queues   </li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="Data-procesing-Processing-service-detailed-design"><a href="#Data-procesing-Processing-service-detailed-design" class="headerlink" title="Data procesing: Processing service detailed design"></a><code>Data procesing: Processing service detailed design</code></h4><p><span style="color: #5bdaed; font-size:1.1em;">What Processing Service does</span></p>
+<ul>
+<li>What Processing Service does?<ul>
+<li>Read events from partition one by one</li>
+<li>Counts in memory</li>
+<li>Flushes this counted values to the database periodically</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Components</span></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=2247">Whole picture</a>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">                                              In-memory Store                    Embedded Database</span><br><span class="line">                                                  |                                     |</span><br><span class="line">                                                  |                                     |</span><br><span class="line">Partition/Shard(Queue) -&gt; Partition Consumer -&gt; Aggregator -&gt;  Internal Queue -&gt; Database Writer -&gt; Database</span><br><span class="line">                                  |                        |                            |</span><br><span class="line">                                  |                        |                            |</span><br><span class="line">                          Deduplication cache         State Store                Dead-letter Queue</span><br></pre></td></tr></table></figure></li>
+<li>Partition Consumer<ul>
+<li>Establishes and maintains TCP connection with the partition to fetch data</li>
+<li>An infinite loop that polls data from the partition</li>
+<li>Converts byte array into the actual object</li>
+<li>Usually single thread component<ul>
+<li>Multi-thread reading events in parallel is hard to achieve<ul>
+<li>Checkpointing becomes more complicated</li>
+<li>Hard to preserve order of events if needed</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Helps eliminate duplicate events<ul>
+<li>Add Distributed Cache to save event ids for short time interval like 10 minutes</li>
+<li>If same message was submitted to the partition several times, only the first one will be consumed </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Aggregator<ul>
+<li>HashTable to accumulate counts by video id</li>
+<li>New HashTable will be created after some time interval for incoming data </li>
+<li>while old HashTable will stop accumulating and only send data to internal queue waiting for saving to database</li>
+</ul>
+</li>
+<li>Internal queue<ul>
+<li>Benefits of using queue instead of sending data directly to database<ul>
+<li>Decoupling aggregated data consumption and processing since processing may take time</li>
+<li>Multi-thread data processing </li>
+<li>Good analogy<ul>
+<li>Security check queue at the airport<ul>
+<li>Single person checking tickets quickly =&gt; Partition Consumer </li>
+<li>Multiple lines for carry-on bags screening which takes much longer time =&gt; Processing service </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Database writer<ul>
+<li>Each thread takes a message from internal queue and stores preaggregated data into database</li>
+<li>Single thread vs multiple-thread<ul>
+<li>Single thread: good for checkpointing</li>
+<li>Multiple-thread: good for throughput </li>
+</ul>
+</li>
+<li><strong>Dead-letter queue</strong> (Important concept in system design)<ul>
+<li>Push messages to the dead-letter queue when downstream service (Database here) degration<ul>
+<li>Network partition</li>
+<li>Database unavailable</li>
+</ul>
+</li>
+<li>Seperate process reading messagage dead-letter queue and store data in database </li>
+</ul>
+</li>
+<li>Data enrichment Embedded Database<ul>
+<li>Event message only has minimized data (like video_id, timestamp)</li>
+<li>Query Embedded Database for other information (like video_title, channel_name)</li>
+<li>Local disk is another option which eliminates a need for remote calls</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>State Management<ul>
+<li>In-memory store can fail, reprocess messages is solution when we only have data in-memory for a short time period</li>
+<li>Another option is to introduce State Store to save in-memory store states periodically. New machine can reload the state into its memory when started. </li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="Data-Ingestion-pipeline"><a href="#Data-Ingestion-pipeline" class="headerlink" title="Data Ingestion pipeline"></a><code>Data Ingestion pipeline</code></h4><p><span style="color: #5bdaed; font-size:1.1em;">Components</span></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=2506">Whole picture</a>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">                                                           -&gt; Partition A -&gt; Processing Service -&gt;</span><br><span class="line">    (Routes request)                                      /                                       \</span><br><span class="line">User -&gt; API Gateway -&gt; Load Balancer -&gt; Partioner Service --&gt; Partition B -&gt; Processing Service --&gt; Database</span><br><span class="line">(Partioner SVC client)(Distribute request)                \                                       /</span><br><span class="line">                                                           -&gt; Partition C -&gt; Processing Service -&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>Components<table>
+<thead>
+<tr>
+<th>Partitioner Service Client</th>
+<th>Load Balancer</th>
+<th>Partitioner Service and Partitions</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Blocking vs non-blocking I/O</td>
+<td>Fast writes</td>
+<td>Fast reads</td>
+</tr>
+<tr>
+<td>Good</td>
+<td>Can slice and dice data however we need</td>
+<td>Data is ready for decision making</td>
+</tr>
+<tr>
+<td>Good</td>
+<td>Can recalculate numbers if needed</td>
+<td></td>
+</tr>
+<tr>
+<td>Bad</td>
+<td>Slow reads</td>
+<td>Can query only the way data was aggregated</td>
+</tr>
+<tr>
+<td>Bad</td>
+<td>Costly for a large scale (many events)</td>
+<td>Requires data aggregation pipeline</td>
+</tr>
+<tr>
+<td>Bad</td>
+<td></td>
+<td>Hard or even impossible to fix errors</td>
+</tr>
+</tbody></table>
+</li>
+<li>Partitioner Service Client<ul>
+<li>Blocking vs non-blocking I/O<ul>
+<li>Blocking<ul>
+<li>Create one single thread for one client socket</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="Data-Retrieval-path"><a href="#Data-Retrieval-path" class="headerlink" title="Data Retrieval path"></a><code>Data Retrieval path</code></h4><h4 id="Data-flow-simulation"><a href="#Data-flow-simulation" class="headerlink" title="Data flow simulation"></a><code>Data flow simulation</code></h4><hr>
+<h3 id="Technology-stack"><a href="#Technology-stack" class="headerlink" title="Technology stack"></a><code>Technology stack</code></h3><h3 id="Bottleneck-tradeoffs-and-more"><a href="#Bottleneck-tradeoffs-and-more" class="headerlink" title="Bottleneck, tradeoffs and more"></a><code>Bottleneck, tradeoffs and more</code></h3><h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a><code>Summary</code></h3><hr>
 
       
 
