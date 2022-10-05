@@ -16,7 +16,7 @@
 <meta property="og:description" content="Learning from System Design Interview Youtube ChannelSystem Design Interview – Step By Step Guide System Design Interview – Step By Step Guide  Requirements clarification4 aspectsUsers&#x2F;Customers   Who">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-09-02T16:27:06.000Z">
-<meta property="article:modified_time" content="2022-10-03T04:20:26.166Z">
+<meta property="article:modified_time" content="2022-10-05T03:28:28.110Z">
 <meta property="article:author" content="Hao Tang">
 <meta property="article:tag" content="System Design">
 <meta name="twitter:card" content="summary">
@@ -723,53 +723,267 @@
 </li>
 </ul>
 <hr>
-<h4 id="Data-Ingestion-pipeline"><a href="#Data-Ingestion-pipeline" class="headerlink" title="Data Ingestion pipeline"></a><code>Data Ingestion pipeline</code></h4><p><span style="color: #5bdaed; font-size:1.1em;">Components</span></p>
+<h4 id="Data-Ingestion-pipeline"><a href="#Data-Ingestion-pipeline" class="headerlink" title="Data Ingestion pipeline"></a><code>Data Ingestion pipeline</code></h4><p><span style="color: #AE87FA; font-size:1.2em;"><strong>Components</strong></span></p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=2506">Whole picture</a>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">                                                           -&gt; Partition A -&gt; Processing Service -&gt;</span><br><span class="line">    (Routes request)                                      /                                       \</span><br><span class="line">User -&gt; API Gateway -&gt; Load Balancer -&gt; Partioner Service --&gt; Partition B -&gt; Processing Service --&gt; Database</span><br><span class="line">(Partioner SVC client)(Distribute request)                \                                       /</span><br><span class="line">                                                           -&gt; Partition C -&gt; Processing Service -&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li>Components<table>
+</ul>
+<hr>
+<p><span style="color: #AE87FA; font-size:1.2em;">Partitioner Service Client</span></p>
+<ul>
+<li>Reduce server load<ul>
+<li>Blocking vs non-blocking I/O</li>
+<li>Buffering and batching</li>
+</ul>
+</li>
+<li>Handle request failue<ul>
+<li>Timeouts =&gt; Retry after timeouts =&gt; Exponetial Backoff and jitter to distribute retries =&gt;Still has danger and should introduce circuit breaker</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Blocking vs non-blocking I/O</span></p>
+<ul>
+<li>Blocking (one thread per connection)<ul>
+<li>Connection process<ul>
+<li>Client initiates connection using socket</li>
+<li>The socket on the server side with connection is blocked while server processing the request</li>
+<li>The single execution thread handling the connections is also blocked</li>
+<li>When new request coming in, have to create another new thread to handle the new request</li>
+</ul>
+</li>
+<li>When machine slows down, we will create more threads to handle request =&gt; Machine can go into a death spiral and the whole cluster of machines may die</li>
+<li>Solution: rate limiting helps keep systems stable during traffic peaks</li>
+</ul>
+</li>
+<li>non-blocking I/O<ul>
+<li>Queue request and let threads handle later<ul>
+<li>Piling up request is less expensive than piling up threads</li>
+<li>Higher throughput</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Blocking vs non-blocking I/O</strong></p>
+<table>
 <thead>
 <tr>
-<th>Partitioner Service Client</th>
-<th>Load Balancer</th>
-<th>Partitioner Service and Partitions</th>
+<th></th>
+<th>Blocking I/O</th>
+<th>non-blocking I/O</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Blocking vs non-blocking I/O</td>
-<td>Fast writes</td>
-<td>Fast reads</td>
+<td>Complexity</td>
+<td>(GOOD) Easy to Debug</td>
+<td>(BAD) Complicated to debug</td>
 </tr>
 <tr>
-<td>Good</td>
-<td>Can slice and dice data however we need</td>
-<td>Data is ready for decision making</td>
+<td>Debug process</td>
+<td>(GOOD)Easy to track the whole request process.</td>
+<td>(BAD) NOT WORKING WELL WITH SINGLE THREAD CONEPTS</td>
 </tr>
 <tr>
-<td>Good</td>
-<td>Can recalculate numbers if needed</td>
-<td></td>
+<td>Exception handler</td>
+<td>(GOOD) Excpetions pop up the stack and easy to catch and handle</td>
+<td>(BAD) NOT WORKING WELL WITH SINGLE THREAD CONEPTS</td>
 </tr>
 <tr>
-<td>Bad</td>
-<td>Slow reads</td>
-<td>Can query only the way data was aggregated</td>
-</tr>
-<tr>
-<td>Bad</td>
-<td>Costly for a large scale (many events)</td>
-<td>Requires data aggregation pipeline</td>
-</tr>
-<tr>
-<td>Bad</td>
-<td></td>
-<td>Hard or even impossible to fix errors</td>
+<td>Throughput</td>
+<td>(BAD) One thread per client connection.</td>
+<td>(GOOD) Higher throughput by putting requests into queue and waiting for thread picking up</td>
 </tr>
 </tbody></table>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Buffering and batching</span></p>
+<ul>
+<li><strong>Buffering and batching</strong><ul>
+<li>Sending every event to API gateway is not efficient<ul>
+<li>Put events into a buffer</li>
+<li>Wait up to a short time interval(like several seconds) or until batch fills with events</li>
+<li>Send multiple events in a batch in one single request</li>
+</ul>
 </li>
-<li>Partitioner Service Client<ul>
-<li>Blocking vs non-blocking I/O<ul>
-<li>Blocking<ul>
-<li>Create one single thread for one client socket</li>
+<li>Benefits<ul>
+<li>Increase throughput</li>
+<li>Save on cost</li>
+<li>More effective request compression</li>
+</ul>
+</li>
+<li>Drawbacks<ul>
+<li>Introduce complexitity of both server and client sides<ul>
+<li>For example, if some events succeeded in a batch while others failed, it is hard to decide whether should resend the batch<ul>
+<li>(My opionion) resend batch but needs server side to filter out duplicate events by event id or introduce of event idempotent on DB side</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Timeouts</span></p>
+<p><strong>Connection timeout vs Request timeout</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Connection Timeout</th>
+<th>Request Timeout</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Definition</td>
+<td>Timeout while waiting for establishing connection</td>
+<td>Timeout while waiting for server processing request</td>
+</tr>
+<tr>
+<td>How long timeout should be</td>
+<td>Timeout should be small(tens of milliseconds) since heavy processing does not even start</td>
+<td>Measure 1% of request latency =&gt; 99% of request should succeed</td>
+</tr>
+</tbody></table>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Retries</span></p>
+<ul>
+<li><strong>Retries</strong><ul>
+<li>Reason: request may hit a bad machine and second attemp will have a good chance to work</li>
+<li>Retry storm event: all retry happen at same time and too many requests coming in </li>
+<li>How to reduce chance of retry storm event =&gt; Exponetial Backoff algoritm and jitter algorithm</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Exponetial Backoff algoritm and jitter algorithm</span></p>
+<ul>
+<li><strong>Exponetial Backoff algoritm and jitter algorithm</strong><ul>
+<li>Exponetial Backoff algoritm: increases the waiting time between retries up to a maximum</li>
+<li>Jitter algorithm: add randomness to spread out the load </li>
+<li>Still has danger with too many request<ul>
+<li>For example when service is down or degraded</li>
+<li>Should introduce circuit breaker</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Circuit Breaker</span></p>
+<ul>
+<li><strong>Circuit Breaker Patter</strong><ul>
+<li>How it works<ul>
+<li>Calculate how many failure request. If error threshold is exceeded, stop calling downstream service</li>
+<li>Some time later, allow limited number of requests pass through<ul>
+<li>If these requests are successful, assume the fault previously causing the failure has been fixed.</li>
+<li>Allow all requests at this point and start counting failed requests from scratch</li>
+<li>Loop completes</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Drawbacks<ul>
+<li>Hard to debug and test</li>
+<li>Hard to set threshold and timers</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #AE87FA; font-size:1.2em;">Load Balancer</span></p>
+<ul>
+<li>Software vs hardware load balancing<ul>
+<li>Hardware load balancer: usually powerful machines and optimized to handle millions of request</li>
+<li>Software load balancer: only software installed on hardware we choose<ul>
+<li>Public cloud service can provide like ELB for AWS</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Networking protocols<ul>
+<li>TCP: simply forward network packets without inspecting the content of packets<ul>
+<li>As if established a single end-to-end TCP connection between a client and a server</li>
+<li>Allows TCP load balancers to be super fast and handle millions of requests per second </li>
+</ul>
+</li>
+<li>HTTP: terminate the connection and establishes a connection to a server by itself<ul>
+<li>Look inside message and load balance based on http message header like cookie information</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Load balancing algorithms<ul>
+<li>Round robin: distributes request in order across the list of servers </li>
+<li>Least connections algorithm: sends requests to the server with the lowest number of active connections</li>
+<li>Least reponse time algorithm: sends requests to the server with the fastest response time</li>
+<li>Hash-based algorithms: distribute requests based on a key we define, suck as the client IP address or request url</li>
+</ul>
+</li>
+<li>DNS<ul>
+<li>Register partitioner service in DNS with specified domain name like patitionerservice.domain.com</li>
+<li>Requests are forwarded to load balancer when clients hit domain name</li>
+<li>Load balancer provides API for server to register and unregister <ul>
+<li>Load balancer can use all servers’ IP addresses to distribute the requests</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Health checking<ul>
+<li>Ping server periodically for listening on servers’ heart beat<ul>
+<li>Requests are only routed to healthy servers (With heart beat)</li>
+<li>Stop routing request to unhealthy servers and resume when it becomes healthy again</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>High availability<ul>
+<li>Primary and secondary to prevent single point failure<ul>
+<li>Primary load balancer accept connections and secondary is monitoring</li>
+<li>Secondary takes over once primary is unable to accept connections</li>
+<li>Primary and secondary should live in different data center in case the whole data center goes down</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #AE87FA; font-size:1.2em;">Partioner Service and Partitions</span></p>
+<ul>
+<li>Overall<ul>
+<li>Partition service:<ul>
+<li>Gets requests from clients </li>
+<li>looks inside each request to retrieve individual view events </li>
+<li>routes to correct partition</li>
+</ul>
+</li>
+<li>Partition:<ul>
+<li>Also a web service</li>
+<li>gets message and stores message on disk in the form of the append-only log file =&gt; Have totally-ordered sequence of messages ordered by time</li>
+<li>Not be a large file but a set of files with pre-defined size </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Partition strategy<ul>
+<li>Simple strategy: calculate a hash function based on some key like video identifier<ul>
+<li>Will not work in large scale =&gt; lead to “hot partitions”</li>
+<li>For example, when we have one or a set of popular videos, all view events will go to the same partition</li>
+</ul>
+</li>
+<li>2 solutions to resolve “hot partitions”<ul>
+<li>Include event time into hash key. <ul>
+<li>spread requests evenly across different partions based on event time. </li>
+<li>Like one minute, event goes to partition A and next minute events will go to partition B</li>
+</ul>
+</li>
+<li>Split hot partition into 2 new partitions<ul>
+<li>Consistent hashing splits a range of keys into 2 new ranges</li>
+<li>Allocate dedicated partition for some popular video channels<ul>
+<li>Only events for these popular video channels go to dedicated partitions while all other events go to other partitions</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
