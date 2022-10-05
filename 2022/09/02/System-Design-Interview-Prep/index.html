@@ -16,7 +16,7 @@
 <meta property="og:description" content="Learning from System Design Interview Youtube ChannelSystem Design Interview – Step By Step Guide System Design Interview – Step By Step Guide  Requirements clarification4 aspectsUsers&#x2F;Customers   Who">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-09-02T16:27:06.000Z">
-<meta property="article:modified_time" content="2022-10-05T03:28:28.110Z">
+<meta property="article:modified_time" content="2022-10-05T04:56:17.988Z">
 <meta property="article:author" content="Hao Tang">
 <meta property="article:tag" content="System Design">
 <meta name="twitter:card" content="summary">
@@ -951,7 +951,8 @@
 <hr>
 <p><span style="color: #AE87FA; font-size:1.2em;">Partioner Service and Partitions</span></p>
 <ul>
-<li>Overall<ul>
+<li><p>Overall</p>
+<ul>
 <li>Partition service:<ul>
 <li>Gets requests from clients </li>
 <li>looks inside each request to retrieve individual view events </li>
@@ -966,7 +967,8 @@
 </li>
 </ul>
 </li>
-<li>Partition strategy<ul>
+<li><p>Partition strategy</p>
+<ul>
 <li>Simple strategy: calculate a hash function based on some key like video identifier<ul>
 <li>Will not work in large scale =&gt; lead to “hot partitions”</li>
 <li>For example, when we have one or a set of popular videos, all view events will go to the same partition</li>
@@ -989,6 +991,104 @@
 </ul>
 </li>
 </ul>
+</li>
+<li><p>Service discovery</p>
+<ul>
+<li>2 main service discovery pattern in the world of microservices<ul>
+<li>server-side discovery<ul>
+<li>Clients know about load balancer</li>
+<li>load balancer knows about server-side instances</li>
+</ul>
+</li>
+<li>cliend-side discovery<ul>
+<li>Server instances regiester in common place =&gt; service registry<ul>
+<li>service registry<ul>
+<li>Highly available web service</li>
+<li>Determine health of each registered instance</li>
+<li>Example: Zookeeper<ul>
+<li>Each partition registers itself in Zookeeper</li>
+<li>Partition service query Zookeeper for the list of partitions</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Client query service registry and obtain a list of available servers</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Another service discovery way is like cassandra, which every node knows all other nodes in the cluster. <ul>
+<li>Client only needs to contact one node </li>
+<li>The node will figure out the information</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Replication</p>
+<ul>
+<li>Single-leader replication<ul>
+<li>Example: Scale SQL server<ul>
+<li>One leader and several followers<ul>
+<li>Write and read from leader</li>
+<li>Followers will copy events from the leader</li>
+</ul>
+</li>
+<li>One follower will be chosen as leader when leader dies</li>
+<li>Leader will keep track of followers to check if it is alive or any of the followers is too far behind<ul>
+<li>Leader will remove a follower if it is not alive or too far behind</li>
+</ul>
+</li>
+<li>Send response back when write to leader finishes or also wait for required number of replicas to finish replicating events as well<ul>
+<li>Wait for replica will prevent data loss if leader dies before followers have replicated the same data</li>
+<li>But it will increase the latency and also may affect availability if required number of replicas are not available</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Multiple-leader replication<ul>
+<li>Mostly used to replicate data for several different data centers</li>
+</ul>
+</li>
+<li>Leaderless replication<ul>
+<li>Cassandra</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Message format</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Textual format</th>
+<th>Binary Timeout</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Popular</td>
+<td>XML, csv, json</td>
+<td>Thrift, Protocol Buffers and Avro</td>
+</tr>
+<tr>
+<td>Benefits</td>
+<td>Human-readable, well-known, widely supported and heavily used by many distributed systems</td>
+<td>More compact and faster to parse</td>
+</tr>
+<tr>
+<td>Reason binary is faster</td>
+<td>Json always needs field name</td>
+<td>Use schema to replace duplciate field names</td>
+</tr>
+<tr>
+<td>Schema</td>
+<td></td>
+<td>Schema needs to be saved in some shared database that can be accessed by client and server</td>
+</tr>
+</tbody></table>
 </li>
 </ul>
 <hr>
@@ -1227,11 +1327,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">System Design</a>
+                <a href="javascript:void(0)" class="js-tag color5">tags</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tags</a>
+                <a href="javascript:void(0)" class="js-tag color4">System Design</a>
               </li>
              
               <li class="article-tag-list-item">
