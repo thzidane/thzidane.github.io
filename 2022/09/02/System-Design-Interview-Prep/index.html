@@ -16,7 +16,7 @@
 <meta property="og:description" content="Learning from System Design Interview Youtube ChannelSystem Design Interview – Step By Step Guide System Design Interview – Step By Step Guide  Requirements clarification4 aspectsUsers&#x2F;Customers   Who">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-09-02T16:27:06.000Z">
-<meta property="article:modified_time" content="2022-10-05T04:56:17.988Z">
+<meta property="article:modified_time" content="2022-10-08T04:09:32.611Z">
 <meta property="article:author" content="Hao Tang">
 <meta property="article:tag" content="System Design">
 <meta name="twitter:card" content="summary">
@@ -1092,8 +1092,388 @@
 </li>
 </ul>
 <hr>
-<h4 id="Data-Retrieval-path"><a href="#Data-Retrieval-path" class="headerlink" title="Data Retrieval path"></a><code>Data Retrieval path</code></h4><h4 id="Data-flow-simulation"><a href="#Data-flow-simulation" class="headerlink" title="Data flow simulation"></a><code>Data flow simulation</code></h4><hr>
-<h3 id="Technology-stack"><a href="#Technology-stack" class="headerlink" title="Technology stack"></a><code>Technology stack</code></h3><h3 id="Bottleneck-tradeoffs-and-more"><a href="#Bottleneck-tradeoffs-and-more" class="headerlink" title="Bottleneck, tradeoffs and more"></a><code>Bottleneck, tradeoffs and more</code></h3><h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a><code>Summary</code></h3><hr>
+<h4 id="Data-Retrieval-path"><a href="#Data-Retrieval-path" class="headerlink" title="Data Retrieval path"></a><code>Data Retrieval path</code></h4><p><span style="color: #AE87FA; font-size:1.2em;"><strong>Big Picture</strong></span></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws">Whole picture</a>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">                                                --&gt; Distributed Cache</span><br><span class="line">                                               /</span><br><span class="line">User -&gt; Browser-&gt; API Gateway -&gt; Query Service ----&gt; Database </span><br><span class="line">                                               \        | Old Data</span><br><span class="line">                                                --&gt; Object Storage</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Browser -&gt; API Gateway</span></p>
+<ul>
+<li>Like opening one Youtube video needs several service calls<ul>
+<li>Retrieves video information</li>
+<li>Retrieves comments</li>
+<li>Retrieves recommendations</li>
+<li>Query service to get video statistics  </li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Data storages</span></p>
+<ul>
+<li>Hot storage: database<ul>
+<li>Data rollup from Hot storage to cold storage<ul>
+<li>(Hot storage database) Current: Per minute data for several days</li>
+<li>(Cold storage object store) One week later: per minute data aggregated into per hour data </li>
+<li>(Cold storage object store) 3 months: per hour data aggregated into 1 day granularity</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Cold storage: Object storage<ul>
+<li>Represents archive and infrequently accessed data</li>
+</ul>
+</li>
+<li>Dcistributed cache to improve performance<ul>
+<li>Save each time query results from hot and cold storage data into distributed cache</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Query service</span></p>
+<ul>
+<li>Data federation: need to call several storages to fulfill the request<ul>
+<li>Recent data: from database</li>
+<li>Old data: from object storage</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="Data-flow-simulation"><a href="#Data-flow-simulation" class="headerlink" title="Data flow simulation"></a><code>Data flow simulation</code></h4><p><span style="color: #AE87FA; font-size:1.2em;"><strong>Whole Picture</strong></span></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/bUHFg8CZFws?t=4023">Whole picture</a></li>
+<li>Write path:<ul>
+<li>3 users opened video A =&gt; 3 view events of video A sent to API Gateway<ul>
+<li>Partitioner client batch these 3 requests and send them in one single request to load balancer </li>
+<li>Load balancer routes all three events from the request to one of partioner service machine</li>
+</ul>
+</li>
+<li><strong>Partioner service</strong> will send all these 3 events to same partition (partition data based on the video identifier)</li>
+<li><strong>Processing service</strong><ul>
+<li>Partition consumer reads all three messages from the partition one by one and sends them to aggregator</li>
+<li>Aggregator counts messages for a one minute period(in-memory store) and flushes calculated values to the internal queue at the end of that minute.</li>
+<li>Database writer picks count from the internal queue and sends it to the database</li>
+<li>In the database, we store count per hour and the total number of views for each video<ul>
+<li>Add a one-minute value to the current hour count as well as the total count</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Read path:<ul>
+<li>When user opens video A, API gateway sends request to query service to get total count</li>
+<li>Query service will try to get value from distributed cache<ul>
+<li>If total count for the video is not found in the cache or has expired, call the database to get value and save it into the cache as well.  </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="Technology-stack"><a href="#Technology-stack" class="headerlink" title="Technology stack"></a><code>Technology stack</code></h3><p><span style="color: #5bdaed; font-size:1.1em;">Client-side</span></p>
+<ul>
+<li>Netty: high-performance non-blocking IO framework for developing network applications, both clients and servers</li>
+<li>Netflix Hystrix, Polly: implementation of client-side concepts like timeouts, retries, circuite breaker pattern</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Load balancing</span></p>
+<ul>
+<li>Hardware: <ul>
+<li>NetScaler</li>
+</ul>
+</li>
+<li>Software: <ul>
+<li>NGINX</li>
+<li>Cloud service like ASW ELB</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Messaging systems</span></p>
+<ul>
+<li>Apache kafka<ul>
+<li>Can replace partioner service and partition</li>
+</ul>
+</li>
+<li>Public cloud counterpart<ul>
+<li>Amazon Kinesis</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Data processing</span></p>
+<ul>
+<li>Batch messages and aggregate data<ul>
+<li>Apache spark</li>
+<li>Apache flink</li>
+<li>cloud based solution<ul>
+<li>AWS Kinesis Data Analytics</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Storage</span></p>
+<ul>
+<li>Wide column databases <ul>
+<li>Popular choice for time-series data<ul>
+<li>Apache Cassandra</li>
+<li>HBase database</li>
+</ul>
+</li>
+<li>Optimized for handling time series data<ul>
+<li>like influxDB</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Store raw events for error handling and customer ad-hoc query<ul>
+<li>Apache Hadoop</li>
+<li>cloud data warehouse<ul>
+<li>AWS Redshift</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Object cold storage solution<ul>
+<li>AWS S3</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Other</span></p>
+<ul>
+<li><strong>Vitess</strong> is database solution for scaling and managing large clusters of MySQL instances<ul>
+<li>Vitess has been serving all youtube database traffic since 2011</li>
+</ul>
+</li>
+<li><strong>Redis</strong> is good option for distributed cache<ul>
+<li>For message deduplication</li>
+<li>For scaling read data queries </li>
+</ul>
+</li>
+<li><strong>RabbitMQ/AWS SQS</strong> is good option for deadletter queue<ul>
+<li>Message broker to queue undelivered messages</li>
+</ul>
+</li>
+<li><strong>RocksDB</strong> is a high performance embedded database for key-value data<ul>
+<li>store video and channel related information locally in the machine</li>
+<li>inject this information in real-time</li>
+</ul>
+</li>
+<li><strong>Zookeeper</strong> is good option for leader selection for partitions and to manager service discovery<ul>
+<li>Distributed configuration service</li>
+<li>Eureka web service is alternative for service discovery</li>
+</ul>
+</li>
+<li><strong>ELK(Elasticsearch, logstash, kibana)</strong> is a popular stack of open source frameworks for monitoring components<ul>
+<li>Cloud service conterpart: AWS CloudWatch </li>
+</ul>
+</li>
+<li><strong>Thrift, Protobuf and Avro</strong> are popular choices for binary message format</li>
+<li><strong>Murmurhash</strong> for hashing function</li>
+</ul>
+<hr>
+<h3 id="Bottleneck-tradeoffs-and-more"><a href="#Bottleneck-tradeoffs-and-more" class="headerlink" title="Bottleneck, tradeoffs and more"></a><code>Bottleneck, tradeoffs and more</code></h3><h4 id="Bottleneck"><a href="#Bottleneck" class="headerlink" title="Bottleneck"></a>Bottleneck</h4><p><span style="color: #5bdaed; font-size:1.1em;">Identify bottlenecks</span></p>
+<ul>
+<li>Performance testing<ul>
+<li>Load testing: measure behavior of a system under a specific expected load<ul>
+<li>To understand system is indeed scalable and can handle a load we expect</li>
+</ul>
+</li>
+<li>Stress testing: test beyond normal operaptional capacity, often to a breaking point<ul>
+<li>Identify a breaking point in the system</li>
+<li>Which component suffers first</li>
+<li>What resource it will be<ul>
+<li>memory</li>
+<li>CPU</li>
+<li>Network</li>
+<li>Disk I/O</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Soak testing: test a system with a typical production load for an extended period of time<ul>
+<li>Find leaks of resources like memory leaks</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Generating high load is kye for performance testing<ul>
+<li>Apache JMeter can be used to generate a desired load</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Make suer system is running healthy</span></p>
+<ul>
+<li>All components must be instrumented with monitoring of their health<ul>
+<li>Monitoring related concepts<ul>
+<li><strong>Metrics</strong> is a variable that we measure like error count or processing time  </li>
+<li><strong>Dashboards</strong> provides a summary view of a service’s core metrics</li>
+<li><strong>Alerts</strong> is a notification sent to service owners in a reaction to some issue happening in the service</li>
+</ul>
+</li>
+<li><strong>4 golden signals of monitoring</strong><ul>
+<li>Latency</li>
+<li>Traffic</li>
+<li>Errors</li>
+<li>Saturation(饱和度)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Make sure the system produces accurate results</span></p>
+<ul>
+<li>Build audit system<ul>
+<li><strong>Weak audit system</strong><ul>
+<li>Continuously running end-to-end test</li>
+<li>Example: generate several video view events in the system once a minute<ul>
+<li>Call query service and validate returned value equals to the expected count</li>
+</ul>
+</li>
+<li>Pros  <ul>
+<li>Gives us a high confidence that system counts correctly</li>
+<li>Easy to implement and maintain</li>
+</ul>
+</li>
+<li>Cons<ul>
+<li>Not 100% reliable <ul>
+<li>May lose events in some rare scenario. </li>
+<li>May not identify this issue for a long period of time</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Strong audit system</strong><ul>
+<li>Example<ul>
+<li>Store raw events in Hadoop and use MapReduce to count events</li>
+<li>Compare result of both audit and read systems results</li>
+</ul>
+</li>
+<li>Lambda Architecture<ul>
+<li>Compare results from stream processing and batch processing frameworks results</li>
+</ul>
+</li>
+<li>Having 2 almost same system running may be a overkill<ul>
+<li>Suggestions<ul>
+<li>Don’t try to do both at the same time unless absolutely must</li>
+<li>Single one system choice<ul>
+<li>Real time or latency sensitive: stream processing framework</li>
+<li>NOT latency sensitive: batch processing framework</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">Will a hugely popular video become a bottleneck</span></p>
+<ul>
+<li>Spread events coming for a popular video across several partitions<ul>
+<li>A single consumer of a single <em>HOT</em> partition may not be able to keep up with the load and will fall behind</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><span style="color: #5bdaed; font-size:1.1em;">What if the processing service cannot keep up with the speed new messages arrive</span></p>
+<ul>
+<li>Possible <strong>RCs</strong> that can cause this<ul>
+<li>number of events is huge</li>
+<li>processing of a single event is complicated and time consuming</li>
+</ul>
+</li>
+<li><strong>Solution</strong><ul>
+<li>Batch events and store them in the object storage service like AWS S3</li>
+<li>Send a message to message borker every time persist a batch of events</li>
+<li>Big clusters of machines retreive messages from message broker<ul>
+<li>Read a correspoinding batch of events from Object Storage and process each event</li>
+</ul>
+</li>
+<li>A bit slower than stream processing, but fast than batch processing</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a><code>Summary</code></h3><h4 id="Functional-requirements-API"><a href="#Functional-requirements-API" class="headerlink" title="Functional requirements (API)"></a>Functional requirements (API)</h4><ul>
+<li><strong>What to do</strong><ul>
+<li>Requirements clarification</li>
+<li>Define APIs for what exactlyu out system is supposed to do</li>
+<li>Should be clear on what the scope of the design is</li>
+</ul>
+</li>
+<li><strong>Steps</strong><ul>
+<li>Wirte down verbs for API to define</li>
+<li>Define input parameters and return values</li>
+<li>Make several iterations to bruch up the APIs</li>
+</ul>
+</li>
+</ul>
+<h4 id="Non-functional-requirements-qualities"><a href="#Non-functional-requirements-qualities" class="headerlink" title="Non-functional requirements (qualities)"></a>Non-functional requirements (qualities)</h4><ul>
+<li><strong>What to do</strong><ul>
+<li>Figure out what qualities interview is most interested</li>
+</ul>
+</li>
+<li><strong>Steps</strong><ul>
+<li>Open list of non-functional requirements on wiki and read the list<ul>
+<li>Not pick more than 3 </li>
+</ul>
+</li>
+<li>Focus: <em>Scalability, Availability, Performance</em></li>
+<li>Other popular choices: consistency, durability, maintainability and cost</li>
+</ul>
+</li>
+</ul>
+<h4 id="High-level-design"><a href="#High-level-design" class="headerlink" title="High-level design"></a>High-level design</h4><ul>
+<li><strong>What to do</strong><ul>
+<li>Draw some key components to outline a high-level design</li>
+</ul>
+</li>
+<li><strong>Steps</strong><ul>
+<li>How data gets into the system</li>
+<li>How data gets out of the system</li>
+<li>Where data is stored inside the system</li>
+<li>Try to dirve the conversation</li>
+</ul>
+</li>
+</ul>
+<h4 id="Detailed-design"><a href="#Detailed-design" class="headerlink" title="Detailed design"></a>Detailed design</h4><ul>
+<li><strong>What to do</strong><ul>
+<li>Dive deep into several of those components drawed in high-level design</li>
+</ul>
+</li>
+<li><strong>Steps</strong><ul>
+<li>It’s all about data <ul>
+<li>Storage, transfer, processing</li>
+</ul>
+</li>
+<li>Use fundamental concepts and combine them together</li>
+<li>Apply relevant technologies</li>
+</ul>
+</li>
+</ul>
+<h4 id="Bottlenecks-and-tradeoffs"><a href="#Bottlenecks-and-tradeoffs" class="headerlink" title="Bottlenecks and tradeoffs"></a>Bottlenecks and tradeoffs</h4><ul>
+<li><strong>What to do</strong></li>
+<li><strong>Steps</strong><ul>
+<li>Listen to the interviewer<ul>
+<li>Bottelnechk hints will be from interviewer</li>
+</ul>
+</li>
+<li>Know the tradeoffs</li>
+</ul>
+</li>
+</ul>
+<hr>
 
       
 
